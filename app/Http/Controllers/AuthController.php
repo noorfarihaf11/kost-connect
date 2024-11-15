@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return view('register');
+        return view('dashboard.register');
     }
 
     public function register(Request $request): RedirectResponse
@@ -32,7 +32,7 @@ class AuthController extends Controller
 
     public function login()
     {
-        return view('login');
+        return view('dashboard.login');
     }
 
     public function authenticate(Request $request)
@@ -45,7 +45,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/dashboard.dashboard');
         }
         return back()->with('loginError', 'Login Failed!');
     }

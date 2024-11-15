@@ -10,18 +10,21 @@ class Room extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_house',
+        'id_city',
         'name_room',
         'room_type',
-        'square_feet',
+        'description',
         'price_per_month',
-        'is_available'
+        'address',
+        'square_feet',
+        'is_available',
+        'available_rooms',
+        'timestamps'
     ];
 
-    public function boardingHouse()
+    public function city ()
     {
-        return $this->belongsTo(BoardingHouse::class);
-    
+        return $this->belongsTo(City::class, 'id_city');
     }
 
     public function images()
@@ -29,8 +32,14 @@ class Room extends Model
         return $this->hasMany(RoomImage::class);
     }
 
-    public function transactions()
+    public function reservations()
     {
         return $this->hasMany(Transaction::class);
+        
+    }
+
+    public function testimonials ()
+    {
+        return $this->hasMany(Testimonial::class);
     }
 }

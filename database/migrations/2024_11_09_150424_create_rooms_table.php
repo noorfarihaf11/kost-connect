@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id('id_room')->primary;
-            $table->unsignedBigInteger('id_house')->nullable();
-            $table->foreign('id_house')->references('id_house')->on('boarding_houses');
+            $table->unsignedBigInteger('id_city')->nullable();
+            $table->foreign('id_city')->references('id_city')->on('cities');
             $table->string('name_room');
-            $table->string('room_type');
-            $table->integer('square_feet');
+            $table->enum('room_type', ['putra', 'putri', 'campur']);
+            $table->text('description');
             $table->integer('price_per_month');
+            $table->text('address');
+            $table->integer('square_feet');
             $table->boolean('is_available');
+            $table->integer('available_rooms');
             $table->timestamps();
         });
     }

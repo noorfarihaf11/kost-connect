@@ -20,15 +20,8 @@ class BoardingHouse extends Model
         'address',
     ];
 
-    public function city ()
-    {
-        return $this->belongsTo(City::class);
-    }
+   
 
-    public function category ()
-    {
-        return $this->belongsTo(Category::class);
-    }
 
     public function rooms ()
     {
@@ -40,14 +33,6 @@ class BoardingHouse extends Model
         return $this->hasMany(Bonus::class);
     }
     
-    public function testimonials ()
-    {
-        return $this->hasMany(Testimonial::class);
-    }
-
-    public function transactions ()
-    {
-        return $this->hasMany(Transaction::class);
-    }
+   
     
 }

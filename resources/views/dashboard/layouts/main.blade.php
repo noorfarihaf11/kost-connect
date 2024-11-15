@@ -2,16 +2,16 @@
 <html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
 
 <head>
-    @include('layouts.style')
+    @include('dashboard.layouts.style')
 </head>
 
 <body>
    
         <!-- Desktop sidebar -->
-        @include('layouts.sidebar')
+        @include('dashboard.layouts.sidebar')
 
         <div class="flex flex-col flex-1 w-full">
-            @include('layouts.header')
+            @include('dashboard.layouts.header')
       
         @yield('content')
     </div>

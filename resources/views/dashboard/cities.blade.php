@@ -1,18 +1,18 @@
-@extends('layouts.main')
+@extends('dashboard.layouts.main')
 
 @section('content')
     <div class="container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Role
+            City
         </h2>
 
         <div class="flex items-center justify-between mb-4">
             <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                List role
+                List city
             </h4>
             <button id="openModal"
                 class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                New role
+                New city
             </button>
         </div>
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -24,20 +24,22 @@
                         <tr>
                             <th class="px-4 py-3">#</th>
                             <th class="px-4 py-3">Name</th>
+                            <th class="px-4 py-3">Slug</th>
                             <th class="px-4 py-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        @foreach ($roles as $role)
+                        @foreach ($cities as $city)
                             <tr>
-                                <td class="px-2 py-3 text-sm">{{ $role->id_role }}</td>
-                                <td class="px-2 py-3 text-sm">{{ $role->name_role }}</td>
+                                <td class="px-2 py-3 text-sm">{{ $city->id_city }}</td>
+                                <td class="px-2 py-3 text-sm">{{ $city->name_city }}</td>
+                                <td class="px-2 py-3 text-sm">{{ $city->slug }}</td>
                                 <td class="px-2 py-3">
                                     <div class="flex items-center space-x-4 text-sm">
                                         <button
                                             class="editButton flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                            aria-label="Edit" data-id="{{ $role->id_role }}"
-                                            data-name_role="{{ $role->name_role }}">
+                                            aria-label="Edit" data-id="{{ $city->id_city }}"
+                                            data-name_city="{{ $city->name_city }}" data-slug="{{ $city->slug }}">
                                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793z">
                                                 </path>
@@ -46,7 +48,7 @@
                                         </button>
                                         <button
                                             class="deleteButton flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                            aria-label="Delete" data-id="{{ $role->id_role }}">
+                                            aria-label="Delete" data-id="{{ $city->id_city }}">
                                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd"
                                                     d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
@@ -62,15 +64,21 @@
             </div>
         </div>
 
-        <div id="roleForm" style="display: none;"
+        <!-- Modal untuk form New City -->
+        <div id="cityForm" style="display: none;"
             class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-2xl">
-                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Add New Role</h3>
-                <form method="post" action="/roles" class="mb-5" enctype="multipart/form-data">
+                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Add New City</h3>
+                <form method="post" action="/cities" class="mb-5" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-4">
-                        <label class="block text-sm text-gray-700 dark:text-gray-400">Role Name</label>
-                        <input type="text" name="name_role" required
+                        <label class="block text-sm text-gray-700 dark:text-gray-400">City Name</label>
+                        <input type="text" name="name_city" required
+                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-700 dark:text-gray-400">Slug</label>
+                        <input type="text" name="slug" required
                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
                     </div>
                     <div class="flex justify-end">
@@ -90,17 +98,23 @@
     </div>
 
 
-    <div id="editRoleForm" style="display: none;"
+    <!-- Modal untuk form Edit City -->
+    <div id="editCityForm" style="display: none;"
         class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-2xl">
-            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Add New Role</h3>
-            <form id="editRoleDetails" method="POST">
+            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Add New City</h3>
+            <form id="editCityDetails" method="POST">
                 @csrf
                 @method('PUT')
-                <input type="hidden" name="id_role" id="edit_id_role">
+                <input type="hidden" name="id_city" id="edit_id_city">
                 <div class="mb-4">
-                    <label class="block text-sm text-gray-700 dark:text-gray-400">Role Name</label>
-                    <input type="text" name="name_role" id="edit_name_role" required
+                    <label class="block text-sm text-gray-700 dark:text-gray-400">City Name</label>
+                    <input type="text" name="name_city" id="edit_name_city" required
+                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-700 dark:text-gray-400">Slug</label>
+                    <input type="text" name="slug" id="edit_slug_city" required
                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
                 </div>
                 <div class="flex justify-end">
@@ -124,22 +138,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             const openModalButton = document.getElementById('openModal');
             const closeModalButton = document.getElementById('closeModal');
-            const roleForm = document.getElementById('roleForm');
+            const cityForm = document.getElementById('cityForm');
 
 
             openModalButton.addEventListener('click', function() {
-                roleForm.style.display = 'flex';
+                cityForm.style.display = 'flex';
             });
 
             closeModalButton.addEventListener('click', function() {
-                roleForm.style.display = 'none';
+                cityForm.style.display = 'none';
             });
 
             const closeEditModalButton = document.getElementById('closeEditModal');
-            const editRoleForm = document.getElementById('editRoleForm');
+            const editCityForm = document.getElementById('editCityForm');
 
             closeEditModalButton.addEventListener('click', function() {
-                editRoleForm.style.display = 'none';
+                editCityForm.style.display = 'none';
             });
 
         });
@@ -148,21 +162,23 @@
 
             $('.editButton').click(function() {
                 const id = $(this).data('id');
-                const name_role = $(this).data('name_role');
+                const name_city = $(this).data('name_city');
+                const slug = $(this).data('slug');
 
                 // Set the values in the edit form
-                $('#edit_id_role').val(id);
-                $('#edit_name_role').val(name_role);
+                $('#edit_id_city').val(id);
+                $('#edit_name_city').val(name_city);
+                $('#edit_slug_city').val(slug);
 
                 // Show the modal
-                $('#editRoleForm').show(); // Open the modal
+                $('#editCityForm').show(); // Open the modal
             });
 
-            $('#editRoleDetails').on('submit', function(event) {
+            $('#editCityDetails').on('submit', function(event) {
                 event.preventDefault(); // Prevent the default form submission
 
-                const id = $('#edit_id_role').val(); 
-                const url = '/roles/' + id; // Construct the URL for the PUT request
+                const id = $('#edit_id_city').val(); // Get the city ID
+                const url = '/cities/' + id; // Construct the URL for the PUT request
                 const formData = $(this).serialize() + '&_method=PUT';
 
                 console.log("Submitting data:");
@@ -176,7 +192,7 @@
                     data: formData, // Send the form data with CSRF token
                     success: function(response) {
                         if (response.success) {
-                            alert('Role updated successfully!');
+                            alert('City updated successfully!');
                             location.reload(); // Reload the page after a successful update
                         } else {
                             alert('Update failed: ' + response.message);
@@ -190,27 +206,27 @@
             });
 
             $(document).on('click', '.deleteButton', function() {
-                const id_role = $(this).data('id');
+                const id_city = $(this).data('id');
                 const confirmed = confirm('Are you sure you want to delete this user?');
 
                 if (confirmed) {
                     $.ajax({
-                        url: '/roles/' + id_role,
+                        url: '/cities/' + id_city,
                         type: 'DELETE',
                         data: {
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
                             if (response.success) {
-                                alert('Role deleted successfully!');
+                                alert('City deleted successfully!');
                                 location.reload(); // Reload the page to update the table
                             } else {
-                                alert('Error deleting Role: ' + (response.message ||
+                                alert('Error deleting City: ' + (response.message ||
                                     'Unknown error.'));
                             }
                         },
                         error: function(xhr) {
-                            alert('An error occurred while deleting the Role.');
+                            alert('An error occurred while deleting the City.');
                         }
                     });
                 }

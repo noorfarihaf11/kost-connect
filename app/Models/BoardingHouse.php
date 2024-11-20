@@ -19,7 +19,6 @@ class BoardingHouse extends Model
         'price',
         'address',
     ];
-
     public function rooms ()
     {
         return $this->hasMany(Room::class);
@@ -29,5 +28,4 @@ class BoardingHouse extends Model
     {
         return $this->hasMany(Bonus::class);
     }
-    
 }

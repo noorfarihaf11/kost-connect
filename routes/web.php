@@ -3,6 +3,7 @@
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
@@ -12,15 +13,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard.dashboard')->middleware('auth');
-});
+    return view('dashboard.dashboard');
+})->middleware('auth');
 
 Route::get('/home', function () {
     return view('home.dashboard');
 });
-Route::get('/kost', function () {
-    return view('home.kost');
-});
+
+Route::get('/daftarkost', [HomeController::class, 'rooms']);
 
 
 Route::get('/cities', [CityController::class, 'index']);
@@ -35,7 +35,7 @@ Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
 
 Route::get('/register', [AuthController::class, 'index'])->middleware('guest');
 Route::post('/register', [AuthController::class, 'register']);
-Route::get('/login', [AuthController::class, 'login'])->middleware('guest');
+Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 

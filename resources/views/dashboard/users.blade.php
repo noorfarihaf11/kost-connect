@@ -47,8 +47,8 @@
                           </div>
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $user->role->name_role }}
-                        </td>
+                          {{ $user->role ? $user->role->name_role : 'User' }}
+                      </td>
                         <td class="px-4 py-3">
                           <div class="flex items-center space-x-4 text-sm">
                             <button

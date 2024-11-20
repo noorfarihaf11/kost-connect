@@ -18,5 +18,25 @@ class CitySeeder extends Seeder
             'slug' => 'gsk'
 
         ]);
+        City::create([
+            'name_city' => 'Surabaya',
+            'slug' => 'sby'
+
+        ]);
+        City::create([
+            'name_city' => 'Malang',
+            'slug' => 'mlg'
+
+        ]);
+        City::create([
+            'name_city' => 'Bandung',
+            'slug' => 'bdg'
+
+        ]);
+        City::create([
+            'name_city' => 'Jakarta',
+            'slug' => 'jkt'
+
+        ]);
     }
 }

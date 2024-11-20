@@ -81,6 +81,7 @@
         </div>
       </div>
       <div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
+        @foreach ($rooms as $room)
         <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="h-56 w-full">
             <a href="#">
@@ -90,7 +91,7 @@
           </div>
           <div class="pt-6">
             <div class="mb-4 flex items-center justify-between gap-4">
-              <span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> Putra </span>
+              <span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> {{ $room->room_type }} </span>
   
               <div class="flex items-center justify-end gap-1">
                 <button type="button" data-tooltip-target="tooltip-quick-look" class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -119,7 +120,7 @@
             </div>
   
             <a href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
-                Kost Singgahsini Tipe A Bintaro Tangerang Selatan</a>
+              {{ $room->name_room }}</a>
   
             <div class="mt-2 flex items-center gap-2">
               <div class="flex items-center">
@@ -150,18 +151,12 @@
   
             <ul class="mt-2 flex items-center gap-4">
               <li class="flex items-center gap-2">
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Wi-Fi</p>
-              </li>
-              <li class="flex items-center gap-2">
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">AC</p>
-              </li>
-              <li class="flex items-center gap-2">
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Kamar Mandi Dalam</p>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $room->description }}</p>
               </li>
             </ul>
   
             <div class="mt-4 flex items-center justify-between gap-4">
-              <p class="text-xl font-extrabold leading-tight text-gray-900 dark:text-white"> 2.5 JT </p>
+              <p class="text-xl font-extrabold leading-tight text-gray-900 dark:text-white"> {{ $room->price_per_month }} </p>
   
               <button type="button" class="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 Ajukan reservasi
@@ -169,6 +164,7 @@
             </div>
           </div>
         </div>
+        @endforeach
       </div>
     </div>
     <!-- Filter modal -->

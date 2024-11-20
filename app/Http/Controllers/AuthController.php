@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return view('dashboard.register', ['role' => 'user']);
+        return view('dashboard.register');
     }
 
     public function register(Request $request): RedirectResponse
@@ -50,6 +50,9 @@ class AuthController extends Controller
             'password' => 'required|min:5',
             'no_tlp' => 'required|numeric|digits_between:10,13',
             'address' => 'nullable|string|max:255',
+            'name' => ['required', 'min:5', 'max:60'],
+            'email' => 'required|max:200|email:dns',
+            'password' => 'required|min:5'
         ]);
 
         $userData = [
@@ -60,7 +63,7 @@ class AuthController extends Controller
             'id_role' => 2, // Role sebagai Pemilik Kos
         ];
 
-        $user = User::create($userData);
+        $user = $user = User::create($userData);
 
         $ownerData = [
             'id_user' => $user->id_user, 
@@ -74,31 +77,13 @@ class AuthController extends Controller
 
         Owner::create($ownerData);
 
-        return redirect('/login')->with('success', 'Pendaftaran berhasil! Silahkan login sebagai pemilik kos.');
+        return redirect('/login')->with('success', 'Registration Successful! Please Login');
     }
 
 
     public function login()
     {
         return view('dashboard.login');
-    }
-
-    public function showLoginOptions()
-    {
-        return view('home.masuk');
-    }
-
-    public function showRegisterForm(Request $request)
-    {
-        $role = $request->query('role');
-
-        // Validasi role
-        if (!in_array($role, ['pemilik', 'pencari'])) {
-            return redirect()->back()->withErrors(['error' => 'Role tidak valid.']);
-        }
-
-        // Tampilkan view register dengan role yang dipilih
-        return view('dashboard.register', compact('role'));
     }
 
     public function authenticate(Request $request)
@@ -111,10 +96,11 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/home');
+            return redirect()->intended('/dashboard');
         }
         return back()->with('loginError', 'Login Failed!');
     }
+
 
     public function logout(Request $request)
     {
@@ -124,4 +110,5 @@ class AuthController extends Controller
 
         return redirect()->route('login');
     }
+    
 }

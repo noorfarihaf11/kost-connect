@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('testimonials', function (Blueprint $table) {
             $table->id('id_testimoni')->primary;
+<<<<<<< HEAD
             $table->unsignedBigInteger('id_room')->nullable();
             $table->foreign('id_room')->references('id_room')->on('rooms');
+=======
+            $table->unsignedBigInteger('id_house')->nullable();
+            $table->foreign('id_house')->references('id_house')->on('boarding_houses');
+>>>>>>> eed4b87 (first commit)
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id_user')->on('users');
             $table->string('photo');

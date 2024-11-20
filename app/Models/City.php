@@ -13,7 +13,6 @@ class City extends Model
         'name_city',
         'slug'
     ];
-
     public function rooms ()
     {
         return $this->hasMany(Room::class);

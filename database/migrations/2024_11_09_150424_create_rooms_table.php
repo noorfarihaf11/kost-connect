@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id('id_room')->primary;
+<<<<<<< HEAD
             $table->unsignedBigInteger('id_city')->nullable();
             $table->foreign('id_city')->references('id_city')->on('cities');
             $table->string('name_room');
@@ -23,6 +24,15 @@ return new class extends Migration
             $table->integer('square_feet');
             $table->boolean('is_available');
             $table->integer('available_rooms');
+=======
+            $table->unsignedBigInteger('id_house')->nullable();
+            $table->foreign('id_house')->references('id_house')->on('boarding_houses');
+            $table->string('name_room');
+            $table->string('room_type');
+            $table->integer('square_feet');
+            $table->integer('price_per_month');
+            $table->boolean('is_available');
+>>>>>>> eed4b87 (first commit)
             $table->timestamps();
         });
     }

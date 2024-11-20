@@ -49,7 +49,6 @@ class AuthController extends Controller
         }
         return back()->with('loginError', 'Login Failed!');
     }
-
     public function logout(Request $request)
     {
         Auth::logout();
@@ -58,5 +57,4 @@ class AuthController extends Controller
     
         return redirect()->route('login');
     }
-    
 }

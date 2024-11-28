@@ -8,12 +8,11 @@
 </head>
 
 <header>
-    @include('home.layouts.header')
+    @include('home.layouts.header') <!-- Navbar di header -->
 </header>
-
-<body>
-    @yield('content')
-    @include('home.layouts.footer')
+<body class="mt-16"> 
+    @yield('content') <!-- Konten halaman -->
+    @include('home.layouts.footer') <!-- Footer -->
 </body>
 
 </html>

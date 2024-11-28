@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id('id_payment');
-            $table->unsignedBigInteger('id_customer')->nullable();
-            $table->foreign('id_customer')->references('id_customer')->on('customers');
-            $table->enum('payment_method', ['down_payment', 'full_payment'])->nullable(); 
-            $table->string('payment_status')->nulllable();
+            $table->unsignedBigInteger('id_reservation');
+            $table->foreign('id_reservation')->references('id_reservation')->on('reservations');
+            $table->unsignedBigInteger('id_transaction')->nullable();
+            $table->string('payment_method');
+            $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
+            $table->string('proof_of_payment')->nullable(); 
             $table->integer('total_amount')->nullable(); 
             $table->timestamps();
         });

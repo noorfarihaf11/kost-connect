@@ -11,20 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rooms', function (Blueprint $table) {
-            $table->id('id_room')->primary;
+        Schema::create('boarding_houses', function (Blueprint $table) {
+            $table->id('id_house')->primary;
+            $table->string('name_house');
+            $table->string('slug');
+            $table->string('thumbnail');
             $table->unsignedBigInteger('id_city')->nullable();
             $table->foreign('id_city')->references('id_city')->on('cities');
-            $table->unsignedBigInteger('id_owner')->nullable();
-            $table->foreign('id_owner')->references('id_user')->on('users');
-            $table->string('name_room');
-            $table->enum('room_type', ['putra', 'putri', 'campur']);
+            $table->unsignedBigInteger('id_category')->nullable();
+            $table->foreign('id_category')->references('id_category')->on('categories');
             $table->text('description');
-            $table->integer('price_per_month');
+            $table->integer('price');
             $table->text('address');
-            $table->integer('square_feet');
-            $table->boolean('is_available')->nullable();
-            $table->integer('available_rooms');
             $table->timestamps();
         });
     }
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rooms');
+        Schema::dropIfExists('boarding_houses');
     }
 };

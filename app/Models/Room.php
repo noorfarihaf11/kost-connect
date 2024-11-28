@@ -9,6 +9,7 @@ class Room extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_room'; 
     protected $fillable = [
         'id_city',
         'name_room',
@@ -25,6 +26,11 @@ class Room extends Model
     public function city ()
     {
         return $this->belongsTo(City::class, 'id_city');
+    }
+
+    public function owner ()
+    {
+        return $this->belongsTo(User::class, 'id_owner');
     }
 
     public function images()

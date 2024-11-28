@@ -32,7 +32,6 @@
                             <th class="px-4 py-3">Harga bulanan</th>
                             <th class="px-4 py-3">Alamat</th>
                             <th class="px-4 py-3">Luas kamar</th>
-                            <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3">Jumlah tersedia</th>
                             <th class="px-4 py-3">Action</th>
                         </tr>
@@ -48,7 +47,6 @@
                                 <td class="px-4 py-3 text-sm text-center">{{ $room->price_per_month }}</td>
                                 <td class="px-4 py-3 text-sm text-center">{{ $room->address }}</td>
                                 <td class="px-4 py-3 text-sm text-center">{{ $room->square_feet }}</td>
-                                <td class="px-4 py-3 text-sm text-center">{{ $room->is_available }}</td>
                                 <td class="px-4 py-3 text-sm text-center">{{ $room->available_rooms }}</td>
                                 <td class="px-4 py-3 text-sm text-center">
                                     <div class="flex items-center space-x-4 text-sm">
@@ -61,7 +59,6 @@
                                             data-price_per_month="{{ $room->price_per_month }}"
                                             data-address="{{ $room->address }}"
                                             data-square_feet="{{ $room->square_feet }}"
-                                            data-is_available="{{ $room->is_available }}"
                                             data-available_rooms="{{ $room->available_rooms }}">
                                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793z">
@@ -90,30 +87,60 @@
         <!-- Modal untuk form New City -->
         <div id="cityForm" style="display: none;"
             class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-2xl">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Tambah kamar baru</h3>
                 <form method="post" action="/rooms" class="mb-5" enctype="multipart/form-data">
                     @csrf
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-700 dark:text-gray-400">Kota</label>
-                        <select name="id_city" required
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300">
-                            <option value="" disabled selected>Pilih Kota</option>
-                            @foreach ($cities as $city)
-                                <option value="{{ $city->id_city }}">{{ $city->name_city }}</option>
-                            @endforeach
-                        </select>
+                    <div class="mb-4 flex space-x-4"> <!-- Menggunakan flex untuk dua kolom dalam satu baris -->
+                        <div class="w-1/2">
+                            <label class="block text-sm text-gray-700 dark:text-gray-400">Kota</label>
+                            <select name="id_city" required
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300">
+                                <option value="" disabled selected>Pilih Kota</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id_city }}">{{ $city->name_city }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+        
+                        <div class="w-1/2">
+                            <label class="block text-sm text-gray-700 dark:text-gray-400">Nama kamar</label>
+                            <input type="text" name="name_room" required
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
+                        </div>
                     </div>
-                    
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-700 dark:text-gray-400">Nama kamar</label>
-                        <input type="text" name="name_room" required
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
+        
+                    <div class="mb-4 flex space-x-4"> <!-- Menggunakan flex untuk dua kolom dalam satu baris -->
+                        <div class="w-1/2">
+                            <label class="block text-sm text-gray-700 dark:text-gray-400">Jenis Kelamin</label>
+                            <select name="room_type" required
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300">
+                                <option value="" disabled selected>Pilih Jenis Kelamin</option>
+                                <option value="putra">Putra</option>
+                                <option value="putri">Putri</option>
+                                <option value="campur">Campur</option>
+                            </select>
+                        </div>
+        
+                        <div class="w-1/2">
+                            <label class="block text-sm text-gray-700 dark:text-gray-400">Harga Sewa</label>
+                            <input type="text" name="price_per_month" required
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300"
+                                placeholder="harga per bulan" />
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-700 dark:text-gray-400">Jenis kelamin</label>
-                        <input type="text" name="room_type" required
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
+                    <div class="mb-4 flex space-x-4"> <!-- Menggunakan flex untuk dua kolom dalam satu baris -->
+                        <div class="w-1/2">
+                            <label class="block text-sm text-gray-700 dark:text-gray-400">Luas Kamar</label>
+                            <input type="text" name="square_feet" required
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
+                        </div>
+        
+                        <div class="w-1/2">
+                            <label class="block text-sm text-gray-700 dark:text-gray-400">Jumlah Tersedia</label>
+                            <input type="text" name="available_rooms" required
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
+                        </div>
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm text-gray-700 dark:text-gray-400">Deskripsi</label>
@@ -121,28 +148,8 @@
                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm text-gray-700 dark:text-gray-400">Harga bulanan</label>
-                        <input type="text" name="price_per_month" required
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-                    </div>
-                    <div class="mb-4">
                         <label class="block text-sm text-gray-700 dark:text-gray-400">Alamat</label>
                         <input type="text" name="address" required
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-700 dark:text-gray-400">Luas kamar</label>
-                        <input type="text" name="square_feet" required
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-700 dark:text-gray-400">Status</label>
-                        <input type="text" name="is_available" required
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-700 dark:text-gray-400">Jumlah tersedia</label>
-                        <input type="text" name="available_rooms" required
                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
                     </div>
                     <div class="flex justify-end">

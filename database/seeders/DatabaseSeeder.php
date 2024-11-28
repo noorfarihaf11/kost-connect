@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\City;
 use App\Models\Room;
+use App\Models\Role;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,12 +18,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CitySeeder::class,
-            RoomSeeder::class
+            RoomSeeder::class,
+            RoleSeeder::class,
         ]);
         
         // Ambil data setelah seeding
         $cities = City::all();
         $rooms = Room::all();
+        $roles = Role::all();
     
         // Lakukan apa pun yang perlu dilakukan dengan data yang diperoleh
     }

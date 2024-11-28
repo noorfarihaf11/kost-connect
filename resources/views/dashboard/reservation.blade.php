@@ -1,0 +1,220 @@
+@extends('dashboard.layouts.main')
+
+@section('content')
+    <div class="container grid px-6 mx-auto">
+        @if(auth()->check() && auth()->user()->id_role == 1)
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Reservation
+        </h2>
+        @else
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Reservasi Saya
+        </h2>
+        @endif
+        <div class="flex items-center justify-between mb-4">
+            <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+                List reservation
+            </h4>
+        </div>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+        <div class="w-full overflow-hidden rounded-lg shadow-xs">
+            <div class="w-full overflow-x-auto">
+                <table class="w-full whitespace-no-wrap">
+                    <thead>
+                        <tr
+                            class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3 text-center w-6">ID</th>
+                            <th class="px-4 py-3 text-center w-6">ID Kamar</th>
+                            <th class="px-4 py-3">Nama</th>
+                            <th class="px-4 py-3">Tanggal Kunjung</th>
+                            <th class="px-4 py-3">Notes</th>
+                            <th class="px-4 py-3">Status</th>
+                            @if(auth()->check() && auth()->user()->id_role == 1)
+                            <th class="px-4 py-3">Actions</th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                        @foreach ($reservations as $reservasi)
+                            <tr class="text-gray-700 dark:text-gray-400 text-center">
+                                <td class="px-3 py-2 text-sm w-6">
+                                    {{ $reservasi->id_reservation }}
+                                </td>
+                                <td class="px-3 py-2 text-sm w-6">
+                                    {{ $reservasi->room->name_room }}
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="text-center">
+                                        <p class="font-semibold">{{ $reservasi->user->name }}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                                            {{ $reservasi->user->email }}
+                                        </p>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm">
+                                    {{ $reservasi->reservation_date }}
+                                </td>
+                                <td class="px-4 py-3 text-sm">
+                                    {{ $reservasi->notes }}
+                                </td>
+                                <td class="px-4 py-3 text-sm">
+                                    @if ($reservasi->reservation_status == 1)
+                                        <span
+                                            class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                                            Diajukan
+                                        </span>
+                                    @elseif ($reservasi->reservation_status == 2)
+                                        <span
+                                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                            Diterima
+                                        </span>
+                                    @elseif ($reservasi->reservation_status == 0)
+                                        <span
+                                            class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                            Ditolak
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if(auth()->check() && auth()->user()->id_role == 1)
+                                    @if ($reservasi->reservation_status == 2)
+                                        <button
+                                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg opacity-50 cursor-not-allowed focus:outline-none"
+                                            type="button" disabled>
+                                            Sudah Diterima
+                                        </button>
+                                    @else
+                                        <button
+                                            class="accReservation px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                            type="button" data-id="{{ $reservasi->id_reservation }}"
+                                            data-reservation_status="{{ $reservasi->reservation_status }}">
+                                            Terima
+                                        </button>
+                                    @endif
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </main>
+    </div>
+    </div>
+
+    <div id="terimareservasiForm" style="display: none;"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-1/3">
+            <!-- Modal Header -->
+            <form id="updateStatus" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="id_reservation" id="edit_id_reservation">
+                <input type="hidden" name="reservation_status" value="2">
+                <div class="flex justify-between items-center p-4 border-b">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Terima Reservasi</h2>
+                    <button id="closeModalButton" type="button"
+                        class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" aria-label="close">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img" aria-hidden="true">
+                            <path
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" fill-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-4">
+                    <p class="text-sm text-gray-700 dark:text-gray-400">
+                        Dengan mengonfirmasi, reservasi ini akan diterima dan penyewa akan diberi tahu. Apakah Anda ingin
+                        melanjutkan?
+                    </p>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="flex justify-end p-4 border-t">
+                    <button
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                        onclick="closeModal()">
+                        Tolak
+                    </button>
+                    <button
+                        class="ml-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-300">
+                        Terima
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- <div id="customerForm" style="display: none;"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-2xl">
+            <form method="post" action="/reservation" class="mb-5" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="id_reservation" value="{{ $reservasi->id_reservation }}">
+                <input type="hidden" name="name" value="{{ $reservasi->user->name }}">
+                <input type="hidden" name="email" value="{{ $reservasi->user->email }}">
+                <input type="hidden" name="phone_number" value="{{ $reservasi->phone_number }}">
+            </form>
+        </div>
+    </div> --}}
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
+    <script>
+        $(document).ready(function() {
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $('.accReservation').click(function() {
+                const id = $(this).data('id');
+                const reservation_status = $(this).data('reservation_status');
+
+                $('#edit_id_reservation').val(id);
+                $('#edit_reservation_status').val(reservation_status);
+
+                $('#terimareservasiForm').show(); // Open the modal
+            });
+
+            $('#closeModalButton').click(function() {
+                $('#terimareservasiForm').hide(); // Hide the modal
+            });
+
+            $('#updateStatus').on('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                const id = $('#edit_id_reservation').val();
+                const url = '/reservation/' + id; // Construct the URL for the PUT request
+                const formData = $(this).serialize() + '&_method=PUT';
+
+                console.log("Submitting data:");
+                console.log("ID:", id);
+                console.log("URL:", url);
+                console.log("Form Data:", formData);
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData, // Send the form data with CSRF token
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Reservation updated successfully!');
+                            location.reload(); // Reload the page after a successful update
+                        } else {
+                            alert('Update failed: ' + response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + xhr
+                            .responseText); // Show error message if something goes wrong
+                    }
+                });
+            });
+        });
+    </script>
+@endsection 

@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id('id_reservation');
-            $table->string('code');
             $table->unsignedBigInteger('id_room');
             $table->foreign('id_room')->references('id_room')->on('rooms');
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id_user')->on('users');
-            $table->string('reservation_status');
-            $table->date('reservation_date')->nullable();
+            $table->string('reservation_status')->default('1')->nullable();
+            $table->date('reservation_date');
+            $table->string('notes');
             $table->timestamps(); 
         });
     }

@@ -6,8 +6,6 @@
 </head>
 
 <body>
-   
-        <!-- Desktop sidebar -->
         @include('dashboard.layouts.sidebar')
 
         <div class="flex flex-col flex-1 w-full">

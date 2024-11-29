@@ -10,9 +10,13 @@
 
         <div class="flex flex-col flex-1 w-full">
             @include('dashboard.layouts.header')
+            <main class="h-full pb-16 overflow-y-auto">
       
         @yield('content')
+            </main>
+        
     </div>
+    
     </div>
 </body>
 

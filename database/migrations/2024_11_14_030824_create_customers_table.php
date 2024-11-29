@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id('id_customer');
-            $table->unsignedBigInteger('id_reservation')->nullable();
-            $table->foreign('id_reservation')->references('id_reservation')->on('reservations');
+            $table->unsignedBigInteger('id_payment')->nullable();
+            $table->foreign('id_payment')->references('id_payment')->on('payments');
             $table->string('name'); 
             $table->string('email'); 
             $table->string('phone_number'); 
             $table->date('start_date'); 
-            $table->date('end_date'); 
-            $table->string('customer_status')->nulllable();
+            $table->date('end_date')->nullable(); 
+            $table->enum('customer_status', ['active', 'inactive'])->default('inactive');
             $table->timestamps();
         });
     }

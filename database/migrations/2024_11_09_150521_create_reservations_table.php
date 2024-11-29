@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('id_user')->references('id_user')->on('users');
             $table->string('reservation_status')->default('1')->nullable();
             $table->date('reservation_date');
+            $table->string('phone_number');
             $table->string('notes');
             $table->timestamps(); 
         });

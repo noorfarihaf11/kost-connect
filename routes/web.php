@@ -3,6 +3,7 @@
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReservationController;
@@ -61,4 +62,7 @@ Route::post('/reservation', [ReservationController::class, 'store']);
 Route::put('/reservation/{id}', [ReservationController::class, 'update']);
 
 Route::get('/payment', [PaymentController::class, 'index'])->middleware('auth');
-Route::put('/payment/{id}', [PaymentController::class, 'update']);
+Route::put('/payment/{id}/upload-proof', [PaymentController::class, 'uploadProof'])->middleware('auth');
+Route::put('/payment/{id}/confirm', [PaymentController::class, 'confirmPayment'])->middleware('auth');
+
+Route::get('/customer', [CustomerController::class, 'index'])->middleware('auth');

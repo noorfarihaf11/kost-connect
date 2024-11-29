@@ -34,7 +34,8 @@ class ReservationController extends Controller
         $validated = $request->validate([
             'id_room' => 'required|integer',
             'reservation_date' => 'required|date',
-            'notes' => 'nullable|string',
+            'phone_number' => 'required|string',
+            'notes' => 'required|string',
         ]);
 
         // Buat data reservasi
@@ -42,6 +43,7 @@ class ReservationController extends Controller
             'id_room' => $request->id_room,
             'reservation_date' => $request->reservation_date,
             'notes' => $request->notes,
+            'phone_number' => $request->phone_number,
             'id_user' => Auth::id(),  // Pastikan yang login dapat membuat reservasi
         ]);
 

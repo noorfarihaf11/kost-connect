@@ -15,6 +15,7 @@ class Reservation extends Model
         'id_user',
         'reservation_status',
         'reservation_date',
+        'phone_number',
         'notes',
         'timestamps'
     ];

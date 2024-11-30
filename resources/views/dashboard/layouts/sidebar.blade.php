@@ -83,9 +83,15 @@
                     @endauth
                 @endif
             </ul>
+            <div class="px-6 my-6">
+                <a href="/home"
+                    class="flex items-center justify-start w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Home
+                </a>
+            </div>
         </div>
     </aside>
-
     <script>
         // Menentukan fungsi untuk menambahkan kelas aktif pada menu
         function setActiveMenu() {

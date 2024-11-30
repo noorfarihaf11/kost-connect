@@ -17,17 +17,22 @@ class AuthController extends Controller
 
     public function register(Request $request): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'min:5', 'max:60'],
-            'email' => 'required|max:200|email:dns',
-            'password' => 'required|min:5'
-        ]);
-
-        $validatedData['password'] = Hash::make($validatedData['password']);
-
-        $user = User::create($validatedData);
-
-        return redirect('/login')->with('success', 'Registration Successful! Please Login');
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|min:5|max:60',
+                'email' => 'required|email|unique:users,email|max:200',
+                'password' => 'required|min:5',
+            ]);
+    
+            $validatedData['password'] = bcrypt($validatedData['password']);
+            $validatedData['id_role'] = 3;
+    
+            User::create($validatedData);
+    
+            return redirect('/login')->with('success', 'Registration Successful! Please Login');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Registration failed. Please try again.'])->withInput();
+        }
     }
 
     public function login()

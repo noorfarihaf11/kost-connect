@@ -158,13 +158,13 @@
 
                             <div class="mt-4 flex items-center justify-between gap-4">
                                 <p class="text-xl font-extrabold leading-tight text-gray-900 dark:text-white">
-                                    {{ $room->price_per_month }} </p>
+                                    Rp {{ number_format($room->price_per_month, 0, ',', '.') }} </p>
 
-                                <button type="button"
+                                    <button type="button"
                                     class="reservButton inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                                     data-id="{{ $room->id_room }}" data-name_room="{{ $room->name_room }}">
-                                    Ajukan reservasi
-                                </button>
+                                    Reservasi
+                                </button>                         
                             </div>
                         </div>
                     </div>

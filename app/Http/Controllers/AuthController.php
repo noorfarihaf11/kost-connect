@@ -25,7 +25,7 @@ class AuthController extends Controller
             ]);
     
             $validatedData['password'] = bcrypt($validatedData['password']);
-            $validatedData['id_role'] = 3;
+            $validatedData['id_role'] = 1;
     
             User::create($validatedData);
     

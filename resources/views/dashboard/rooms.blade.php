@@ -228,80 +228,62 @@
             });
 
         });
+    
         $(document).ready(function() {
-            const csrfToken = $('meta[name="csrf-token"]').attr('content');
+    const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            $('.editButton').click(function() {
-                const id = $(this).data('id');
-                const name_city = $(this).data('name_city');
-                const slug = $(this).data('slug');
+    // Edit button handler (untuk edit room)
+    $('.editButton').click(function() {
+        const id = $(this).data('id');
+        const name_room = $(this).data('name_room');
+        const room_type = $(this).data('room_type');
+        const description = $(this).data('description');
+        const price_per_month = $(this).data('price_per_month');
+        const address = $(this).data('address');
+        const square_feet = $(this).data('square_feet');
+        const available_rooms = $(this).data('available_rooms');
 
-                // Set the values in the edit form
-                $('#edit_id_city').val(id);
-                $('#edit_name_city').val(name_city);
-                $('#edit_slug_city').val(slug);
+        // Set the values in the edit form
+        $('#edit_id_room').val(id);
+        $('#edit_name_room').val(name_room);
+        $('#edit_room_type').val(room_type);
+        $('#edit_description').val(description);
+        $('#edit_price_per_month').val(price_per_month);
+        $('#edit_address').val(address);
+        $('#edit_square_feet').val(square_feet);
+        $('#edit_available_rooms').val(available_rooms);
 
-                // Show the modal
-                $('#editCityForm').show(); // Open the modal
-            });
+        // Show the modal
+        $('#editRoomForm').show(); // Open the modal
+    });
 
-            $('#editCityDetails').on('submit', function(event) {
-                event.preventDefault(); // Prevent the default form submission
+    // Delete button handler (untuk delete room)
+    $(document).on('click', '.deleteButton', function() {
+        const id_room = $(this).data('id');
+        const confirmed = confirm('Apakah Anda yakin ingin menghapus kamar ini?');
 
-                const id = $('#edit_id_city').val(); // Get the city ID
-                const url = '/cities/' + id; // Construct the URL for the PUT request
-                const formData = $(this).serialize() + '&_method=PUT';
-
-                console.log("Submitting data:");
-                console.log("ID:", id);
-                console.log("URL:", url);
-                console.log("Form Data:", formData);
-
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: formData, // Send the form data with CSRF token
-                    success: function(response) {
-                        if (response.success) {
-                            alert('City updated successfully!');
-                            location.reload(); // Reload the page after a successful update
-                        } else {
-                            alert('Update failed: ' + response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        alert('Error: ' + xhr
-                            .responseText); // Show error message if something goes wrong
+        if (confirmed) {
+            $.ajax({
+                url: '/rooms/' + id_room, // URL sesuai dengan route yang ditentukan
+                type: 'DELETE',
+                data: {
+                    _token: csrfToken, // Mengirimkan CSRF token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Kamar berhasil dihapus!');
+                        location.reload(); // Reload halaman setelah berhasil menghapus
+                    } else {
+                        alert('Error: ' + (response.message || 'Gagal menghapus kamar.'));
                     }
-                });
-            });
-
-            $(document).on('click', '.deleteButton', function() {
-                const id_city = $(this).data('id');
-                const confirmed = confirm('Are you sure you want to delete this user?');
-
-                if (confirmed) {
-                    $.ajax({
-                        url: '/cities/' + id_city,
-                        type: 'DELETE',
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                alert('City deleted successfully!');
-                                location.reload(); // Reload the page to update the table
-                            } else {
-                                alert('Error deleting City: ' + (response.message ||
-                                    'Unknown error.'));
-                            }
-                        },
-                        error: function(xhr) {
-                            alert('An error occurred while deleting the City.');
-                        }
-                    });
+                },
+                error: function(xhr) {
+                    alert('Terjadi kesalahan saat menghapus kamar.');
                 }
             });
-        });
+        }
+    });
+});
+
     </script>
 @endsection

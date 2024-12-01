@@ -66,3 +66,16 @@ Route::put('/payment/{id}/upload-proof', [PaymentController::class, 'uploadProof
 Route::put('/payment/{id}/confirm', [PaymentController::class, 'confirmPayment'])->middleware('auth');
 
 Route::get('/customer', [CustomerController::class, 'index'])->middleware('auth');
+
+Route::get('/masuk', [AuthController::class, 'showLoginOptions'])->name('masuk')->middleware('guest');
+Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'authenticate']);
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+
+Route::get('/masuk', [AuthController::class, 'showLoginOptions'])->name('login.options');
+
+Route::get('/register', [AuthController::class, 'index'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::get('/register/pemilik', [AuthController::class, 'showRegisterPemilik'])->name('register.pemilik');
+Route::post('/register/pemilik', [AuthController::class, 'registerPemilik']);

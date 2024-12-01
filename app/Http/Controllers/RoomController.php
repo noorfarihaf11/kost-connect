@@ -32,6 +32,11 @@ class RoomController extends Controller
 
         $room->save();
 
+        // $owner = Owner::where('user_id', Auth::id())->first();
+        // if ($owner && $owner->status === 'inactive') {
+        //     $owner->update(['status' => 'active']);
+        // }
+
         return redirect('/rooms');
     }
 }

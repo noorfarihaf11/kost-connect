@@ -27,7 +27,12 @@
                         <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                             Create account
                         </h1>
-                        <form action="/register" method="POST">
+
+                        <h1 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6 text-center">
+                            Daftar sebagai {{ $role === 'pemilik' ? 'Pemilik Kos' : 'Pencari Kos' }}
+                        </h1>
+                
+                        <form action="{{ $role === 'pemilik' ? route('register.pemilik') : route('register') }}" method="POST">
                             @csrf
                             <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Name</span>
@@ -75,6 +80,22 @@
                                     placeholder="*****"
                                 />
                                 @error('password')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </label>
+
+                            <label class="block mt-4 text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Nomor Handphone</span>
+                                <input 
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
+                                           focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray 
+                                           form-input @error('no_tlp') border-red-500 @enderror" 
+                                    type="no_tlp" 
+                                    id="no_tlp" 
+                                    name="no_tlp" 
+                                    placeholder="08*****"
+                                />
+                                @error('no_tlp')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </label>

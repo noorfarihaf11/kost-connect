@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Owner;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -24,12 +25,12 @@ class AuthController extends Controller
                 'password' => 'required|min:5',
                 'no_tlp' => 'nullable|numeric|digits_between:10,13',
             ]);
-            
+
             $validatedData['id_role'] = 3;
             $validatedData['password'] = bcrypt($validatedData['password']);
-    
+
             User::create($validatedData);
-    
+
             return redirect('/login')->with('success',  'Pendaftaran berhasil! Silahkan login sebagai pencari kos.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Registration failed. Please try again.'])->withInput();
@@ -48,15 +49,34 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email|max:200',
             'password' => 'required|min:5',
             'no_tlp' => 'required|numeric|digits_between:10,13',
+            'address' => 'nullable|string|max:255',
         ]);
 
-        $validatedData['id_role'] = 2; 
-        $validatedData['password'] = bcrypt($validatedData['password']);
+        $userData = [
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+            'no_tlp' => $validatedData['no_tlp'],
+            'id_role' => 2, // Role sebagai Pemilik Kos
+        ];
 
-        User::create($validatedData);
+        $user = User::create($userData);
+
+        $ownerData = [
+            'id_user' => $user->id_user, 
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['no_tlp'],
+            'address' => $validatedData['address'],
+            'password' => $user->password, // Menggunakan password yang sama
+            'owner_status' => 'inactive', // Status default
+        ];
+
+        Owner::create($ownerData);
 
         return redirect('/login')->with('success', 'Pendaftaran berhasil! Silahkan login sebagai pemilik kos.');
     }
+
 
     public function login()
     {
@@ -95,14 +115,13 @@ class AuthController extends Controller
         }
         return back()->with('loginError', 'Login Failed!');
     }
-    
+
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-    
+
         return redirect()->route('login');
     }
-
 }

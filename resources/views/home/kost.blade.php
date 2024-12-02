@@ -160,11 +160,11 @@
                                 <p class="text-xl font-extrabold leading-tight text-gray-900 dark:text-white">
                                     Rp {{ number_format($room->price_per_month, 0, ',', '.') }} </p>
 
-                                    <button type="button"
+                                <button type="button"
                                     class="reservButton inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                                     data-id="{{ $room->id_room }}" data-name_room="{{ $room->name_room }}">
                                     Reservasi
-                                </button>                         
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -223,9 +223,11 @@
                                     required>
                             </div>
                             <div>
-                                <label for="phone_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No HP</label>
-                                <input type="text" name="phone_number" id="phone_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                                placeholder="Masukkan no hp aktif" required="">
+                                <label for="phone_number"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No HP</label>
+                                <input type="text" name="phone_number" id="phone_number"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Masukkan no hp aktif" required="">
                             </div>
                         </div>
                         <div class="sm:col-span-2">
@@ -265,7 +267,7 @@
                     // Menampilkan modal
                     $('#reservationForm').removeClass('hidden');
                 });
-    
+
                 $('#closeModalButton').click(function() {
                     $('#reservationForm').addClass('hidden');
                 });

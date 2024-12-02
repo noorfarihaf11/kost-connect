@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('owners', function (Blueprint $table) {
             $table->id('id_owner');
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id_user')->on('users');
             $table->string('name');
             $table->string('email')->unique(); 
             $table->string('phone')->nullable(); 
             $table->text('address')->nullable(); 
             $table->string('password'); 
+            $table->enum('owner_status', ['active', 'inactive'])->default('inactive');
             $table->timestamps();
         });
     }

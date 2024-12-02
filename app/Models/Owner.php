@@ -13,11 +13,13 @@ class Owner extends Model
     protected $primary_key = 'id_owner';
 
     protected $fillable = [
+        'id_user',
         'name',
         'email',
+        'password',
         'phone',
         'address',
-        'password',
+        'owner_status'
     ];
 
     public function boardingHouses()

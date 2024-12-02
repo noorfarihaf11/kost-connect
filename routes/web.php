@@ -5,10 +5,12 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\BoardingHouseController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Room;
 
@@ -35,7 +37,7 @@ Route::get('/daftarkost/{id}', function ($id) {
 });
 
 
-Route::get('/cities', [CityController::class, 'index'])->middleware('admin');
+Route::get('/cities', [CityController::class, 'index'])->middleware('owner');
 Route::post('/cities', [CityController::class, 'store']);
 Route::put('/cities/{id}', [CityController::class, 'update']);
 Route::delete('/cities/{id}', [CityController::class, 'destroy']);
@@ -79,3 +81,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/register/pemilik', [AuthController::class, 'showRegisterPemilik'])->name('register.pemilik');
 Route::post('/register/pemilik', [AuthController::class, 'registerPemilik']);
+
+Route::get('/owners', [OwnerController::class, 'index'])->middleware('admin');
+
+Route::get('/rumahkost', [BoardingHouseController::class, 'index'])->middleware('owner');

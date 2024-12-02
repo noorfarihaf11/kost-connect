@@ -13,8 +13,9 @@ class City extends Model
         'name_city',
         'slug'
     ];
-    public function rooms ()
+
+    public function houses ()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(BoardingHouse::class);
     }
 }

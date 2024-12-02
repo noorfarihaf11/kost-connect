@@ -9,20 +9,27 @@ class BoardingHouse extends Model
 {
     use HasFactory;
 
+    protected $table = 'boarding_houses';
+    protected $primary_key = 'id_house';
+
     protected $fillable = [
-        'name_house',
-        'slug',
-        'thumbnail',
+        'id_owner',
         'id_city',
-        'id_category',
-        'description',
-        'price',
+        'name',
         'address',
+        'gender_type',
+        'image',
+        'timestamps'
     ];
 
     public function owner()
     {
-        return $this->belongsTo(Owner::class, 'id_owner');
+        return $this->belongsTo(Owner::class, 'id_owner','id_owner');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'id_city','id_city');
     }
 
     public function rooms()

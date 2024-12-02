@@ -7,41 +7,42 @@
             @auth
                 <ul class="mt-6">
                     <li class="relative px-6 py-3">
-                        <a href=/dashboard
+                        <a href="/dashboard"
                             class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100">
-                            <i class="fa-solid fa-house"></i>
+                            <i class="fas fa-tachometer-alt"></i>
                             <span class="ml-4">Dashboard</span>
                         </a>
                     </li>
                 </ul>
+
                 <ul>
                     @if (Gate::allows('admin') || Gate::allows('owner'))
                         <li class="relative px-6 py-3">
-                            <a href=/cities
+                            <a href="/cities"
                                 class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                 <i class="fas fa-city"></i>
                                 <span class="ml-4">Kota</span>
                             </a>
                         </li>
                         <li class="relative px-6 py-3">
-                            <a href=/roles
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fa-solid fa-users-cog"></i>
-                                <span class="ml-4">Role</span>
+                            <a href=/owners
+                                class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                <i class="fas fa-user-tie"></i>
+                                <span class="ml-4">Pemilik Rumah Kost</span>
                             </a>
                         </li>
                         <li class="relative px-6 py-3">
-                            <a href=/users
+                            <a href="/rumahkost"
                                 class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fa-solid fa-user-cog"></i>
-                                <span class="ml-4">User</span>
+                                <i class="fa-solid fa-house"></i>
+                                <span class="ml-4">Rumah Kost</span>
                             </a>
                         </li>
                         <li class="relative px-6 py-3">
                             <a href=/rooms
                                 class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                 <i class="fas fa-bed"></i>
-                                <span class="ml-4">Kamar kost</span>
+                                <span class="ml-4">Kamar Kost</span>
                             </a>
                         </li>
                         <li class="relative px-6 py-3">
@@ -63,6 +64,20 @@
                                 class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                 <i class="fas fa-house-user"></i>
                                 <span class="ml-4">Penghuni Kos</span>
+                            </a>
+                        </li>
+                        <li class="relative px-6 py-3">
+                            <a href=/roles
+                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                <i class="fa-solid fa-users-cog"></i>
+                                <span class="ml-4">Role</span>
+                            </a>
+                        </li>
+                        <li class="relative px-6 py-3">
+                            <a href=/users
+                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                <i class="fa-solid fa-user-cog"></i>
+                                <span class="ml-4">User</span>
                             </a>
                         </li>
                     @else

@@ -13,23 +13,17 @@ return new class extends Migration
     {
         Schema::create('boarding_houses', function (Blueprint $table) {
             $table->id('id_house')->primary;
-            $table->string('name_house');
-            $table->string('slug');
-            $table->string('thumbnail');
+            $table->unsignedBigInteger('id_owner')->nullable();
+            $table->foreign('id_owner')->references('id_owner')->on('owners');
             $table->unsignedBigInteger('id_city')->nullable();
             $table->foreign('id_city')->references('id_city')->on('cities');
-            $table->unsignedBigInteger('id_category')->nullable();
-            $table->foreign('id_category')->references('id_category')->on('categories');
-            $table->text('description');
-            $table->integer('price');
-            $table->text('address');
+            $table->string('name');
+            $table->string('address');
+            $table->enum('gender_type', ['putra', 'putri','campur']);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('boarding_houses');

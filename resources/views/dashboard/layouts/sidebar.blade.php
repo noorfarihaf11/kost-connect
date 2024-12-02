@@ -15,7 +15,7 @@
                     </li>
                 </ul>
                 <ul>
-                    @if (auth()->check() && auth()->user()->id_role == 1)
+                    @if (Gate::allows('admin') || Gate::allows('owner'))
                         <li class="relative px-6 py-3">
                             <a href=/cities
                                 class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">

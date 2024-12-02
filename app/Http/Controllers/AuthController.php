@@ -19,7 +19,7 @@ class AuthController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required|min:5|max:60',
+                'name' => 'required|min:1|max:60',
                 'email' => 'required|email|unique:users,email|max:200',
                 'password' => 'required|min:5',
                 'no_tlp' => 'nullable|numeric|digits_between:10,13',
@@ -30,7 +30,7 @@ class AuthController extends Controller
     
             User::create($validatedData);
     
-            return redirect('/login')->with('success', 'Registration Successful! Please Login');
+            return redirect('/login')->with('success',  'Pendaftaran berhasil! Silahkan login sebagai pencari kos.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Registration failed. Please try again.'])->withInput();
         }
@@ -44,7 +44,7 @@ class AuthController extends Controller
     public function registerPemilik(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
-            'name' => 'required|min:5|max:60',
+            'name' => 'required|min:1|max:60',
             'email' => 'required|email|unique:users,email|max:200',
             'password' => 'required|min:5',
             'no_tlp' => 'required|numeric|digits_between:10,13',
@@ -55,7 +55,7 @@ class AuthController extends Controller
 
         User::create($validatedData);
 
-        return redirect('/login')->with('success', 'Pendaftaran berhasil! Silakan login sebagai pemilik kos.');
+        return redirect('/login')->with('success', 'Pendaftaran berhasil! Silahkan login sebagai pemilik kos.');
     }
 
     public function login()

@@ -19,12 +19,18 @@ class BoardingHouse extends Model
         'price',
         'address',
     ];
-    public function rooms ()
+
+    public function owner()
+    {
+        return $this->belongsTo(Owner::class, 'id_owner');
+    }
+
+    public function rooms()
     {
         return $this->hasMany(Room::class);
     }
 
-    public function bonuses ()
+    public function bonuses()
     {
         return $this->hasMany(Bonus::class);
     }

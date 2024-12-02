@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Gate;
 
 class ReservationController extends Controller
 {
@@ -16,9 +16,11 @@ class ReservationController extends Controller
     {
         $user = Auth::user(); // Ambil pengguna yang sedang login
 
-        if ($user->id_role == 1) {
+        if (Gate::allows('admin') || Gate::allows('owner')) {
+            // Jika user adalah Admin atau Owner, ambil semua reservasi
             $reservations = Reservation::with(['room', 'user'])->get();
         } else {
+            // Jika user bukan Admin atau Owner, ambil hanya reservasi yang miliknya
             $reservations = Reservation::with(['room', 'user'])->where('id_user', $user->id_user)->get();
         }
 
@@ -38,7 +40,8 @@ class ReservationController extends Controller
             'notes' => 'required|string',
         ]);
 
-        // Buat data reservasi
+        $payment_due_date = \Carbon\Carbon::parse($request->reservation_date)->addDay();
+
         Reservation::create([
             'id_room' => $request->id_room,
             'reservation_date' => $request->reservation_date,
@@ -57,11 +60,17 @@ class ReservationController extends Controller
             $reservations->update($request->all());
 
             if ($request->reservation_status == 2) {
+
+                $reservation_date = $reservations->reservation_date;
+                $payment_due_date = \Carbon\Carbon::parse($reservation_date)->addDay();
+
                 Payment::create([
                     'id_reservation' => $reservations->id_reservation,
                     'payment_method' => 'bank_transfer', // Contoh default metode pembayaran
                     'payment_status' => 'pending',     // Status default pembayaran
                     'total_amount' => $reservations->room->price_per_month, // Total harga dari reservasi
+                    'payment_due_date' => $payment_due_date,
+                    'payment_type' => 'first_payment',
                 ]);
             }
 

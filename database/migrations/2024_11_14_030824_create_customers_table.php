@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id('id_customer');
-            $table->unsignedBigInteger('id_payment')->nullable();
-            $table->foreign('id_payment')->references('id_payment')->on('payments');
+            $table->unsignedBigInteger('id_reservation')->nullable();
+            $table->foreign('id_reservation')->references('id_reservation')->on('reservations');
             $table->string('name'); 
             $table->string('email'); 
             $table->string('phone_number'); 

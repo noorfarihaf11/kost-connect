@@ -17,6 +17,8 @@ class Payment extends Model
         'payment_status',
         'total_amount',
         'proof_of_payment',
+        'payment_due_date',
+        'first_payment_date',
         'timestamps'
     ];
 

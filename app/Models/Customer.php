@@ -11,7 +11,7 @@ class Customer extends Model
     protected $primaryKey = 'id_customer';
     protected $fillable = [
         'id_customer',
-        'id_payment',
+        'id_reservation',
         'name',
         'email',
         'phone_number',
@@ -21,6 +21,10 @@ class Customer extends Model
         'timestamps'
     ];
 
+    public function reservation ()
+    {
+        return $this->belongsTo(Reservation::class, 'id_reservation');
+    }
     public function payment ()
     {
         return $this->belongsTo(Payment::class, 'id_payment');

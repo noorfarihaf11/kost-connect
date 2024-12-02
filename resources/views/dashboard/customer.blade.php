@@ -41,10 +41,10 @@
                         @foreach ($customers as $penghuni)
                             <tr class="text-gray-700 dark:text-gray-400 text-center">
                                 <td class="px-3 py-2 text-sm w-6">
-                                    {{ $penghuni->payment->reservation->id_reservation }}
+                                    {{ $penghuni->reservation->id_reservation }}
                                 </td>
                                 <td class="px-3 py-2 text-sm w-6">
-                                    {{ $penghuni->payment->reservation->room->name_room }}
+                                    {{ $penghuni->reservation->room->name_room }}
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="text-center">

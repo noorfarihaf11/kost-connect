@@ -226,7 +226,6 @@
                   <span>Settings</span>
                 </a>
               </li>
-              <li class="flex">
                 <form action="/logout" method="POST" class="w-full">
                   @csrf
                   <button 
@@ -247,8 +246,7 @@
                     </svg>
                     <span>Log out</span>
                   </button>
-                </form>
-              </li>              
+                </form>       
             </ul>
           </template>
         </li>

@@ -12,32 +12,79 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return view('dashboard.register');
+        return view('dashboard.register', ['role' => 'user']);
     }
 
     public function register(Request $request): RedirectResponse
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required|min:5|max:60',
+                'name' => 'required|min:1|max:60',
                 'email' => 'required|email|unique:users,email|max:200',
                 'password' => 'required|min:5',
+                'no_tlp' => 'nullable|numeric|digits_between:10,13',
             ]);
+<<<<<<< HEAD
     
             $validatedData['password'] = bcrypt($validatedData['password']);
             $validatedData['id_role'] = 1;
+=======
+            
+            $validatedData['id_role'] = 3;
+            $validatedData['password'] = bcrypt($validatedData['password']);
+>>>>>>> 9ba330145272c20f205bf6c7ffb1632793893e91
     
             User::create($validatedData);
     
-            return redirect('/login')->with('success', 'Registration Successful! Please Login');
+            return redirect('/login')->with('success',  'Pendaftaran berhasil! Silahkan login sebagai pencari kos.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Registration failed. Please try again.'])->withInput();
         }
     }
 
+    public function showRegisterPemilik()
+    {
+        return view('dashboard.register', ['role' => 'pemilik']);
+    }
+
+    public function registerPemilik(Request $request): RedirectResponse
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|min:1|max:60',
+            'email' => 'required|email|unique:users,email|max:200',
+            'password' => 'required|min:5',
+            'no_tlp' => 'required|numeric|digits_between:10,13',
+        ]);
+
+        $validatedData['id_role'] = 2; 
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
+        User::create($validatedData);
+
+        return redirect('/login')->with('success', 'Pendaftaran berhasil! Silahkan login sebagai pemilik kos.');
+    }
+
     public function login()
     {
         return view('dashboard.login');
+    }
+
+    public function showLoginOptions()
+    {
+        return view('home.masuk');
+    }
+
+    public function showRegisterForm(Request $request)
+    {
+        $role = $request->query('role');
+
+        // Validasi role
+        if (!in_array($role, ['pemilik', 'pencari'])) {
+            return redirect()->back()->withErrors(['error' => 'Role tidak valid.']);
+        }
+
+        // Tampilkan view register dengan role yang dipilih
+        return view('dashboard.register', compact('role'));
     }
 
     public function authenticate(Request $request)
@@ -54,6 +101,7 @@ class AuthController extends Controller
         }
         return back()->with('loginError', 'Login Failed!');
     }
+    
     public function logout(Request $request)
     {
         Auth::logout();
@@ -62,4 +110,5 @@ class AuthController extends Controller
     
         return redirect()->route('login');
     }
+
 }

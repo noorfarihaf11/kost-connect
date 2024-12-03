@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="container grid px-6 mx-auto">
-        @if(auth()->check() && auth()->user()->id_role == 1)
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Reservation
-        </h2>
+        @if (Gate::allows('admin') || Gate::allows('owner'))
+            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                Reservation
+            </h2>
         @else
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Reservasi Saya
@@ -13,7 +13,7 @@
         @endif
         <div class="flex items-center justify-between mb-4">
             <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                List reservation
+                Daftar reservasi
             </h4>
         </div>
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -27,14 +27,16 @@
                         <tr
                             class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3 text-center w-6">ID</th>
-                            <th class="px-4 py-3 text-center w-6">ID Kamar</th>
                             <th class="px-4 py-3">Nama</th>
+                            <th class="px-4 py-3 text-center w-6">Kamar</th>
+                            <th class="px-4 py-3 text-center w-6">Alamat</th>
+                            <th class="px-4 py-3 text-center w-6">Harga</th>
                             <th class="px-4 py-3">Tanggal Kunjung</th>
                             <th class="px-4 py-3">Notes</th>
                             <th class="px-4 py-3">Status</th>
-                            @if(auth()->check() && auth()->user()->id_role == 1)
-                            <th class="px-4 py-3">Actions</th>
-                            @endif
+                            @can('owner')
+                                <th class="px-4 py-3">Actions</th>
+                            @endcan
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -43,16 +45,22 @@
                                 <td class="px-3 py-2 text-sm w-6">
                                     {{ $reservasi->id_reservation }}
                                 </td>
-                                <td class="px-3 py-2 text-sm w-6">
-                                    {{ $reservasi->room->name_room }}
-                                </td>
                                 <td class="px-4 py-3">
                                     <div class="text-center">
                                         <p class="font-semibold">{{ $reservasi->user->name }}</p>
                                         <p class="text-xs text-gray-600 dark:text-gray-400">
-                                            {{ $reservasi->user->email }}
+                                            {{ $reservasi->phone_number }}
                                         </p>
                                     </div>
+                                </td>
+                                <td class="px-3 py-2 text-sm w-6">
+                                    {{ $reservasi->room->name_room }}
+                                </td>
+                                <td class="px-3 py-2 text-sm w-6">
+                                    {{ $reservasi->room->address     }}
+                                </td>
+                                <td class="px-3 py-2 text-sm w-6">
+                                    Rp {{ number_format ($reservasi->room->price_per_month, 0, ',', '.')  }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $reservasi->reservation_date }}
@@ -79,22 +87,22 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if(auth()->check() && auth()->user()->id_role == 1)
-                                    @if ($reservasi->reservation_status == 2)
-                                        <button
-                                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg opacity-50 cursor-not-allowed focus:outline-none"
-                                            type="button" disabled>
-                                            Sudah Diterima
-                                        </button>
-                                    @else
-                                        <button
-                                            class="accReservation px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                                            type="button" data-id="{{ $reservasi->id_reservation }}"
-                                            data-reservation_status="{{ $reservasi->reservation_status }}">
-                                            Terima
-                                        </button>
-                                    @endif
-                                    @endif
+                                    @can('owner')
+                                        @if ($reservasi->reservation_status == 2)
+                                            <button
+                                                class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg opacity-50 cursor-not-allowed focus:outline-none"
+                                                type="button" disabled>
+                                                Sudah Diterima
+                                            </button>
+                                        @else
+                                            <button
+                                                class="accReservation px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                                type="button" data-id="{{ $reservasi->id_reservation }}"
+                                                data-reservation_status="{{ $reservasi->reservation_status }}">
+                                                Terima
+                                            </button>
+                                        @endif
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach
@@ -214,4 +222,4 @@
             });
         });
     </script>
-@endsection 
+@endsection

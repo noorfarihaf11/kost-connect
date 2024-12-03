@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('reservation_date');
             $table->string('phone_number');
             $table->string('notes');
+            $table->date('next_payment_date')->nullable();
             $table->timestamps(); 
         });
     }

@@ -12,7 +12,7 @@ class Room extends Model
     protected $primaryKey = 'id_room'; 
     protected $fillable = [
         'id_city',
-        'name_room',
+        'name',
         'room_type',
         'description',
         'price_per_month',
@@ -23,9 +23,9 @@ class Room extends Model
         'timestamps'
     ];
 
-    public function city ()
+    public function house ()
     {
-        return $this->belongsTo(City::class, 'id_city');
+        return $this->belongsTo(BoardingHouse::class, 'id_house');
     }
 
     public function owner ()

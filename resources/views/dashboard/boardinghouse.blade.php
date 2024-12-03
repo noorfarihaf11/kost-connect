@@ -29,24 +29,19 @@
                         </a>
                     </div>
         
-                    <!-- Details Section -->
                     <div class="pt-4">
-                        <!-- Title -->
                         <h5 class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
                             {{ $rumah->name }}
                         </h5>
         
-                        <!-- Owner Info -->
                         <p class="text-sm text-gray-700 dark:text-gray-400">
                             <strong>Pemilik:</strong> {{ $rumah->owner->name }} | {{ $rumah->owner->phone }}
                         </p>
         
-                        <!-- Location Info -->
                         <p class="mt-2 text-sm text-gray-700 dark:text-gray-400">
                             <strong>Lokasi:</strong> {{ $rumah->address }}, {{ $rumah->city->name_city }}
                         </p>
         
-                        <!-- Gender Type Badge -->
                         <div class="mt-4 flex items-center justify-between">
                             <span class="px-3 py-1 text-sm font-semibold text-white rounded-full 
                                 {{ $rumah->gender_type === 'putra' ? 'bg-blue-600' : ($rumah->gender_type === 'putri' ? 'bg-pink-600' : 'bg-orange-600') }}">

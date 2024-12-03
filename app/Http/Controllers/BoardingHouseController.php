@@ -38,11 +38,6 @@ class BoardingHouseController extends Controller
 
         $owner = Owner::where('id_user', Auth::id())->first();
 
-        // Jika tidak ditemukan, kembalikan dengan pesan error
-        if (!$owner) {
-            return redirect()->back()->withErrors('Data owner tidak ditemukan. Pastikan Anda sudah terdaftar sebagai owner.');
-        }
-
         $house = new BoardingHouse();
         $house->id_owner = $owner->id_owner;
         $house->id_city = $request->post('id_city');

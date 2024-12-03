@@ -10,7 +10,7 @@ class BoardingHouse extends Model
     use HasFactory;
 
     protected $table = 'boarding_houses';
-    protected $primary_key = 'id_house';
+    protected $primaryKey = 'id_house';
 
     protected $fillable = [
         'id_owner',
@@ -34,7 +34,7 @@ class BoardingHouse extends Model
 
     public function rooms()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Room::class, 'id_house');
     }
 
     public function bonuses()

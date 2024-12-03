@@ -44,7 +44,7 @@
                                     {{ $penghuni->reservation->id_reservation }}
                                 </td>
                                 <td class="px-3 py-2 text-sm w-6">
-                                    {{ $penghuni->reservation->room->name_room }}
+                                    {{ $penghuni->reservation->room->name }}
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="text-center">

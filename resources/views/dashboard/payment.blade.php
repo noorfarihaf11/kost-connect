@@ -56,7 +56,7 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-sm">
-                                        {{ $tagihan->reservation->room->name_room }}
+                                        {{ $tagihan->reservation->room->name }}
                                     </td>
                                     <td class="px-4 py-3 text-sm">
                                         Rp {{ number_format($tagihan->total_amount, 0, ',', '.') }}
@@ -99,7 +99,7 @@
                                                 class="seeButtonAdmin px-3 py-1 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-md transition-colors duration-150 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
                                                 data-id="{{ $tagihan->id_payment }}"
                                                 data-id_reservation="{{ $tagihan->id_reservation }}"
-                                                data-name_room="{{ $tagihan->reservation->room->name_room }}"
+                                                data-name="{{ $tagihan->reservation->room->name }}"
                                                 data-payment_method="{{ $tagihan->payment_method }}"
                                                 data-total_amount="{{ $tagihan->total_amount }}"
                                                 data-proof_of_payment="{{ $tagihan->proof_of_payment }}">
@@ -110,7 +110,7 @@
                                                 class="detailPaymentButton px-3 py-1 text-sm font-medium leading-5 text-white bg-yellow-600 border border-transparent rounded-md transition-colors duration-150 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-300"
                                                 data-id="{{ $tagihan->id_payment }}"
                                                 data-id_reservation="{{ $tagihan->id_reservation }}"
-                                                data-name_room="{{ $tagihan->reservation->room->name_room }}"
+                                                data-name="{{ $tagihan->reservation->room->name }}"
                                                 data-payment_method="{{ $tagihan->payment_method }}"
                                                 data-total_amount="{{ $tagihan->total_amount }}"
                                                 data-proof_of_payment="{{ $tagihan->proof_of_payment }}">
@@ -284,7 +284,7 @@
                 $('.detailPaymentButton, .seeButtonAdmin').click(function() {
                     const id = $(this).data('id');
                     const id_reservation = $(this).data('id_reservation');
-                    const name_room = $(this).data('name_room');
+                    const name = $(this).data('name');
                     const payment_method = $(this).data('payment_method');
                     const total_amount = $(this).data('total_amount');
                     const proof_of_payment = $(this).data('proof_of_payment');
@@ -292,7 +292,7 @@
                     // Mengisi nilai ke input form
                     $('#edit_id_payment').val(id);
                     $('#id_reservation').val(id_reservation);
-                    $('#name_room').val(name_room);
+                    $('#name').val(name);
                     $('#payment_method').val(payment_method);
                     $('#total_amount').val(total_amount);
 

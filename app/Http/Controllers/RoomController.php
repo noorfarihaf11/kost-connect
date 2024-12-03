@@ -2,65 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BoardingHouse;
 use Illuminate\Http\Request;
 use App\Models\Room;
-use App\Models\RoomImage;
 use App\Models\City;
 use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
 {
     public function index()
-    {   
+    {
         $rooms = Room::all();
         $cities = City::all();
+        $houses = BoardingHouse::all();
         $user = Auth::user();
-        $data = RoomImage::all();
-        return view('dashboard.rooms', compact('rooms', 'cities', 'user', 'data'));
+        return view('dashboard.rooms', compact('rooms', 'cities', 'user', 'houses'));
     }
 
-    public function store(Request $req)
-{
-    // Create a new room instance
-    $room = new Room;
-    $room_image = new RoomImage;
-    $file_path = public_path('uploads');
-    // Assign the room details from the form request to the room model
-    $room->id_city = $req->post('id_city');
-    $room->name_room = $req->post('name_room');
-    $room->room_type = $req->post('room_type');
-    $room->price_per_month = $req->post('price_per_month');
-    $room->square_feet = $req->post('square_feet');
-    $room->available_rooms = $req->post('available_rooms');
-    $room->description = $req->post('description');
-    $room->address = $req->post('address');
+    public function store(Request $request)
+    {
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'id_house' => 'required|exists:boarding_houses,id_house',
+            'price_per_month' => 'required|numeric',
+            'square_feet' => 'required|numeric',
+            'available_rooms' => 'required|integer|min:0',
+            'is_available' => 'required',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Save the room details into the database
-    $req->validate([
-        "room_image"=>'required|mimes:jpg,png,pdf|max:2048'
-    ]); 
-    $room->save();
+        // Create a new Room instance and set its attributes
+        $room = new Room();
+        $room->id_house = $request->post('id_house');  // Corrected from $$request to $request
+        $room->name = $request->post('name');
+        $room->description = $request->post('description');
+        $room->price_per_month = $request->post('price_per_month');
+        $room->square_feet = $request->post('square_feet');
+        $room->is_available = $request->post('is_available');
+        $room->available_rooms = $request->post('available_rooms');
 
-    // Check if there is a file uploaded for room image
-    if ($req->hasFile('room_image')) {
-        // Get the uploaded file
-        $file = $req->file('room_image');
-        
-        // Create a unique filename for the image
-        $filename = time() . '_' . $file->getClientOriginalName();
-        
-        // Store the file in the 'room_images' folder within 'public' disk
-        $path = $file->storeAs('room_images', $filename, 'public');
-        
-        // Save the path of the image in the room model
-        $room_image->image = $path;
+        // Handle the image upload if it's present
+        if ($request->hasFile('image')) {
+            $fileName = $request->file('image')->store('room_images', 'public');
+            $room->image = $fileName;
+        }
 
-        
-        // Update the room in the database with the image path
+        // Save the new room data
         $room->save();
 
-        return redirect('/rooms');
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Data kamar berhasil disimpan!');
     }
-}
+    public function update(Request $request, $id)
+    {
+        try {
+            $rooms = Room::findOrFail($id);
+            $rooms->update($request->all());
 
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Reservation updated successfully!']);
+            }
+
+            return redirect('reservation')->with('success', 'Reservation updated successfully!');
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Update failed: ' . $e->getMessage()]);
+            }
+
+            return redirect('reservation')->with('error', 'Update failed: ' . $e->getMessage());
+        }
+    }
 }

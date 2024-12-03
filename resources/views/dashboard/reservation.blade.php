@@ -54,7 +54,7 @@
                                     </div>
                                 </td>
                                 <td class="px-3 py-2 text-sm w-6">
-                                    {{ $reservasi->room->name_room }}
+                                    {{ $reservasi->room->name }}
                                 </td>
                                 <td class="px-3 py-2 text-sm w-6">
                                     {{ $reservasi->room->address     }}

@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id('id_room')->primary;
-            $table->unsignedBigInteger('id_city');
-            $table->foreign('id_city')->references('id_city')->on('cities');
-            $table->unsignedBigInteger('id_house');
+            $table->unsignedBigInteger('id_house')->nullable();
             $table->foreign('id_house')->references('id_house')->on('boarding_houses');
-            $table->string('name_room');
+            $table->string('name');
+            $table->string('image')->nullable();
             $table->text('description');
             $table->integer('price_per_month');
             $table->integer('square_feet');

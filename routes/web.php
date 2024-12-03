@@ -42,7 +42,7 @@ Route::post('/cities', [CityController::class, 'store']);
 Route::put('/cities/{id}', [CityController::class, 'update']);
 Route::delete('/cities/{id}', [CityController::class, 'destroy']);
 
-Route::get('/roles', [RoleController::class, 'index'])->middleware('admin');;
+Route::get('/roles', [RoleController::class, 'index']);;
 Route::post('/roles', [RoleController::class, 'store']);
 Route::put('/roles/{id}', [RoleController::class, 'update']);
 Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
@@ -53,9 +53,9 @@ Route::get('/login', [AuthController::class, 'login'])->name('login')->middlewar
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::get('/users', [UserController::class, 'index'])->middleware('admin');
+Route::get('/users', [UserController::class, 'index']);
 
-Route::get('/rooms', [RoomController::class, 'index'])->middleware('admin');
+Route::get('/rooms', [RoomController::class, 'index']);
 Route::post('/rooms', [RoomController::class, 'store']);
 
 Route::post('/submitreservation', [ReservationController::class, 'submitreservation']);
@@ -82,6 +82,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/register/pemilik', [AuthController::class, 'showRegisterPemilik'])->name('register.pemilik');
 Route::post('/register/pemilik', [AuthController::class, 'registerPemilik']);
 
-Route::get('/owners', [OwnerController::class, 'index'])->middleware('admin');
+Route::get('/owners', [OwnerController::class, 'index']);
 
-Route::get('/rumahkost', [BoardingHouseController::class, 'index'])->middleware('owner');
+Route::get('/rumahkost', [BoardingHouseController::class, 'index']);
+Route::post('/submitHouseForm', [BoardingHouseController::class, 'store']);

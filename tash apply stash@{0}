@@ -1,0 +1,43 @@
+[33m1c80932[m[33m ([m[1;36mHEAD[m[33m)[m HEAD@{0}: checkout: moving from 9ba330145272c20f205bf6c7ffb1632793893e91 to 1c80932
+[33m9ba3301[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{1}: checkout: moving from d99c22261db8d4815e64ecc1bc5473a8289acd81 to 9ba3301
+[33md99c222[m HEAD@{2}: checkout: moving from 9ba330145272c20f205bf6c7ffb1632793893e91 to d99c222
+[33m9ba3301[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{3}: checkout: moving from 1c80932fe9c1176e8c5ad7209dec44db92f3d104 to 9ba3301
+[33m1c80932[m[33m ([m[1;36mHEAD[m[33m)[m HEAD@{4}: commit: add house and owner
+[33md99c222[m HEAD@{5}: checkout: moving from recovery-branch to d99c222
+[33m777843e[m[33m ([m[1;32mrecovery-branch[m[33m)[m HEAD@{6}: reset: moving to HEAD
+[33m777843e[m[33m ([m[1;32mrecovery-branch[m[33m)[m HEAD@{7}: reset: moving to 777843e
+[33m777843e[m[33m ([m[1;32mrecovery-branch[m[33m)[m HEAD@{8}: rebase (continue): Halaman Pengguna
+[33m9ba3301[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{9}: checkout: moving from master to recovery-branch
+[33m9ba3301[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{10}: reset: moving to 9ba3301
+[33md99c222[m HEAD@{11}: reset: moving to d99c222
+[33md99c222[m HEAD@{12}: reset: moving to HEAD
+[33md99c222[m HEAD@{13}: commit: owner and house
+[33m9ba3301[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{14}: commit: add features n fixing bugs
+[33m865d466[m HEAD@{15}: pull origin master: Fast-forward
+[33m190ca61[m HEAD@{16}: commit: fixing bugs
+[33m0e5e956[m HEAD@{17}: commit: fixing bugs
+[33m0811488[m HEAD@{18}: commit: fixing bugs
+[33mae43963[m HEAD@{19}: commit: konfirmasi pembayaran dan menjadikan sebagai pengguna
+[33m794a177[m HEAD@{20}: merge 794a177: Fast-forward
+[33md89c7bf[m HEAD@{21}: checkout: moving from 794a177f3a5160f76b5cc53d608b5cb8aeb07e24 to master
+[33m794a177[m HEAD@{22}: commit (merge): Menambahkan fitur reservasi, pembayaran, middleware dan memperbaiki bug
+[33m0f0266b[m HEAD@{23}: commit: menambahkan halaman baru
+[33md32a3e0[m HEAD@{24}: commit: Menyelesaikan konflik merge dan memperbarui file
+[33md89c7bf[m HEAD@{25}: checkout: moving from 2e2e7b294fbaa3e8e0f02491287646b2595f75d8 to d89c7bf
+[33m2e2e7b2[m HEAD@{26}: checkout: moving from 8cbfb7a4c4c085b0eab716d4740f33bb6865b45f to 2e2e7b2
+[33m8cbfb7a[m HEAD@{27}: checkout: moving from 8164b3c378c9dc7ff74431542bf9048112272306 to 8cbfb7a
+[33m8164b3c[m HEAD@{28}: checkout: moving from d89c7bff4ebce82a3ef6bcc72bf29bf329034ede to 8164b3c
+[33md89c7bf[m HEAD@{29}: checkout: moving from 2e2e7b294fbaa3e8e0f02491287646b2595f75d8 to d89c7bf
+[33m2e2e7b2[m HEAD@{30}: commit: Selesaikan konflik pada README.md
+[33m001249e[m HEAD@{31}: pull origin master --rebase (start): checkout 001249edb5019c5a93cdfa18473d7c79daaf551c
+[33md89c7bf[m HEAD@{32}: rebase (finish): returning to refs/heads/master
+[33md89c7bf[m HEAD@{33}: checkout: moving from 8cbfb7a4c4c085b0eab716d4740f33bb6865b45f to d89c7bf
+[33m8cbfb7a[m HEAD@{34}: commit: Simpan perubahan pada routes/web.php
+[33m001249e[m HEAD@{35}: checkout: moving from master to 001249e
+[33m001249e[m HEAD@{36}: checkout: moving from dde4ccb31e26ed88f4de0512e8e8195d942346b9 to master
+[33mdde4ccb[m HEAD@{37}: commit (merge): Resolve merge conflicts
+[33md89c7bf[m HEAD@{38}: commit: menambahkan halaman depan
+[33m8164b3c[m HEAD@{39}: commit: Halaman Pengguna
+[33meed4b87[m HEAD@{40}: commit: first commit
+[33md5b46da[m HEAD@{41}: pull origin master --rebase (start): checkout d5b46da34ad789c4ea9a8cd632f63cf0b166be0c
+[33m001249e[m HEAD@{42}: commit (initial): Halaman Sign up, login Dashboard dan CRUD

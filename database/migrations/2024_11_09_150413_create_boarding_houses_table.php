@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->enum('gender_type', ['putra', 'putri','campur']);
+            $table->string('image');
             $table->timestamps();
         });
     }

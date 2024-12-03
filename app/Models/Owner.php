@@ -10,7 +10,7 @@ class Owner extends Model
     use HasFactory;
 
     protected $table = 'owners';
-    protected $primary_key = 'id_owner';
+    protected $primaryKey = 'id_owner';
 
     protected $fillable = [
         'id_user',
@@ -21,6 +21,11 @@ class Owner extends Model
         'address',
         'owner_status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 
     public function boardingHouses()
     {

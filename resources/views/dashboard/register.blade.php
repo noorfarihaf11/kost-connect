@@ -33,7 +33,7 @@
                             <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Name</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
+                                    class="block w-full mt-1 text-sm border-gray-300 rounded-lg dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
                                            focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray 
                                            form-input @error('name') border-red-500 @enderror"
                                     type="text" id="name" name="name" placeholder="Jane Doe"
@@ -42,11 +42,11 @@
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </label>
-
+                            
                             <label class="block mt-4 text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Email</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
+                                    class="block w-full mt-1 text-sm border-gray-300 rounded-lg dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
                                            focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray 
                                            form-input @error('email') border-red-500 @enderror"
                                     type="email" id="email" name="email" placeholder="Use @gmail"
@@ -55,11 +55,11 @@
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </label>
-
+                            
                             <label class="block mt-4 text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Password</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
+                                    class="block w-full mt-1 text-sm border-gray-300 rounded-lg dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
                                            focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray 
                                            form-input @error('password') border-red-500 @enderror"
                                     type="password" id="password" name="password" placeholder="*****" />
@@ -67,11 +67,11 @@
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </label>
-
+                            
                             <label class="block mt-4 text-sm" style="{{ $role === 'pemilik' ? '' : 'display: none;' }}">
                                 <span class="text-gray-700 dark:text-gray-400">Nomor Handphone</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
+                                    class="block w-full mt-1 text-sm border-gray-300 rounded-lg dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
                                            focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray 
                                            form-input @error('no_tlp') border-red-500 @enderror"
                                     type="text" id="no_tlp" name="no_tlp" placeholder="08*****"
@@ -80,10 +80,11 @@
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </label>
+                            
                             <label class="block mt-4 text-sm" style="{{ $role === 'pemilik' ? '' : 'display: none;' }}">
                                 <span class="text-gray-700 dark:text-gray-400">Alamat Rumah</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
+                                    class="block w-full mt-1 text-sm border-gray-300 rounded-lg dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 
                                            focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray 
                                            form-input @error('address') border-red-500 @enderror"
                                     type="text" id="address" name="address" placeholder="Alamat Pribadi"
@@ -91,7 +92,7 @@
                                 @error('address')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
-                            </label>
+                            </label>                            
 
                             <button
                                 class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors 

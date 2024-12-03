@@ -63,7 +63,7 @@ class AuthController extends Controller
         $user = User::create($userData);
 
         $ownerData = [
-            'id_user' => $user->id_user, 
+            'id_user' => $user->id_user,
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'phone' => $validatedData['no_tlp'],

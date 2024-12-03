@@ -1,0 +1,96 @@
+[33mcommit 119b5f28e91b6750f387bbedd5959b5001f538f9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Your Name <you@example.com>
+Date:   Tue Dec 3 14:43:13 2024 +0700
+
+    gambar kamar
+
+[33mcommit 8027e073d15f66d19e64c7e6d087cdbdbc9a0b53[m
+Author: Your Name <you@example.com>
+Date:   Sun Dec 1 21:41:45 2024 +0700
+
+    crud kamar
+
+[33mcommit 770f01aa95808dcb796c5d7f5d5dc6a088cfd923[m
+Author: Noor Fariha Fathmawaty <noorfarihaf05@gmail.com>
+Date:   Sat Nov 30 18:14:05 2024 +0700
+
+    Update README.md
+
+[33mcommit af073e4f0b270307d618bb0af10f7c61dbb88922[m
+Author: Noor Fariha Fathmawaty <noorfarihaf05@gmail.com>
+Date:   Sat Nov 30 18:07:36 2024 +0700
+
+    Update README.md
+
+[33mcommit 190ca6195a1ebe56ac0cc1e352366fc6d9f123f6[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Sat Nov 30 16:17:36 2024 +0700
+
+    fixing bugs
+
+[33mcommit 0e5e9564bc9dbe088e51ff654405a749ad6cd7f4[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Fri Nov 29 15:18:30 2024 +0700
+
+    fixing bugs
+
+[33mcommit 08114889555421e48df27e89c4c39c378d939dfa[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Fri Nov 29 15:16:11 2024 +0700
+
+    fixing bugs
+
+[33mcommit ae439638ca321c66f2b7aa22bd3d3e5cf9828621[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Fri Nov 29 13:37:21 2024 +0700
+
+    konfirmasi pembayaran dan menjadikan sebagai pengguna
+
+[33mcommit 794a177f3a5160f76b5cc53d608b5cb8aeb07e24[m
+Merge: 0f0266b 001249e
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Thu Nov 28 16:33:11 2024 +0700
+
+    Menambahkan fitur reservasi, pembayaran, middleware dan memperbaiki bug
+
+[33mcommit 0f0266b0e1d9f619d825b0f03f155a4b86233cde[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Wed Nov 20 23:58:57 2024 +0700
+
+    menambahkan halaman baru
+
+[33mcommit d32a3e00397a5c342e23c4d73479ebade201118b[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Wed Nov 20 23:50:41 2024 +0700
+
+    Menyelesaikan konflik merge dan memperbarui file
+
+[33mcommit d89c7bff4ebce82a3ef6bcc72bf29bf329034ede[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Wed Nov 20 22:54:59 2024 +0700
+
+    menambahkan halaman depan
+
+[33mcommit 8164b3c378c9dc7ff74431542bf9048112272306[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Fri Nov 15 11:52:39 2024 +0700
+
+    Halaman Pengguna
+
+[33mcommit eed4b87cdce98a1d138684cf19d58d8cd59e13cf[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Thu Nov 14 09:21:25 2024 +0700
+
+    first commit
+
+[33mcommit 001249edb5019c5a93cdfa18473d7c79daaf551c[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Thu Nov 14 09:12:16 2024 +0700
+
+    Halaman Sign up, login  Dashboard dan CRUD
+
+[33mcommit d5b46da34ad789c4ea9a8cd632f63cf0b166be0c[m
+Author: noorfarihaf11 <noorfarihaf05@gmail.com>
+Date:   Thu Nov 14 09:09:38 2024 +0700
+
+    Initial commit

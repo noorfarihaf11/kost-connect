@@ -58,6 +58,9 @@ Route::get('/users', [UserController::class, 'index'])->middleware('admin');
 
 Route::get('/rooms', [RoomController::class, 'index'])->middleware('admin');
 Route::post('/rooms', [RoomController::class, 'store']);
+Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
+Route::put('/rooms/{id}', [RoomController::class, 'update']);
+
 
 //khusus owner
 

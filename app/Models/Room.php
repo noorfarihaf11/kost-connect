@@ -9,7 +9,7 @@ class Room extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id_room'; 
+    protected $primaryKey = 'id_room';
     protected $fillable = [
         'id_city',
         'name_room',
@@ -33,15 +33,17 @@ class Room extends Model
         return $this->belongsTo(User::class, 'id_owner');
     }
 
-    public function images()
+    
+    public function roomImages()
     {
-        return $this->hasMany(RoomImage::class);
+        return $this->hasMany(RoomImage::class, 'id_room');
     }
+
 
     public function reservations()
     {
         return $this->hasMany(Transaction::class);
-        
+
     }
 
     public function testimonials ()

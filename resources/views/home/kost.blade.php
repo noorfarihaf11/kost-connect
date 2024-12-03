@@ -57,12 +57,13 @@
                         class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                         <div class="h-56 w-full">
                             <a href="#">
-                                <img class="mx-auto h-full dark:hidden"
-                                    src="https://i.pinimg.com/736x/4a/70/f4/4a70f405a23e39c21903499e2f00a47e.jpg"
-                                    alt="" />
-                                <img class="mx-auto hidden h-full dark:block"
-                                    src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg"
-                                    alt="" />
+                                @if($room->roomImages->isNotEmpty())
+                                    <img class="mx-auto h-full dark:hidden"
+                                         src="{{ asset('storage/' . $room->roomImages->first()->image) }}" alt="Room Image" />
+                                @else
+                                    <img class="mx-auto h-full dark:hidden"
+                                         src="https://via.placeholder.com/150" alt="No image available" />
+                                @endif
                             </a>
                         </div>
                         <div class="pt-6">

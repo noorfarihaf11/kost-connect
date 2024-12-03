@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function rooms()
     {
-        $rooms = Room::all();
+        $rooms = Room::with('roomImages')->get();
         return view('home.kost', compact('rooms'));
     }
 

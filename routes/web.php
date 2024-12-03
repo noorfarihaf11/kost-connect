@@ -1,18 +1,19 @@
 <?php
 
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\RoleController;
+use App\Models\Room;
+use App\Http\Middleware\Owner;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BoardingHouseController;
-use Illuminate\Support\Facades\Route;
-use App\Models\Room;
 
 Route::get('/', function () {
     return view('welcome');
@@ -57,6 +58,13 @@ Route::get('/users', [UserController::class, 'index'])->middleware('admin');
 
 Route::get('/rooms', [RoomController::class, 'index'])->middleware('admin');
 Route::post('/rooms', [RoomController::class, 'store']);
+
+//khusus owner
+
+Route::get('/tambahrooms', [RoomController::class, 'indextambahroom'])->middleware(Owner::class);
+Route::post('/tambahroom', [RoomController::class, 'tambahroom'])->middleware(Owner::class);
+Route::put('/rooms/{id}', [RoomController::class, 'update']);
+Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
 
 Route::post('/submitreservation', [ReservationController::class, 'submitreservation']);
 Route::get('/reservation', [ReservationController::class, 'index'])->middleware('auth');

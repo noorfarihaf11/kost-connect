@@ -16,7 +16,7 @@
                 </ul>
 
                 <ul>
-                    @if (Gate::allows('admin') || Gate::allows('owner'))
+                    @if (Gate::allows('admin'))
                         <li class="relative px-6 py-3">
                             <a href="/cities"
                                 class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
@@ -80,7 +80,7 @@
                                 <span class="ml-4">User</span>
                             </a>
                         </li>
-                    @else
+                    @elseif (Gate::allows('owner'))
                         <li class="relative px-6 py-3">
                             <a href=/reservation
                                 class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
@@ -93,6 +93,13 @@
                                 class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                 <i class="fas fa-wallet"></i>
                                 <span class="ml-4">Payment</span>
+                            </a>
+                        </li>
+                        <li class="relative px-6 py-3">
+                            <a href=/tambahrooms
+                                class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                <i class="fas fa-bed"></i>
+                                <span class="ml-4">Manajemen Room</span>
                             </a>
                         </li>
                     @endauth

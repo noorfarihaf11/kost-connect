@@ -35,6 +35,7 @@
                             <th class="px-4 py-3">Luas kamar</th>
                             <th class="px-4 py-3">Jumlah tersedia</th>
                             <th class="px-4 py-3">Action</th>
+                            <th class="px-4 py-3">Gambar</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">

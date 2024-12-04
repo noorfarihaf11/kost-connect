@@ -18,6 +18,11 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
@@ -61,26 +66,26 @@
 
                                 <td class="px-4 py-3 text-sm text-center">
                                     <div class="flex items-center space-x-4 text-sm">
-                                        <button class="editButton flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                            aria-label="Edit" data-id="{{ $room->id_room }}"
-                                            data-name_room="{{ $room->name_room }}"
-                                            data-room_type="{{ $room->room_type }}"
-                                            data-description="{{ $room->description }}"
-                                            data-price_per_month="{{ $room->price_per_month }}"
-                                            data-address="{{ $room->address }}"
-                                            data-square_feet="{{ $room->square_feet }}"
-                                            data-available_rooms="{{ $room->available_rooms }}">
-                                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793z"></path>
-                                                <path d="M11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-                                            </svg>
-                                        </button>
-                                        <button class="deleteButton flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                            aria-label="Delete" data-id="{{ $room->id_room }}">
-                                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </button>
+                                        <a href="{{ route('roomowner.edit', $room->id_room) }}" class="editButton">
+                                            <button type="button" class="px-2 py-1 rounded bg-blue-500 text-white hover:bg-blue-600">
+                                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793z"></path>
+                                                    <path d="M11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                                </svg>
+                                            </button>
+                                        </a>
+
+                                        <!-- Tombol Delete -->
+                                        <form action="{{ route('roomowner.delete', $room->id_room) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kamar ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="deleteButton flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
+
                                     </div>
                                 </td>
                             </tr>
@@ -157,7 +162,7 @@
             <!-- Input Foto -->
             <div class="mb-4">
                 <label class="block text-sm text-gray-700 dark:text-gray-400">Foto Kamar</label>
-                <input type="file" name="image" accept="image/*" required
+                <input type="file" name="image" accept="image/*"
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
             </div>
 
@@ -175,100 +180,6 @@
     </div>
 </div>
 
-
-
-    <!-- Modal untuk Edit Room -->
-<div id="editRoomForm" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Edit Kamar</h3>
-        <form id="editRoomDetails" method="POST" action="/editroom">
-            @csrf
-            @method('PUT')
-            <input type="hidden" name="id_room" id="edit_id_room">
-            <div class="mb-4">
-                <label class="block text-sm text-gray-700 dark:text-gray-400">Nama kamar</label>
-                <input type="text" name="name_room" id="edit_name_room" required class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm text-gray-700 dark:text-gray-400">Jenis Kelamin</label>
-                <select name="room_type" id="edit_room_type" required class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300">
-                    <option value="putra">Putra</option>
-                    <option value="putri">Putri</option>
-                    <option value="campur">Campur</option>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm text-gray-700 dark:text-gray-400">Harga Sewa</label>
-                <input type="text" name="price_per_month" id="edit_price_per_month" required class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm text-gray-700 dark:text-gray-400">Deskripsi</label>
-                <input type="text" name="description" id="edit_description" required class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm text-gray-700 dark:text-gray-400">Alamat</label>
-                <input type="text" name="address" id="edit_address" required class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm text-gray-700 dark:text-gray-400">Luas Kamar</label>
-                <input type="text" name="square_feet" id="edit_square_feet" required class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm text-gray-700 dark:text-gray-400">Jumlah Tersedia</label>
-                <input type="text" name="available_rooms" id="edit_available_rooms" required class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-            </div>
-
-            <div class="flex justify-end">
-                <button id="closeEditModal" type="button" class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-gray-700 transition-colors duration-150 bg-gray-200 border border-transparent rounded-md active:bg-gray-300 focus:outline-none focus:shadow-outline-gray">
-                    Cancel
-                </button>
-                <button type="submit" class="px-4 py-2 text-sm font-medium leading-5 text-white bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                    Save Changes
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-    {{-- <!-- Modal untuk form Edit City -->
-    <div id="editCityForm" style="display: none;"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-2xl">
-            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Add New City</h3>
-            <form id="editCityDetails" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="id_city" id="edit_id_city">
-                <div class="mb-4">
-                    <label class="block text-sm text-gray-700 dark:text-gray-400">City Name</label>
-                    <input type="text" name="name_city" id="edit_name_city" required
-                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm text-gray-700 dark:text-gray-400">Slug</label>
-                    <input type="text" name="slug" id="edit_slug_city" required
-                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 form-input focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300" />
-                </div>
-                <div class="flex justify-end">
-                    <button id="closeEditModal" type="button"
-                        class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-gray-700 transition-colors duration-150 bg-gray-200 border border-transparent rounded-md active:bg-gray-300 focus:outline-none focus:shadow-outline-gray">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="px-4 py-2 text-sm font-medium leading-5 text-white bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div> --}}
 
     <script>
         $(document).ready(function() {
@@ -297,90 +208,6 @@
 
         });
 
-        $(document).ready(function() {
-    // Edit button functionality
-    $('.editButton').click(function() {
-        const id = $(this).data('id');
-        const name_room = $(this).data('name_room');
-        const room_type = $(this).data('room_type');
-        const description = $(this).data('description');
-        const price_per_month = $(this).data('price_per_month');
-        const address = $(this).data('address');
-        const square_feet = $(this).data('square_feet');
-        const available_rooms = $(this).data('available_rooms');
-
-        // Set values to the modal form
-        $('#edit_id_room').val(id);
-        $('#edit_name_room').val(name_room);
-        $('#edit_room_type').val(room_type);
-        $('#edit_description').val(description);
-        $('#edit_price_per_month').val(price_per_month);
-        $('#edit_address').val(address);
-        $('#edit_square_feet').val(square_feet);
-        $('#edit_available_rooms').val(available_rooms);
-
-        // Show the modal
-        $('#editRoomForm').show();
-    });
-
-    // Close edit modal
-    $('#closeEditModal').click(function() {
-        $('#editRoomForm').hide();
-    });
-
-    // Delete button functionality
-    $(document).on('click', '.deleteButton', function() {
-        const id_room = $(this).data('id');
-        const confirmed = confirm('Are you sure you want to delete this room?');
-
-        if (confirmed) {
-            $.ajax({
-                url: '/rooms/' + id_room,
-                type: 'DELETE',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert('Room deleted successfully!');
-                        location.reload();
-                    } else {
-                        alert('Error deleting room.');
-                    }
-                },
-                error: function(xhr) {
-                    alert('An error occurred while deleting the room.');
-                }
-            });
-        }
-    });
-
-    // Edit room submit form (AJAX)
-    $('#editRoomDetails').on('submit', function(event) {
-        event.preventDefault();
-
-        const id = $('#edit_id_room').val();
-        const url = '/rooms/' + id;
-        const formData = $(this).serialize();
-
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.success) {
-                    alert('Room updated successfully!');
-                    location.reload();
-                } else {
-                    alert('Error updating room.');
-                }
-            },
-            error: function(xhr) {
-                alert('An error occurred while updating the room.');
-            }
-        });
-    });
-});
 
     </script>
 @endsection

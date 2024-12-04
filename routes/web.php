@@ -59,15 +59,16 @@ Route::get('/users', [UserController::class, 'index'])->middleware('admin');
 Route::get('/rooms', [RoomController::class, 'index'])->middleware('admin');
 Route::post('/rooms', [RoomController::class, 'store']);
 Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
-Route::put('/rooms/{id}', [RoomController::class, 'update']);
+Route::put('/editroom', [RoomController::class, 'update']);
 
 
 //khusus owner
 
 Route::get('/tambahrooms', [RoomController::class, 'indextambahroom'])->middleware(Owner::class);
 Route::post('/tambahroom', [RoomController::class, 'tambahroom'])->middleware(Owner::class);
-Route::put('/rooms/{id}', [RoomController::class, 'update']);
-Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
+Route::get('/roomowner/edit/{id}', [RoomController::class, 'editownerroom'])->name('roomowner.edit');
+Route::put('/roomowner/update/{id}', [RoomController::class, 'updateownerroom'])->name('roomowner.update');
+Route::delete('/roomsowner/{id}', [RoomController::class, 'destroyownerroom'])->name('roomowner.delete');
 
 Route::post('/submitreservation', [ReservationController::class, 'submitreservation']);
 Route::get('/reservation', [ReservationController::class, 'index'])->middleware('auth');

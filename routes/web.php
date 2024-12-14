@@ -11,6 +11,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BoardingHouseController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Room;
 
@@ -18,18 +19,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard.dashboard');
-})->middleware('auth');
-
-Route::get('/home', function () {
-    return view('home.dashboard');
-});
 
 Route::get('/payment', function () {
     return view('dashboard.payment');
 });
 
+Route::get('/home', [HomeController::class, 'index']);
 Route::get('/daftarkost', [HomeController::class, 'rooms']);
 Route::get('/daftarkost/{id}', function ($id) {
     $room = Room::findOrFail($id);
@@ -66,7 +61,7 @@ Route::post('/reservation', [ReservationController::class, 'store']);
 Route::put('/reservation/{id}', [ReservationController::class, 'update']);
 
 Route::get('/payment', [PaymentController::class, 'index'])->middleware('auth');
-Route::put('/payment/{id}/upload-proof', [PaymentController::class, 'uploadProof'])->middleware('auth');
+Route::put('/payment/{id}/upload-proof', [PaymentController::class, 'uploadPaymentProof'])->middleware('auth');
 Route::put('/payment/{id}/confirm', [PaymentController::class, 'confirmPayment'])->middleware('auth');
 
 Route::get('/customer', [CustomerController::class, 'index'])->middleware('auth');
@@ -88,3 +83,7 @@ Route::get('/owners', [OwnerController::class, 'index']);
 
 Route::get('/rumahkost', [BoardingHouseController::class, 'index']);
 Route::post('/submitHouseForm', [BoardingHouseController::class, 'store']);
+
+Route::post('/snap-token', [PaymentController::class, 'getSnapToken']);
+
+Route::get('/dashboard', [DashboardController::class, 'index']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Owner;
 use App\Models\City;
+use App\Models\Reservation;
 use App\Models\BoardingHouse;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,12 @@ class BoardingHouseController extends Controller
 
         if ($owner) {
             $houses = BoardingHouse::where('id_owner', $owner->id_owner)->get();
-            $owners = collect([$owner]); // 
+            $owners = collect([$owner]); 
+            $totalReservasi = Reservation::join('rooms', 'reservations.id_room', '=', 'rooms.id_room')
+            ->join('boarding_houses', 'rooms.id_house', '=', 'boarding_houses.id_house')
+            ->where('boarding_houses.id_owner', $owner->id_owner)
+            ->where('reservations.reservation_status', 1)
+            ->count(); 
         } else {
             $owners = Owner::all(); //
             $houses = BoardingHouse::all(); // 
@@ -24,7 +30,7 @@ class BoardingHouseController extends Controller
 
         $cities = City::all();
 
-        return view('dashboard.boardinghouse', compact('owners', 'houses', 'cities'));
+        return view('dashboard.boardinghouse', compact('owners', 'houses', 'cities','totalReservasi'));
     }
 
 

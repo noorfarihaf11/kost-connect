@@ -2,7 +2,7 @@
     <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
         <div class="py-4 text-gray-500 dark:text-gray-400">
             <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
-                Kostzy
+                Kost Connect
             </a>
             @auth
                 <ul class="mt-6">
@@ -14,23 +14,8 @@
                         </a>
                     </li>
                 </ul>
-
                 <ul>
-                    @if (Gate::allows('admin') || Gate::allows('owner'))
-                        <li class="relative px-6 py-3">
-                            <a href="/cities"
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fas fa-city"></i>
-                                <span class="ml-4">Kota</span>
-                            </a>
-                        </li>
-                        <li class="relative px-6 py-3">
-                            <a href=/owners
-                                class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fas fa-user-tie"></i>
-                                <span class="ml-4">Pemilik Rumah Kost</span>
-                            </a>
-                        </li>
+                    @if (Gate::allows('owner'))
                         <li class="relative px-6 py-3">
                             <a href="/rumahkost"
                                 class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
@@ -46,12 +31,16 @@
                             </a>
                         </li>
                         <li class="relative px-6 py-3">
-                            <a href=/reservation
-                                class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                            <a href="/reservation"
+                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                 <i class="fas fa-calendar-alt"></i>
                                 <span class="ml-4">Reservasi</span>
+                                {{-- <span
+                                    class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-600">
+                                    {{ $totalReservasi }}
+                                </span> --}}
                             </a>
-                        </li>
+                        </li>                               
                         <li class="relative px-6 py-3">
                             <a href="/payment"
                                 class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
@@ -96,6 +85,22 @@
                             </a>
                         </li>
                     @endauth
+                @endif
+                @if (Gate::allows('admin'))
+                <li class="relative px-6 py-3">
+                    <a href="/cities"
+                        class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                        <i class="fas fa-city"></i>
+                        <span class="ml-4">Kota</span>
+                    </a>
+                </li>
+                <li class="relative px-6 py-3">
+                    <a href=/owners
+                        class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                        <i class="fas fa-user-tie"></i>
+                        <span class="ml-4">Pemilik Rumah Kost</span>
+                    </a>
+                </li>
                 @endif
             </ul>
             <div class="px-6 my-6">

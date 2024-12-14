@@ -7,9 +7,9 @@
                 Reservation
             </h2>
         @else
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Reservasi Saya
-        </h2>
+            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                Reservasi Saya
+            </h2>
         @endif
         <div class="flex items-center justify-between mb-4">
             <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
@@ -31,7 +31,7 @@
                             <th class="px-4 py-3 text-center w-6">Kamar</th>
                             <th class="px-4 py-3 text-center w-6">Alamat</th>
                             <th class="px-4 py-3 text-center w-6">Harga</th>
-                            <th class="px-4 py-3">Tanggal Kunjung</th>
+                            <th class="px-4 py-3">TGL Kunjung</th>
                             <th class="px-4 py-3">Notes</th>
                             <th class="px-4 py-3">Status</th>
                             @can('owner')
@@ -57,10 +57,10 @@
                                     {{ $reservasi->room->name }}
                                 </td>
                                 <td class="px-3 py-2 text-sm w-6">
-                                    {{ $reservasi->room->address     }}
+                                    {{ $reservasi->room->house->address }}
                                 </td>
                                 <td class="px-3 py-2 text-sm w-6">
-                                    Rp {{ number_format ($reservasi->room->price_per_month, 0, ',', '.')  }}
+                                    Rp {{ number_format($reservasi->room->price_per_month, 0, ',', '.') }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $reservasi->reservation_date }}
@@ -92,7 +92,7 @@
                                             <button
                                                 class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg opacity-50 cursor-not-allowed focus:outline-none"
                                                 type="button" disabled>
-                                                Sudah Diterima
+                                                Diterima
                                             </button>
                                         @else
                                             <button

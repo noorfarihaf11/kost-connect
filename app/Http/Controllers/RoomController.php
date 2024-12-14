@@ -6,18 +6,38 @@ use App\Models\BoardingHouse;
 use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\City;
+use App\Models\Reservation;
+use App\Models\Owner;
 use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
 {
     public function index()
     {
-        $rooms = Room::all();
+        $owner = Owner::where('id_user', Auth::id())->first();
+
+        if ($owner) {
+            $houses = BoardingHouse::where('id_owner', $owner->id_owner)->get();
+            $rooms = Room::whereIn('id_house', $houses->pluck('id_house'))->get();
+            $totalReservasi = Reservation::join('rooms', 'reservations.id_room', '=', 'rooms.id_room')
+                ->join('boarding_houses', 'rooms.id_house', '=', 'boarding_houses.id_house')
+                ->where('boarding_houses.id_owner', $owner->id_owner)
+                ->where('reservations.reservation_status', 1)
+                ->count();
+
+            $owners = collect([$owner]);
+        } else {
+            $owners = Owner::all();
+            $houses = BoardingHouse::all();
+            $rooms = Room::all(); 
+            $totalReservasi = 0; 
+        }
+
         $cities = City::all();
-        $houses = BoardingHouse::all();
-        $user = Auth::user();
-        return view('dashboard.rooms', compact('rooms', 'cities', 'user', 'houses'));
+
+        return view('dashboard.rooms', compact('owners', 'houses', 'rooms', 'cities', 'totalReservasi'));
     }
+
 
     public function store(Request $request)
     {

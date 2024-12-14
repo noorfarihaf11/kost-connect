@@ -9,27 +9,48 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
     public function index()
     {
-        $user = Auth::user(); // Ambil pengguna yang sedang login
+        $user = Auth::user();
 
         if (Gate::allows('admin') || Gate::allows('owner')) {
-            // Jika user adalah Admin atau Owner, ambil semua reservasi
             $reservations = Reservation::with(['room', 'user'])->get();
         } else {
-            // Jika user bukan Admin atau Owner, ambil hanya reservasi yang miliknya
             $reservations = Reservation::with(['room', 'user'])->where('id_user', $user->id_user)->get();
         }
 
-        // Ambil data room dan user untuk kebutuhan lainnya
         $rooms = Room::all();
         $users = User::all();
 
-        return view('dashboard.reservation', compact('rooms', 'users', 'reservations'));
+        $owner = DB::table('owners')->where('id_user', $user->id_user)->first();
+
+        if ($owner) {
+            $id_owner = $owner->id_owner;
+
+            $totalReservasi = Reservation::join('rooms', 'reservations.id_room', '=', 'rooms.id_room')
+                ->join('boarding_houses', 'rooms.id_house', '=', 'boarding_houses.id_house')
+                ->where('boarding_houses.id_owner', $id_owner)
+                ->where('reservations.reservation_status', 1)
+                ->count();
+
+            $reservations = Reservation::with(['room', 'user'])
+                ->join('rooms', 'reservations.id_room', '=', 'rooms.id_room')
+                ->where('rooms.id_house', $owner->id_owner)  
+                ->get();
+        } else {
+           
+            $totalReservasi = 0;
+        }
+
+        return view('dashboard.reservation', compact('rooms', 'users', 'reservations', 'totalReservasi'));
     }
+
+
+
     public function submitReservation(Request $request)
     {
         // Validasi input

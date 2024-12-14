@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    public function index()
+    {
+        $rooms = Room::all();
+        return view('home.dashboard', compact('rooms'));
+    }
+
     public function rooms()
     {
         $rooms = Room::all();

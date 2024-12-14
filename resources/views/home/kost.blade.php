@@ -2,37 +2,72 @@
 
 @section('content')
 <section class="bg-gray-50 py-6 antialiased dark:bg-gray-900">
+    <section class="bg-gray-50 py-6 antialiased dark:bg-gray-900">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <div class="mx-auto max-w-screen-xl px-4 lg:px-0">
         <!-- Breadcrumb & Heading -->
-        <div class="mb-8">
-            <nav class="flex" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-2 rtl:space-x-reverse">
-                    <li>
-                        <a href="#" class="text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white flex items-center">
-                            <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M19.707 9.293l-2-2-7-7a1 1 0 00-1.414 0l-7 7-2 2a1 1 0 001.414 1.414L2 10.414V18a2 2 0 002 2h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a2 2 0 002-2v-7.586l.293.293a1 1 0 001.414-1.414z" />
-                            </svg>
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <span class="text-gray-500 dark:text-gray-400 mx-2">/</span>
-                        <a href="#" class="text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white">Kamar Kost</a>
-                    </li>
-                    <li>
-                        <span class="text-gray-500 dark:text-gray-400 mx-2">/</span>
-                        <span class="text-gray-500 dark:text-gray-400">Surabaya</span>
-                    </li>
-                </ol>
-            </nav>
-            <h2 class="mt-3 text-2xl font-bold text-gray-900 dark:text-white">Kost Daerah Surabaya</h2>
+            <div class="mb-8 flex items-center justify-between">
+                <h2 id="heading" class="mt-3 text-2xl font-bold text-gray-900 dark:text-white">Semua kost di Kost Connect</h2>
+    
+                <!-- Filter Trigger Button -->
+                <button id="filterToggle" type="button" class="relative rounded bg-primary-700 px-5 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                    Filter
+                </button>
+            </div>
+    
+            <!-- Filter Options -->
+            <div id="filterOptions" class="hidden absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                <!-- Checklist for Cities -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Pilih Kota</h3>
+                    <div class="space-y-2">
+                        @if ($rooms->isEmpty())
+                            <p class="text-gray-500 dark:text-gray-400">Tidak ada data</p>
+                        @else
+                            @foreach ($rooms->groupBy('house.city.name_city') as $cityName => $roomsByCity)
+                                @if (!empty($cityName))
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="city-{{ $cityName }}" class="city-filter h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" value="{{ $cityName }}">
+                                    <label for="city-{{ $cityName }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $cityName }}</label>
+                                </div>
+                                @endif
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+    
+                <!-- Checklist for Gender Type -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Pilih Jenis Kos</h3>
+                    <div class="space-y-2">
+                        @if ($rooms->isEmpty())
+                            <p class="text-gray-500 dark:text-gray-400">Tidak ada data</p>
+                        @else
+                            @foreach ($rooms->groupBy('house.gender_type') as $genderType => $roomsByGender)
+                                @if (!empty($genderType))
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="gender-{{ $genderType }}" class="gender-filter h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" value="{{ $genderType }}">
+                                    <label for="gender-{{ $genderType }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ ucfirst($genderType) }}</label>
+                                </div>
+                                @endif
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+    
+                <!-- Apply Button -->
+                <button id="applyFilters" type="button" class="w-full rounded bg-primary-700 px-5 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                    Terapkan
+                </button>
         </div>
 
         <!-- Room Cards -->
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div id="room-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             @foreach ($rooms as $room)
-            <div class="group rounded-lg border border-gray-200 bg-white shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-800">
+                <div class="group rounded-lg border border-gray-200 bg-white shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-800 room-card" 
+                     data-city="{{ $room->house?->city?->name_city }}" 
+                     data-gender="{{ $room->house?->gender_type }}">
                 <div class="h-56 w-full overflow-hidden rounded-t-lg">
                     <a href="#">
                         <img class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 dark:hidden" 
@@ -45,43 +80,31 @@
                 </div>
                 <div class="p-4">
                     <div class="mb-4 flex items-center justify-between">
-                        <span 
-                            class="inline-block rounded-full px-3 py-1 text-xs font-medium 
-                            @if ($room->house->gender_type == 'putra') 
+                            <span class="inline-block rounded-full px-3 py-1 text-xs font-medium 
+                                @if (isset($room->house) && $room->house->gender_type == 'putra') 
                                 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
-                            @elseif ($room->house->gender_type == 'putri') 
+                                @elseif (isset($room->house) && $room->house->gender_type == 'putri') 
                                 bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300
                             @else
                                 bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300
                             @endif">
-                            {{ $room->house->gender_type }}
+                                {{ $room->house->gender_type ?? 'Tidak Tersedia' }}
                         </span>
                     </div>                    
                     <a href="#" class="block mb-2 text-lg font-semibold text-gray-900 hover:text-primary-600 dark:text-white dark:hover:text-primary-300">
                         {{ $room->name }}
                     </a>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        {{ $room->description }}
-                    </p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $room->description }}</p>
                     <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                         <ul class="space-y-1">
-                            <li>
-                                <span class="font-medium text-gray-700 dark:text-gray-300">Kamar Tersedia:</span> 
-                                {{ $room->available_rooms }} kamar
-                            </li>
-                            <li>
-                                <span class="font-medium text-gray-700 dark:text-gray-300">Luas:</span> 
-                                {{ $room->square_feet }} m<sup>2</sup>
-                            </li>
-                            <li>
-                                <span class="font-medium text-gray-700 dark:text-gray-300">Kota:</span> 
-                                {{ $room->house->city->name_city }}
-                            </li>
+                                <li><span class="font-medium text-gray-700 dark:text-gray-300">Kamar Tersedia:</span> {{ $room->available_rooms ?? 'Tidak Tersedia' }} kamar</li>
+                                <li><span class="font-medium text-gray-700 dark:text-gray-300">Luas:</span> {{ $room->square_feet ?? 'Tidak Tersedia' }} m<sup>2</sup></li>
+                                <li><span class="font-medium text-gray-700 dark:text-gray-300">Kota:</span> {{ $room->house->city->name_city ?? 'Tidak Tersedia' }}</li>
                         </ul>
                     </div>
                     <div class="mt-4 flex items-center justify-between">
                         <p class="text-xl font-bold text-gray-900 dark:text-white">
-                            Rp {{ number_format($room->price_per_month, 0, ',', '.') }}
+                                Rp {{ number_format($room->price_per_month ?? 0, 0, ',', '.') }}
                         </p>
                         <button type="button" 
                                 class="reservButton inline-flex items-center rounded bg-primary-700 px-5 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"

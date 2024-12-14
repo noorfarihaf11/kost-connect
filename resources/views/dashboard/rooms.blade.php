@@ -57,30 +57,36 @@
                             <strong>Kamar Tersedia:</strong> {{ $room->available_rooms }}
                         </p>
 
+                        <p class="mt-2 text-sm text-gray-700 dark:text-gray-400">
+                            <strong>Kota:</strong> 
+                            @if(isset($room->house) && isset($room->house->city))
+                                {{ $room->house->city->name_city }}
+                            @else
+                                <span class="text-gray-500">Tidak ada informasi kota</span>
+                            @endif
+                        </p>
+
                         <div class="mt-4 flex items-center justify-between">
                             <div class="flex items-center space-x-2">
-                                <span
-                                    class="px-3 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-100">
+                                @if($room->house)
+                                    <span class="px-3 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-100">
                                     {{ $room->house->name }}
                                 </span>
-                                <span
-                                    class="px-3 py-1 text-sm font-semibold text-white rounded-full 
-                                    {{ $room->house->gender_type === 'putra' ? 'bg-blue-600' : ($room->house->gender_type === 'putri' ? 'bg-pink-600' : 'bg-orange-600') }}">
-                                    {{ ucfirst($room->house->gender_type) }}
+                                @else
+                                    <span class="px-3 py-1 text-sm font-semibold text-gray-500">No house assigned</span>
+                                @endif
+                        
+                                <span class="px-3 py-1 text-sm font-semibold text-white rounded-full 
+                                    {{ ($room->house && $room->house->gender_type === 'putra') ? 'bg-blue-600' : 
+                                       ($room->house && $room->house->gender_type === 'putri' ? 'bg-pink-600' : 'bg-orange-600') }}">
+                                    {{ ucfirst($room->house ? $room->house->gender_type : 'unknown') }}
                                 </span>
                             </div>
-                            <button
-                                class="editRoomButton flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-700 focus:outline-none focus:shadow-outline-gray"
+                            <button class="editRoomButton flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-700 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit" data-id="{{ $room->id_room }}" data-name="{{ $room->name }}"
-                                data-id_house="{{ $room->id_house }}" data-price_per_month="{{ $room->price_per_month }}"
-                                data-square_feet="{{ $room->square_feet }}"
-                                data-available_rooms="{{ $room->available_rooms }}"
-                                data-is_available="{{ $room->is_available }}" data-description="{{ $room->description }}"
-                                data-image="{{ $room->image }}">
+                                data-id_house="{{ $room->id_house }}" data-price_per_month="{{ $room->price_per_month }}">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
-                                    </path>
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                                 </svg>
                             </button>
                         </div>

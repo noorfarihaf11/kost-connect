@@ -6,19 +6,20 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <div class="mx-auto max-w-screen-xl px-4 lg:px-0">
-        <!-- Breadcrumb & Heading -->
+
             <div class="mb-8 flex items-center justify-between">
                 <h2 id="heading" class="mt-3 text-2xl font-bold text-gray-900 dark:text-white">Semua kost di Kost Connect</h2>
     
-                <!-- Filter Trigger Button -->
-                <button id="filterToggle" type="button" class="relative rounded bg-primary-700 px-5 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                <button id="filterToggle" type="button" class="relative flex items-center rounded bg-primary-700 px-5 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                     Filter
+                    <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </button>
             </div>
     
-            <!-- Filter Options -->
             <div id="filterOptions" class="hidden absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                <!-- Checklist for Cities -->
+
                 <div class="mb-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">Pilih Kota</h3>
                     <div class="space-y-2">
@@ -37,7 +38,7 @@
                     </div>
                 </div>
     
-                <!-- Checklist for Gender Type -->
+
                 <div class="mb-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">Pilih Jenis Kos</h3>
                     <div class="space-y-2">
@@ -56,13 +57,13 @@
                     </div>
                 </div>
     
-                <!-- Apply Button -->
+
                 <button id="applyFilters" type="button" class="w-full rounded bg-primary-700 px-5 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                     Terapkan
                 </button>
         </div>
 
-        <!-- Room Cards -->
+
             <div id="room-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             @foreach ($rooms as $room)
                 <div class="group rounded-lg border border-gray-200 bg-white shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-800 room-card" 
@@ -119,8 +120,79 @@
         </div>
     </div>
 
+        <script>
+            $(document).ready(function () {
 
-        <!-- Main modal -->
+                $('#filterToggle').on('click', function () {
+                    const offset = $(this).offset();
+                    const height = $(this).outerHeight();
+                    $('#filterOptions').css({
+                        top: offset.top + height,
+                        left: offset.left - ($('#filterOptions').outerWidth() - $(this).outerWidth())
+                    }).toggle();
+   
+                });
+    
+                function updateHeading() {
+                    const selectedCities = $('.city-filter:checked').map(function () {
+                        return $(this).val();
+                    }).get();
+    
+                    const selectedGenders = $('.gender-filter:checked').map(function () {
+                        return $(this).val();
+                    }).get();
+    
+                    let cityText = selectedCities.length > 0 ? selectedCities.join(' & ') : '';
+                    let genderText = selectedGenders.length > 0 ? selectedGenders.join(' & ') : '';
+    
+                    let headingText = 'Semua kost';
+    
+                    if (cityText) headingText += ` ${cityText}`;
+                    if (genderText) headingText += ` ${genderText}`;
+    
+                    headingText += ' di Kost Connect';
+    
+                    $('#heading').text(headingText);
+                }
+    
+                function filterRooms() {
+                    const selectedCities = $('.city-filter:checked').map(function () {
+                        return $(this).val();
+                    }).get();
+    
+                    const selectedGenders = $('.gender-filter:checked').map(function () {
+                        return $(this).val();
+                    }).get();
+    
+                    $('.room-card').each(function () {
+                        const roomCity = $(this).data('city');
+                        const roomGender = $(this).data('gender');
+    
+                        if (
+                            (selectedCities.length === 0 || selectedCities.includes(roomCity)) &&
+                            (selectedGenders.length === 0 || selectedGenders.includes(roomGender))
+                        ) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                }
+
+                $('#applyFilters').on('click', function () {
+                    filterRooms();
+                    updateHeading();
+                    
+                    const selectedCount = $('.city-filter:checked').length + $('.gender-filter:checked').length;
+                    const filterText = selectedCount > 0 ? `Filter (${selectedCount})` : 'Filter';
+                    
+                    $('#filterToggle').html(`${filterText} <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`);
+                    $('#filterOptions').hide();
+                });
+            });
+        </script>
+    </section>    
+
         <div id="reservationForm" tabindex="-1" aria-hidden="true"
             class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center">
             <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">

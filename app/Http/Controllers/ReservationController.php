@@ -74,6 +74,55 @@ class ReservationController extends Controller
         return response()->json(['message' => 'Reservasi berhasil!'], 200);
     }
 
+    // public function update(Request $request, $id)
+    // {
+    //     try {
+    //         $reservations = Reservation::findOrFail($id);
+    //         $reservations->update($request->all());
+
+    //         if ($request->reservation_status == 2) {
+
+    //             $reservation_date = $reservations->reservation_date;
+    //             $payment_due_date = \Carbon\Carbon::parse($reservation_date)->addDay();
+
+    //             Payment::create([
+    //                 'id_reservation' => $reservations->id_reservation,
+    //                 'payment_method' => 'bank_transfer', // Contoh default metode pembayaran
+    //                 'payment_status' => 'pending',     // Status default pembayaran
+    //                 'total_amount' => $reservations->room->price_per_month, // Total harga dari reservasi
+    //                 'payment_due_date' => $payment_due_date,
+    //                 'payment_type' => 'first_payment',
+    //             ]);
+    //         }
+
+    //         if ($request->ajax()) {
+    //             return response()->json(['success' => true, 'message' => 'Reservation updated successfully!']);
+    //         }
+
+    //         return redirect('reservation')->with('success', 'Reservation updated successfully!');
+    //     } catch (\Exception $e) {
+    //         if ($request->ajax()) {
+    //             return response()->json(['success' => false, 'message' => 'Update failed: ' . $e->getMessage()]);
+    //         }
+
+    //         return redirect('reservation')->with('error', 'Update failed: ' . $e->getMessage());
+    //     }
+    // }
+
+    // public function update(Request $request, $id)
+    // {
+    //     try {
+    //         // Validasi input
+    //         $request->validate([
+    //             'reservation_status' => 'required|in:0,2', // Hanya menerima 0 (ditolak) atau 2 (diterima)
+    //         ]);
+
+    //         $reservations = Reservation::findOrFail($id);
+    //         $reservations->update($request->only('reservation_status'));
+
+    //         // Jika status "diterima", tambahkan data pembayaran
+    //         if ($request->reservation_status == 2) {
+
     public function update(Request $request, $id)
     {
         try {
@@ -87,6 +136,9 @@ class ReservationController extends Controller
 
                 Payment::create([
                     'id_reservation' => $reservations->id_reservation,
+                    'payment_method' => 'bank_transfer', // Default metode pembayaran
+                    'payment_status' => 'pending',       // Default status pembayaran
+                    'total_amount' => $reservations->room->price_per_month,
                     'payment_method' => 'bank_transfer', // Contoh default metode pembayaran
                     'payment_status' => 'pending',     // Status default pembayaran
                     'total_amount' => $reservations->room->price_per_month, // Total harga dari reservasi
@@ -95,6 +147,7 @@ class ReservationController extends Controller
                 ]);
             }
 
+            // Respon JSON untuk AJAX
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Reservation updated successfully!']);
             }

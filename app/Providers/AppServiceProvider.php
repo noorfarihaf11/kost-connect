@@ -23,12 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Definisikan Gate untuk admin
         Gate::define('admin', function (User $user) {
             return $user->id_role === 1; // 1: Admin
         });
 
-        // Definisikan Gate untuk owner
         Gate::define('owner', function (User $user) {
             return $user->id_role === 2; // 2: Owner
         });

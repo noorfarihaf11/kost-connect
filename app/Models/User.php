@@ -59,4 +59,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Room::class, 'id_room');
     }
+
+    public function isCustomer()
+    {
+        return $this->id_role === 3;
+    }
+
 }

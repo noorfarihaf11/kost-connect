@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\StatusReservasiController;
 use App\Http\Controllers\BoardingHouseController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,9 @@ Route::get('/daftarkost/{id}', function ($id) {
     return response()->json($room);
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/status-reservasi', [StatusReservasiController::class, 'index'])->name('status-reservasi.index');
+});
 
 Route::get('/cities', [CityController::class, 'index'])->middleware('owner');
 Route::post('/cities', [CityController::class, 'store']);

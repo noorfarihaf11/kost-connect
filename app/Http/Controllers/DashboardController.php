@@ -20,6 +20,11 @@ class DashboardController extends Controller
         if (!$owner) {
             $totalReservasi = 0;
             $totalAmount = 0;
+            $ownerName = null;
+            $totalCustomer = 0;
+            $totalKamar = 0;
+            $totalRumah = 0;
+
         } else {
             $id_owner = $owner->id_owner;
 

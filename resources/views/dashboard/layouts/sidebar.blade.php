@@ -55,20 +55,6 @@
                                 <span class="ml-4">Penghuni Kos</span>
                             </a>
                         </li>
-                        <li class="relative px-6 py-3">
-                            <a href=/roles
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fa-solid fa-users-cog"></i>
-                                <span class="ml-4">Role</span>
-                            </a>
-                        </li>
-                        <li class="relative px-6 py-3">
-                            <a href=/users
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fa-solid fa-user-cog"></i>
-                                <span class="ml-4">User</span>
-                            </a>
-                        </li>
                     @else
                         <li class="relative px-6 py-3">
                             <a href=/reservation

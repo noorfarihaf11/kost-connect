@@ -5,6 +5,7 @@
             <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Kost Connect</span>
         </a>
         <div class="flex items-center lg:order-2">
+
             <!-- Tambahan Tombol Status Reservasi -->
             @auth
                 @auth
@@ -15,6 +16,8 @@
                         </a>
                     @endif
                 @endauth
+            @auth
+
                 <!-- Jika pengguna sudah login -->
                 <button type="button" class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                     <span class="sr-only">Open user menu</span>
@@ -54,9 +57,6 @@
                 <li>
                     <a href="/daftarkost" class="block py-2 px-4 text-gray-900 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">Kost</a>
                 </li>
-                {{-- <li>
-                    <a href="/reservation" class="block py-2 px-4 text-gray-900 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">Reservation</a>
-                </li> --}}
             </ul>
         </div>        
     </div>

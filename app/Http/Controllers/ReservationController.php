@@ -88,19 +88,28 @@ class ReservationController extends Controller
     //     }
     // }
 
+    // public function update(Request $request, $id)
+    // {
+    //     try {
+    //         // Validasi input
+    //         $request->validate([
+    //             'reservation_status' => 'required|in:0,2', // Hanya menerima 0 (ditolak) atau 2 (diterima)
+    //         ]);
+
+    //         $reservations = Reservation::findOrFail($id);
+    //         $reservations->update($request->only('reservation_status'));
+
+    //         // Jika status "diterima", tambahkan data pembayaran
+    //         if ($request->reservation_status == 2) {
+
     public function update(Request $request, $id)
     {
         try {
-            // Validasi input
-            $request->validate([
-                'reservation_status' => 'required|in:0,2', // Hanya menerima 0 (ditolak) atau 2 (diterima)
-            ]);
-
             $reservations = Reservation::findOrFail($id);
-            $reservations->update($request->only('reservation_status'));
+            $reservations->update($request->all());
 
-            // Jika status "diterima", tambahkan data pembayaran
             if ($request->reservation_status == 2) {
+
                 $reservation_date = $reservations->reservation_date;
                 $payment_due_date = \Carbon\Carbon::parse($reservation_date)->addDay();
 
@@ -109,6 +118,9 @@ class ReservationController extends Controller
                     'payment_method' => 'bank_transfer', // Default metode pembayaran
                     'payment_status' => 'pending',       // Default status pembayaran
                     'total_amount' => $reservations->room->price_per_month,
+                    'payment_method' => 'bank_transfer', // Contoh default metode pembayaran
+                    'payment_status' => 'pending',     // Status default pembayaran
+                    'total_amount' => $reservations->room->price_per_month, // Total harga dari reservasi
                     'payment_due_date' => $payment_due_date,
                     'payment_type' => 'first_payment',
                 ]);
@@ -128,5 +140,4 @@ class ReservationController extends Controller
             return redirect('reservation')->with('error', 'Update failed: ' . $e->getMessage());
         }
     }
-
 }

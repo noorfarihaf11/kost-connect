@@ -26,6 +26,6 @@
                 alt="mockup" 
                 class="rounded-lg shadow-lg w-full h-auto">
         </div>
-    </div>
+    </div>*
 </section>
 @endsection

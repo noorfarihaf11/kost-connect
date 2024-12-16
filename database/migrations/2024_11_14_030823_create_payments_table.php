@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('total_amount')->nullable(); 
             $table->date('payment_due_date'); // Menambahkan batas pembayaran
             $table->enum('payment_type', ['first_payment', 'monthly_payment']);
+            $table->string('snap_token')->nullable();
             $table->timestamps();
         });
     }

@@ -1,184 +1,192 @@
 @extends('home.layouts.main')
 
 @section('content')
-    <div class="container mx-auto px-6">
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Status Reservasi
+    <div class=" px-4 mx-auto max-w-screen-xl lg:px-6">
+        <!-- Header -->
+        <h2 class="my-6 text-3xl font-bold text-gray-800 dark:text-gray-200">
+            {{ $section === 'payment' ? 'Pembayaran' : 'Reservasi' }}
         </h2>
 
-        <!-- Link Navigasi -->
-        <div class="flex justify-start space-x-4 mb-6">
+        <!-- Navigasi Section -->
+        <div class="flex flex-col sm:flex-row justify-start space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 mb-6">
             <a href="{{ route('status-reservasi.index', ['section' => 'pengajuan']) }}"
-               class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg shadow hover:bg-blue-600">
+                class="w-full sm:w-auto text-center px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 transition
+                {{ Request::is('status-reservasi*') && Request::get('section') == 'pengajuan' ? 'bg-blue-700 font-bold' : '' }}">
                 Pengajuan
             </a>
             <a href="{{ route('status-reservasi.index', ['section' => 'payment']) }}"
-               class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg shadow hover:bg-blue-600">
+                class="w-full sm:w-auto text-center px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 transition
+                {{ Request::is('status-reservasi*') && Request::get('section') == 'payment' ? 'bg-blue-700 font-bold' : '' }}">
                 Payment
             </a>
         </div>
 
-        @if($section === 'pengajuan')
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">Pengajuan</h3>
+        @if ($section === 'pengajuan')
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">Pengajuan</h3>
             @foreach ($reservations as $reservasi)
-                <!-- Card Container -->
-                <div class="bg-white shadow-lg rounded-lg p-6 flex space-x-6 mb-6">
-                    <!-- Timeline Section -->
-                    <div class="w-1/4 flex flex-col items-center relative border-r-2 border-gray-300 pr-6">
-                        <!-- Garis Timeline -->
-                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-300"></div>
-
-                        <!-- Step 1: Diajukan -->
-                        <div class="relative mb-10 flex items-center">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center 
-                                {{ $reservasi->reservation_status >= 1 ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
-                                <span class="font-bold">1</span>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden p-6 mb-6 flex flex-col md:flex-row">
+                    <div class="w-full md:w-1/4 border-r-2 border-gray-300 pr-6 mb-4 md:mb-0 relative">
+                        @foreach (['Diajukan', 'Diterima', 'Ditolak'] as $index => $status)
+                            @php
+                                $step = $index + 1;
+                                if ($reservasi->reservation_status == 3 && $step == 3) {
+                                    $statusClass = 'bg-red-500 text-white';
+                                } elseif ($reservasi->reservation_status == 1 && $step == 1) {
+                                    $statusClass = 'bg-yellow-500 text-white';
+                                } elseif ($reservasi->reservation_status == 2 && $step == 2) {
+                                    $statusClass = 'bg-green-500 text-white';
+                                } else {
+                                    $statusClass = 'bg-gray-200'; // Status yang belum tercapai
+                                }
+                            @endphp
+                            <div class="flex items-center mb-8 relative">
+                                @if ($step < 3)
+                                    <div class="absolute left-4 top-8 h-full w-1 bg-gray-300 z-0"></div>
+                                    <!-- Menambahkan z-index untuk memastikan garis berada di bawah -->
+                                @endif
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center {{ $statusClass }} z-10">
+                                    <span class="font-bold text-white">{{ $step }}</span>
+                                </div>
+                                <div class="ml-6">
+                                    <!-- Menambahkan margin kiri yang lebih besar untuk spasi lebih luas -->
+                                    <p class="font-semibold">{{ $status }}</p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        @if ($step == 1)
+                                            {{ $reservasi->created_at->format('M d, Y h:i A') }} <!-- Diajukan -->
+                                        @elseif ($step == 2 && $reservasi->reservation_status == 2)
+                                            {{ $reservasi->updated_at->format('M d, Y h:i A') }} <!-- Diterima -->
+                                        @elseif ($step == 3 && $reservasi->reservation_status == 3)
+                                            {{ $reservasi->updated_at->format('M d, Y h:i A') }} <!-- Ditolak -->
+                                        @else
+                                            -
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
-                            <div class="ml-6">
-                                <p class="font-semibold">Diajukan</p>
-                                <p class="text-xs text-gray-500">{{ $reservasi->created_at->format('M d') }}</p>
-                            </div>
-                        </div>
-
-                        <!-- Step 2: Diterima -->
-                        <div class="relative mb-10 flex items-center">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center 
-                                {{ $reservasi->reservation_status == 2 ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
-                                <span class="font-bold">2</span>
-                            </div>
-                            <div class="ml-6">
-                                <p class="font-semibold">Diterima</p>
-                                <p class="text-xs text-gray-500">Est. {{ now()->addDays(1)->format('M d') }}</p>
-                            </div>
-                        </div>
-
-                        <!-- Step 3: Ditolak -->
-                        <div class="relative flex items-center">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center 
-                                {{ $reservasi->reservation_status == 0 ? 'bg-red-500 text-white' : 'bg-gray-200' }}">
-                                <span class="font-bold">3</span>
-                            </div>
-                            <div class="ml-6">
-                                <p class="font-semibold">Ditolak</p>
-                                <p class="text-xs text-gray-500">Est. {{ now()->addDays(2)->format('M d') }}</p>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
 
-                    <!-- Informasi Utama -->
-                    <div class="border-l-2 border-gray-300 pl-6 flex-1">
-                        <h4 class="text-lg font-semibold mb-2">{{ $reservasi->room->name }}</h4>
-                        <p class="text-gray-600">Tanggal Kunjung: {{ $reservasi->reservation_date }}</p>
-                        <p class="text-gray-600">Alamat: {{ $reservasi->room->house->address }}</p>
-                        <p class="text-gray-600">Notes: {{ $reservasi->notes }}</p>
-                        <p class="text-gray-600 mb-4">Harga: Rp {{ number_format($reservasi->room->price_per_month, 0, ',', '.') }}</p>
-                        
-                        <div class="flex space-x-4 mt-6">
-                            <!-- Tombol Aksi -->
+                    <div class="flex-1 pl-0 md:pl-6 space-y-4">
+                        <!-- Room Name -->
+                        <h4 class="text-xl font-semibold text-gray-800">{{ $reservasi->room->name }}</h4>
+
+                        <!-- Reservation Date -->
+                        <p class="text-gray-600 text-sm">Tanggal Kunjung: <span
+                                class="font-medium">{{ $reservasi->reservation_date }}</span></p>
+
+                        <!-- Address -->
+                        <p class="text-gray-600 text-sm">Alamat: <span
+                                class="font-medium">{{ $reservasi->room->house->address }}</span></p>
+
+                        <!-- Notes -->
+                        <p class="text-gray-600 text-sm">Notes: <span class="font-medium">{{ $reservasi->notes }}</span>
+                        </p>
+
+                        <!-- Price -->
+                        <p class="text-gray-600 font-medium text-sm mb-4">Harga: Rp
+                            <span
+                                class="font-bold">{{ number_format($reservasi->room->price_per_month, 0, ',', '.') }}</span>
+                        </p>
+
+                        <!-- Action Button -->
+                        <div class="flex space-x-4 mt-4">
                             @can('owner')
                                 @if ($reservasi->reservation_status == 2)
-                                    <button
-                                        class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed"
-                                        disabled>
+                                    <button class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed" disabled>
                                         Sudah Diterima
                                     </button>
                                 @else
                                     <button
-                                        class="accReservation px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-                                        data-id="{{ $reservasi->id_reservation }}"
-                                        data-reservation_status="{{ $reservasi->reservation_status }}">
+                                        class="accReservation px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition duration-300 ease-in-out"
+                                        data-id="{{ $reservasi->id_reservation }}">
                                         Terima
                                     </button>
                                 @endif
                             @endcan
-
-                            <!-- Tombol Tambahan -->
-                            <button class="px-4 py-2 border text-gray-600 rounded-lg hover:bg-gray-100">Detail</button>
-                            <button class="px-4 py-2 border text-red-500 rounded-lg hover:bg-red-50">Batalkan</button>
                         </div>
                     </div>
                 </div>
             @endforeach
         @endif
 
-        @if($section === 'payment')
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">Payment</h3>
+        @if ($section === 'payment')
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">Payment</h3>
             @foreach ($payments as $tagihan)
-                <!-- Card Container -->
-                <div class="bg-white shadow-lg rounded-lg p-6 flex space-x-6 mb-6">
-                    <!-- Timeline Section -->
-                    <div class="w-1/4 flex flex-col items-center relative border-r-2 border-gray-300 pr-6">
-                        <!-- Garis Vertical -->
-                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-300"></div>
-                    
-                        <!-- Status 1: Membayar -->
-                        <div class="relative mb-10 flex items-center">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center 
-                                {{ in_array($tagihan->payment_status, ['pending', 'waiting_for_confirmation', 'paid']) ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
-                                <span class="font-bold">1</span>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden p-6 mb-6 flex flex-col md:flex-row">
+                    <div class="w-full md:w-1/4 border-r-2 border-gray-300 pr-6 mb-4 md:mb-0 relative">
+                        @foreach (['Belum Bayar', 'Terbayar', 'Gagal'] as $index => $status)
+                            @php
+                                $step = $index + 1;
+                                if ($tagihan->payment_status == 'pending' && $step == 1) {
+                                    $statusClass = 'bg-yellow-500 text-white';
+                                } elseif ($tagihan->payment_status == 'paid' && $step == 2) {
+                                    $statusClass = 'bg-blue-500 text-white';
+                                } elseif ($tagihan->payment_status == 'failed' && $step == 3) {
+                                    $statusClass = 'bg-green-500 text-white';
+                                } else {
+                                    $statusClass = 'bg-gray-200';
+                                }
+                            @endphp
+                            <div class="flex items-center mb-8 relative">
+                                @if ($step < 3)
+                                    <div class="absolute left-4 top-8 h-full w-1 bg-gray-300 z-0"></div>
+                                @endif
+                                <div
+                                    class="w-8 h-8 rounded-full flex items-center justify-center {{ $statusClass }} z-10">
+                                    <span class="font-bold text-white">{{ $step }}</span>
+                                </div>
+                                <div class="ml-6">
+                                    <p class="font-semibold">{{ $status }}</p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        @if ($step == 1)
+                                            {{ $tagihan->created_at->format('M d, Y h:i A') }}
+                                        @elseif ($step == 2 && $tagihan->payment_status == 'paid')
+                                            {{ $tagihan->updated_at->format('M d, Y h:i A') }}
+                                        @elseif ($step == 3 && $tagihan->payment_status == 'failed')
+                                            {{ $tagihan->updated_at->format('M d, Y h:i A') }}
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
-                            <div class="ml-6">
-                                <p class="font-semibold {{ $tagihan->payment_status == 'pending' ? 'text-blue-500' : '' }}">Membayar</p>
-                                <p class="text-xs text-gray-500">{{ $tagihan->created_at->format('M d') }}</p>
-                            </div>
-                        </div>
-                    
-                        <!-- Status 2: Menunggu Konfirmasi -->
-                        <div class="relative mb-10 flex items-center">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center 
-                                {{ in_array($tagihan->payment_status, ['waiting_for_confirmation', 'paid']) ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
-                                <span class="font-bold">2</span>
-                            </div>
-                            <div class="ml-6">
-                                <p class="font-semibold {{ $tagihan->payment_status == 'waiting_for_confirmation' ? 'text-blue-500' : '' }}">Konfirmasi</p>
-                                <p class="text-xs text-gray-500">{{ $tagihan->updated_at ? $tagihan->updated_at->format('M d') : '-' }}</p>
-                            </div>
-                        </div>
-                    
-                        <!-- Status 3: Terbayar -->
-                        <div class="relative flex items-center">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center 
-                                {{ $tagihan->payment_status == 'paid' ? 'bg-green-500 text-white' : 'bg-gray-200' }}">
-                                <span class="font-bold">3</span>
-                            </div>
-                            <div class="ml-6">
-                                <p class="font-semibold {{ $tagihan->payment_status == 'paid' ? 'text-blue-500' : '' }}">Terbayar</p>
-                                <p class="text-xs text-gray-500">{{ $tagihan->updated_at ? $tagihan->updated_at->format('M d, Y') : '-' }}</p>
-                            </div>
-                        </div>
-                    </div>                                                           
-        
-                    <!-- Informasi Utama -->
-                    <div class="border-l-2 border-gray-300 pl-6 flex-1">
-                        <h4 class="text-lg font-semibold mb-2">{{ $tagihan->reservation->room->name }}</h4>
-                        <p class="text-gray-600">Tagihan : Rp {{ number_format($tagihan->total_amount, 0, ',', '.') }}</p>
-                        <p class="text-gray-600">Via Pembayaran : {{ $tagihan->payment_method }}</p>
-                        <p class="text-gray-600 mb-4">Tanggal Pembayaran : {{ $tagihan->updated_at ? $tagihan->updated_at->format('M d, Y') : '-' }}</p>
-        
-                        <div class="flex space-x-4 mt-6">
-                            <!-- Tombol Detail Pembayaran -->
-                            <button
-                                class="detailPaymentButton px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                                data-id="{{ $tagihan->id_payment }}"
-                                data-id_reservation="{{ $tagihan->reservation->id_reservation }}"
-                                data-name="{{ $tagihan->reservation->room->name }}"
-                                data-payment_method="{{ $tagihan->payment_method }}"
-                                data-total_amount="{{ $tagihan->total_amount }}"
-                                data-proof_of_payment="{{ $tagihan->proof_of_payment }}">
-                                Detail
-                            </button>
-                        </div>
+                        @endforeach
+                    </div>
+
+                    <div class="flex-1 pl-0 md:pl-6 space-y-4">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-1">{{ $tagihan->reservation->room->name }}</h4>
+                        <p class="text-gray-600 text-sm">Tagihan: <span class="font-medium">Rp
+                                {{ number_format($tagihan->total_amount, 0, ',', '.') }}</span></p>
+
+                        <p class="text-gray-600 text-sm mb-4">Tipe Pembayaran:
+                            <span class="font-medium">
+                                @if ($tagihan->payment_type == 'first_payment')
+                                    Tagihan Pertama
+                                @elseif($tagihan->payment_type == 'monthly_payment')
+                                    Tagihan Bulanan
+                                @else
+                                    {{ $tagihan->payment_type }}
+                                @endif
+                            </span>
+                        </p>
+                        <p class="text-gray-600 text-sm">Jatuh Tempo:
+                            <span class="font-medium">
+                                {{ \Carbon\Carbon::parse($tagihan->payment_due_date)->format('M d, Y') }}
+                            </span>
+                        </p>
+                        <button class="pay-button bg-blue-600 text-white px-4 py-2 rounded" data-id ="{{ $tagihan->id_payment }}"
+                            data-id-reservation ="{{ $tagihan->id_reservation }}"
+                            data-total-amount="{{ $tagihan->total_amount }}" data-name="{{$tagihan->reservation->user->name}}"
+                            data-email="{{$tagihan->reservation->user->email}}" data-phone="{{$tagihan->reservation->phone_number}}"
+                            data-room="{{$tagihan->reservation->room->name}}">Bayar</button>
                     </div>
                 </div>
             @endforeach
-        
-    
             <!-- Modal -->
-            <div id="paymentForm" tabindex="-1" aria-hidden="true"
+            {{-- <div id="paymentForm" tabindex="-1" aria-hidden="true"
                 class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center">
                 <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
                     <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                        <div
+                            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                 Detail Tagihan
                             </h3>
@@ -200,26 +208,30 @@
                             <input type="hidden" name="id_payment" id="edit_id_payment">
                             <div class="grid gap-4 mb-4">
                                 <div>
-                                    <label for="total_amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label for="total_amount"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Tagihan</label>
                                     <input type="text" name="total_amount" id="total_amount"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                                         readonly>
                                 </div>
                                 <div>
-                                    <label for="payment_method" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label for="payment_method"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Via Pembayaran</label>
                                     <input type="text" name="payment_method" id="payment_method"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                                         readonly>
                                 </div>
                                 <div id="uploadLabel" class="block">
-                                    <label for="proof_of_payment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label for="proof_of_payment"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Bukti Pembayaran</label>
                                     <input type="file" name="proof_of_payment" id="proof_of_payment"
                                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none">
                                 </div>
-                                <img id="proofImagePreview" class="hidden w-full h-auto rounded-lg" src="" alt="Bukti Pembayaran">
+                                <img id="proofImagePreview" class="hidden w-full h-auto rounded-lg" src=""
+                                    alt="Bukti Pembayaran">
                             </div>
                             <div class="text-right mt-4">
                                 <button type="submit"
@@ -230,10 +242,9 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         @endif
-    
-
+        
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
         <script>
@@ -346,5 +357,49 @@
 
             });
         </script>
+        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+            data-client-key="SB-Mid-client-I485cPfrefIvToXk"></script>
+        <script>
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('pay-button')) {
+                    const button = event.target;
+                    const id = button.getAttribute('data-id');
+                    const id_reservation = button.getAttribute('data-id-reservation');
+                    const totalAmount = button.getAttribute('data-total-amount');
+                    const name = button.getAttribute('data-name');
+                    const email = button.getAttribute('data-email');
+                    const phone = button.getAttribute('data-phone');
+                    const room = button.getAttribute('data-room');
 
-@endsection
+                    fetch('http://127.0.0.1:8000/api/midtrans/transaction', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                id_reservation: id_reservation,
+                                total_amount: totalAmount,
+                                name: name,
+                                email: email,
+                                phone: phone,
+                                room: room
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Data received:', data);
+                            if (data.snap_token) {
+                                snap.pay(data.snap_token); // Memulai pembayaran dengan Snap Token
+                            } else {
+                                alert('Gagal membuat transaksi');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Terjadi kesalahan, coba lagi.');
+                        });
+                }
+            });
+        </script>
+    @endsection

@@ -23,6 +23,19 @@
                 </div>
                 <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
                     <div class="w-full">
+                        @if (session('success'))
+                        <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+                            role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('registError'))
+                        <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                            role="alert">
+                            {{ session('registError') }}
+                        </div>
+                    @endif
                         <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                             Daftar sebagai {{ $role === 'pemilik' ? 'Pemilik Kos' : 'Pencari Kos' }}
                         </h1>

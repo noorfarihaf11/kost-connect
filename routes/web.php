@@ -13,6 +13,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StatusReservasiController;
 use App\Http\Controllers\BoardingHouseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MidtransController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Room;
 
@@ -50,7 +51,7 @@ Route::get('/register', [AuthController::class, 'index'])->middleware('guest');
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::get('/users', [UserController::class, 'index']);
 
@@ -59,13 +60,13 @@ Route::post('/submitRoomForm', [RoomController::class, 'store']);
 Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
 Route::put('/rooms/{id}', [RoomController::class, 'update']);
 
-Route::post('/submitreservation', [ReservationController::class, 'submitreservation']);
+Route::post('/submitreservation', [ReservationController::class, 'submitreservation'])->middleware('auth');;
 Route::get('/reservation', [ReservationController::class, 'index'])->middleware('auth');
 Route::post('/reservation', [ReservationController::class, 'store']);
 Route::put('/reservation/{id}', [ReservationController::class, 'update']);
 
 Route::get('/payment', [PaymentController::class, 'index'])->middleware('auth');
-Route::put('/payment/{id}/upload-proof', [PaymentController::class, 'uploadPaymentProof'])->middleware('auth');
+Route::put('/payment/{id}/upload-proof', [PaymentController::class, 'uploadProof'])->middleware('auth');
 Route::put('/payment/{id}/confirm', [PaymentController::class, 'confirmPayment'])->middleware('auth');
 
 Route::get('/customer', [CustomerController::class, 'index'])->middleware('auth');
@@ -88,6 +89,8 @@ Route::get('/owners', [OwnerController::class, 'index']);
 Route::get('/rumahkost', [BoardingHouseController::class, 'index']);
 Route::post('/submitHouseForm', [BoardingHouseController::class, 'store']);
 
-Route::post('/snap-token', [PaymentController::class, 'getSnapToken']);
-
 Route::get('/dashboard', [DashboardController::class, 'index']);
+
+
+
+

@@ -25,6 +25,7 @@ class StatusReservasiController extends Controller
                 $query->where('id_user', $user->id_user);
             })->get();
 
+
         // Kembalikan view dengan data sesuai bagian
         return view('status-reservasi.index', compact('reservations', 'section', 'payments'));
     }

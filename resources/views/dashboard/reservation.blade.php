@@ -79,7 +79,7 @@
                                             class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
                                             Diterima
                                         </span>
-                                    @elseif ($reservasi->reservation_status == 0)
+                                    @elseif ($reservasi->reservation_status == 3)
                                         <span
                                             class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
                                             Ditolak
@@ -115,12 +115,11 @@
     <div id="terimareservasiForm" style="display: none;"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-1/3">
-            <!-- Modal Header -->
             <form id="updateStatus" method="POST">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id_reservation" id="edit_id_reservation">
-                <input type="hidden" name="reservation_status" value="2">
+                <input type="hidden" name="reservation_status" id="edit_reservation_status" value="1">
                 <div class="flex justify-between items-center p-4 border-b">
                     <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Terima Reservasi</h2>
                     <button id="closeModalButton" type="button"
@@ -133,7 +132,6 @@
                     </button>
                 </div>
 
-                <!-- Modal Body -->
                 <div class="p-4">
                     <p class="text-sm text-gray-700 dark:text-gray-400">
                         Dengan mengonfirmasi, reservasi ini akan diterima dan penyewa akan diberi tahu. Apakah Anda ingin
@@ -141,14 +139,13 @@
                     </p>
                 </div>
 
-                <!-- Modal Footer -->
                 <div class="flex justify-end p-4 border-t">
-                    <button
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                        onclick="closeModal()">
+                    <button id="rejectButton" type="button"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         Tolak
                     </button>
-                    <button
+
+                    <button id="acceptButton" type="button"
                         class="ml-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-300">
                         Terima
                     </button>
@@ -156,19 +153,6 @@
             </form>
         </div>
     </div>
-
-    {{-- <div id="customerForm" style="display: none;"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-2xl">
-            <form method="post" action="/reservation" class="mb-5" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="id_reservation" value="{{ $reservasi->id_reservation }}">
-                <input type="hidden" name="name" value="{{ $reservasi->user->name }}">
-                <input type="hidden" name="email" value="{{ $reservasi->user->email }}">
-                <input type="hidden" name="phone_number" value="{{ $reservasi->phone_number }}">
-            </form>
-        </div>
-    </div> --}}
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
@@ -190,12 +174,23 @@
                 $('#terimareservasiForm').hide(); // Hide the modal
             });
 
-            $('#updateStatus').on('submit', function(event) {
-                event.preventDefault(); // Prevent the default form submission
+            $('#acceptButton').click(function() {
+                $('#edit_reservation_status').val(2); // Set reservation_status menjadi 2 (Terima)
+                $('#updateStatus').submit(); // Kirim form
+            });
 
-                const id = $('#edit_id_reservation').val();
-                const url = '/reservation/' + id; // Construct the URL for the PUT request
-                const formData = $(this).serialize() + '&_method=PUT';
+            // Ketika tombol "Tolak" diklik
+            $('#rejectButton').click(function() {
+                $('#edit_reservation_status').val(3); // Set reservation_status menjadi 3 (Tolak)
+                $('#updateStatus').submit(); // Kirim form
+            });
+
+            $('#updateStatus').on('submit', function(event) {
+                event.preventDefault(); // Mencegah pengiriman form secara default
+
+                const id = $('#edit_id_reservation').val(); // Ambil ID dari input tersembunyi
+                const url = '/reservation/' + id; // URL untuk permintaan PUT
+                const formData = $(this).serialize(); // Serialize data form
 
                 console.log("Submitting data:");
                 console.log("ID:", id);
@@ -204,19 +199,20 @@
 
                 $.ajax({
                     url: url,
-                    type: 'POST',
-                    data: formData, // Send the form data with CSRF token
+                    type: 'POST', // Menggunakan metode POST dengan CSRF token
+                    data: formData, // Kirim data form
                     success: function(response) {
                         if (response.success) {
                             alert('Reservation updated successfully!');
-                            location.reload(); // Reload the page after a successful update
+                            location.reload(); // Reload halaman setelah update berhasil
                         } else {
-                            alert('Update failed: ' + response.message);
+                            alert('Update failed: ' + response
+                            .message); // Menampilkan pesan jika gagal
                         }
                     },
                     error: function(xhr) {
                         alert('Error: ' + xhr
-                            .responseText); // Show error message if something goes wrong
+                        .responseText); // Menampilkan error jika ada masalah
                     }
                 });
             });

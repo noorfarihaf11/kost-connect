@@ -33,7 +33,7 @@ class AuthController extends Controller
     
             return redirect('/login')->with('success', 'Registration Successful! Please Login');
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Registration failed. Please try again.'])->withInput();
+            return back()->with('registError', 'Register Failed!');
         }
     }
 
@@ -126,5 +126,4 @@ class AuthController extends Controller
     
         return redirect()->route('login');
     }
-
 }

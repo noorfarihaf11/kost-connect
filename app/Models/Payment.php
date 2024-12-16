@@ -19,6 +19,7 @@ class Payment extends Model
         'proof_of_payment',
         'payment_due_date',
         'first_payment_date',
+        'snap_token',
         'timestamps'
     ];
 

@@ -6,10 +6,16 @@
         </a>
         <div class="flex items-center lg:order-2">
             @auth
-                @if (Auth::user()->isCustomer())
+                @if (Gate::allows('admin') || Gate::allows('owner'))
+                    <a href="/dashboard"
+                        class="text-gray-800 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 
+                        {{ Request::is('dashboard') ? 'text-primary-700 font-bold' : 'text-gray-900' }}">
+                        Dashboard
+                    </a>
+                @else
                     <a href="/status-reservasi"
                         class="text-gray-800 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 
-                        {{ Request::is('status-reservasi') ? 'text-primary-700 font-bold' : 'text-gray-900' }}">
+                {{ Request::is('status-reservasi') ? 'text-primary-700 font-bold' : 'text-gray-900' }}">
                         Status Reservasi
                     </a>
                 @endif
@@ -69,20 +75,35 @@
         <div class="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1">
             <ul class="flex flex-col font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                 <li>
-                    <a href="/home"
-                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
-                        {{ Request::is('home') ? 'text-primary-700 font-bold' : 'text-gray-900' }}">
+                    <a href="#home" id="homeLink"
+                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 active:text-blue-600">
                         Home
                     </a>
                 </li>
                 <li>
-                    <a href="/daftarkost"
-                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
-                        {{ Request::is('daftarkost') ? 'text-primary-700 font-bold' : 'text-gray-900' }}">
+                    <a href="#kost" id="kostLink"
+                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
                         Kost
                     </a>
                 </li>
-            </ul>            
+            </ul>
         </div>
-    </div>
-</nav>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $(window).scroll(function() {
+                    var scrollPosition = $(window).scrollTop();
+
+                    if ($('#home').offset().top <= scrollPosition && ($('#home').offset().top + $('#home')
+                            .height()) > scrollPosition) {
+                        $('#homeLink').addClass('active'); // tambahkan kelas 'active'
+                        $('#kostLink').removeClass('active'); // hapus kelas 'active'
+                    } else if ($('#kost').offset().top <= scrollPosition && ($('#kost').offset().top + $(
+                            '#kost').height()) > scrollPosition) {
+                        $('#kostLink').addClass('active'); // tambahkan kelas 'active'
+                        $('#homeLink').removeClass('active'); // hapus kelas 'active'
+                    }
+                });
+            });
+        </script>

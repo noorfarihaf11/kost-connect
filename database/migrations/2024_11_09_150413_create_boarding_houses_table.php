@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('id_city')->references('id_city')->on('cities');
             $table->string('name');
             $table->string('address');
-            $table->enum('gender_type', ['putra', 'putri','campur']);
+            $table->enum('gender_type', ['putra', 'putri','campur'])->nullable();
             $table->string('image');
             $table->timestamps();
         });

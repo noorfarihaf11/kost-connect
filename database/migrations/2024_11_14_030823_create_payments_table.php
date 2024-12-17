@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('payment_status', ['pending', 'waiting_for_confirmation', 'paid', 'failed'])->default('pending');
             $table->string('proof_of_payment')->nullable(); 
             $table->integer('total_amount')->nullable(); 
-            $table->date('payment_due_date'); // Menambahkan batas pembayaran
+            $table->date('payment_due_date')->nullable(); // Menambahkan batas pembayaran
             $table->enum('payment_type', ['first_payment', 'monthly_payment']);
             $table->string('snap_token')->nullable();
             $table->timestamps();

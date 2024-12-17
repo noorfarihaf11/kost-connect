@@ -32,7 +32,7 @@
             <div class="flex space-x-4">
                 <a href="#" class="hover:scale-110 transform transition duration-300">
                     <img src="https://img.icons8.com/ios-filled/50/ffffff/facebook.png" alt="Facebook" class="w-6 h-6">
-        </a>
+                </a>
                 <a href="#" class="hover:scale-110 transform transition duration-300">
                     <img src="https://img.icons8.com/ios-filled/50/ffffff/twitter.png" alt="Twitter" class="w-6 h-6">
                 </a>
@@ -52,4 +52,4 @@
             © 2024 KostConnect™. All Rights Reserved.
         </p>
     </div>
-  </footer>
+</footer>

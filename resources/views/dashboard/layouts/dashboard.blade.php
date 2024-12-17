@@ -64,7 +64,6 @@
                 </div>
             </header>
 
-            <!-- Dashboard Content -->
             @yield('content')
         </main>
     </div>

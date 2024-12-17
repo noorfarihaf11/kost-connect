@@ -1,13 +1,21 @@
 @extends('home.layouts.main')
 
 @section('content')
-    <div class=" px-4 mx-auto max-w-screen-xl lg:px-6">
-        <!-- Header -->
+    <div class=" px-2 mx-auto max-w-screen-l lg:px-3">
+        <a href="/home"
+            class="inline-flex items-center font-medium text-primary-600 hover:text-primary-800 dark:text-primary-500 dark:hover:text-primary-700">
+            <svg class="ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M12.707 14.707a1 1 0 010-1.414L9.414 10l3.293-3.293a1 1 0 10-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414 0z"
+                    clip-rule="evenodd"></path>
+            </svg>
+            Home
+        </a>
+    </div>
+    <div class="px-4 mx-auto max-w-screen-xl lg:px-6">
         <h2 class="my-6 text-3xl font-bold text-gray-800 dark:text-gray-200">
             {{ $section === 'payment' ? 'Pembayaran' : 'Reservasi' }}
         </h2>
-
-        <!-- Navigasi Section -->
         <div class="flex flex-col sm:flex-row justify-start space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 mb-6">
             <a href="{{ route('status-reservasi.index', ['section' => 'pengajuan']) }}"
                 class="w-full sm:w-auto text-center px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 transition
@@ -152,7 +160,8 @@
                     </div>
 
                     <div class="flex-1 pl-0 md:pl-6 space-y-4">
-                        <h4 class="text-xl font-semibold text-gray-800 mb-1">{{ $tagihan->reservation->room->name }}</h4>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-1">{{ $tagihan->reservation->room->name }}
+                        </h4>
                         <p class="text-gray-600 text-sm">Tagihan: <span class="font-medium">Rp
                                 {{ number_format($tagihan->total_amount, 0, ',', '.') }}</span></p>
 
@@ -172,11 +181,13 @@
                                 {{ \Carbon\Carbon::parse($tagihan->payment_due_date)->format('M d, Y') }}
                             </span>
                         </p>
-                        <button class="pay-button bg-blue-600 text-white px-4 py-2 rounded" data-id ="{{ $tagihan->id_payment }}"
-                            data-id-reservation ="{{ $tagihan->id_reservation }}"
-                            data-total-amount="{{ $tagihan->total_amount }}" data-name="{{$tagihan->reservation->user->name}}"
-                            data-email="{{$tagihan->reservation->user->email}}" data-phone="{{$tagihan->reservation->phone_number}}"
-                            data-room="{{$tagihan->reservation->room->name}}">Bayar</button>
+                        <button class="pay-button bg-blue-600 text-white px-4 py-2 rounded"
+                            data-id ="{{ $tagihan->id_payment }}" data-id-reservation ="{{ $tagihan->id_reservation }}"
+                            data-total-amount="{{ $tagihan->total_amount }}"
+                            data-name="{{ $tagihan->reservation->user->name }}"
+                            data-email="{{ $tagihan->reservation->user->email }}"
+                            data-phone="{{ $tagihan->reservation->phone_number }}"
+                            data-room="{{ $tagihan->reservation->room->name }}">Bayar</button>
                     </div>
                 </div>
             @endforeach
@@ -244,7 +255,7 @@
                 </div>
             </div> --}}
         @endif
-        
+
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
         <script>

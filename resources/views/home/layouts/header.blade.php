@@ -13,7 +13,7 @@
                         Dashboard
                     </a>
                 @else
-                    <a href="/status-reservasi"
+                    <a href="status-reservasi"
                         class="text-gray-800 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 
                 {{ Request::is('status-reservasi') ? 'text-primary-700 font-bold' : 'text-gray-900' }}">
                         Status Reservasi
@@ -77,7 +77,19 @@
                 <li>
                     <a href="#home" id="homeLink"
                         class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 active:text-blue-600">
-                        Home
+                        Beranda
+                    </a>
+                </li>
+                <li>
+                    <a href="#about" id="aboutLink"
+                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
+                        Tentang Kami
+                    </a>
+                </li>
+                <li>
+                    <a href="#kota" id="kotaLink"
+                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
+                        Kota
                     </a>
                 </li>
                 <li>
@@ -92,18 +104,23 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
+                var sections = ['#home', '#about', '#kota', '#kost']; // List of section IDs
+                var links = ['#homeLink', '#aboutLink', '#kotaLink', '#kostLink']; // Corresponding links
+        
                 $(window).scroll(function() {
                     var scrollPosition = $(window).scrollTop();
-
-                    if ($('#home').offset().top <= scrollPosition && ($('#home').offset().top + $('#home')
-                            .height()) > scrollPosition) {
-                        $('#homeLink').addClass('active'); // tambahkan kelas 'active'
-                        $('#kostLink').removeClass('active'); // hapus kelas 'active'
-                    } else if ($('#kost').offset().top <= scrollPosition && ($('#kost').offset().top + $(
-                            '#kost').height()) > scrollPosition) {
-                        $('#kostLink').addClass('active'); // tambahkan kelas 'active'
-                        $('#homeLink').removeClass('active'); // hapus kelas 'active'
-                    }
+        
+                    links.forEach(function(link) {
+                        $(link).removeClass('active');
+                    });
+        
+                    sections.forEach(function(section, index) {
+                        if ($(section).offset().top <= scrollPosition && 
+                            ($(section).offset().top + $(section).height()) > scrollPosition) {
+                            $(links[index]).addClass('active'); // Add active class to the corresponding link
+                        }
+                    });
                 });
             });
         </script>
+        

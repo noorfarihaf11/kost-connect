@@ -11,7 +11,9 @@
 </head>
 <style>
     #homeLink.active,
-    #kostLink.active {
+    #kostLink.active,
+    #aboutLink.active,
+    #kotaLink.active {
         color: #1d4ed8;
         font-weight: bold;  
     }

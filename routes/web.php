@@ -14,6 +14,7 @@ use App\Http\Controllers\StatusReservasiController;
 use App\Http\Controllers\BoardingHouseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\RoomReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Room;
 
@@ -90,6 +91,11 @@ Route::post('/submitHouseForm', [BoardingHouseController::class, 'store']);
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
+// Route::post('/rooms/{id}/review', [RoomReviewController::class, 'store'])->middleware('auth');
+Route::get('/rooms', [RoomReviewController::class, 'index']);
+Route::put('/stop-kos', [RoomReviewController::class, 'stopKos'])->name('stop.kos');
+// Route::post('/rooms/{id_room}/review', [RoomReviewController::class, 'store'])->name('rooms.review.store');
+Route::post('/rooms/{roomId}/review', [RoomReviewController::class, 'store'])->name('rooms.review.store');
 
 
 

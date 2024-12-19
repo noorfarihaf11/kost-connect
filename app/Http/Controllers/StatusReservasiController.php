@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
 use App\Models\Reservation;
 use App\Models\Payment;  // Pastikan model Payment di-import
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ class StatusReservasiController extends Controller
     {
         // Ambil data reservasi berdasarkan user yang login
         $user = Auth::user();
+        $rooms = Room::all();
         $reservations = Reservation::with('room')
             ->where('id_user', $user->id_user)
             ->get();
@@ -27,6 +29,6 @@ class StatusReservasiController extends Controller
 
 
         // Kembalikan view dengan data sesuai bagian
-        return view('status-reservasi.index', compact('reservations', 'section', 'payments'));
+        return view('status-reservasi.index', compact('reservations', 'section', 'payments', 'rooms'));
     }
 }

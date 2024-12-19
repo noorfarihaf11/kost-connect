@@ -23,7 +23,7 @@ class Customer extends Model
 
     public function reservation ()
     {
-        return $this->belongsTo(Reservation::class, 'id_reservation');
+        return $this->hasOne(Reservation::class, 'id_reservation', 'id_reservation');
     }
     public function payment ()
     {

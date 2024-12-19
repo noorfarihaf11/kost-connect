@@ -3,13 +3,13 @@
 @section('content')
     <div class=" px-2 mx-auto max-w-screen-l lg:px-3">
         <a href="/home"
-            class="inline-flex items-center font-medium text-primary-600 hover:text-primary-800 dark:text-primary-500 dark:hover:text-primary-700">
+            class="inline-flex items-center font-medium text-black-600 hover:text-primary-800 dark:text-primary-500 dark:hover:text-primary-700">
             <svg class="ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                     d="M12.707 14.707a1 1 0 010-1.414L9.414 10l3.293-3.293a1 1 0 10-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414 0z"
                     clip-rule="evenodd"></path>
             </svg>
-            Home
+            Kembali
         </a>
     </div>
     <div class="px-4 mx-auto max-w-screen-xl lg:px-6">
@@ -20,12 +20,12 @@
             <a href="{{ route('status-reservasi.index', ['section' => 'pengajuan']) }}"
                 class="w-full sm:w-auto text-center px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 transition
                 {{ Request::is('status-reservasi*') && Request::get('section') == 'pengajuan' ? 'bg-blue-700 font-bold' : '' }}">
-                Pengajuan
+                Reservasi
             </a>
             <a href="{{ route('status-reservasi.index', ['section' => 'payment']) }}"
                 class="w-full sm:w-auto text-center px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 transition
                 {{ Request::is('status-reservasi*') && Request::get('section') == 'payment' ? 'bg-blue-700 font-bold' : '' }}">
-                Payment
+                Pembayaran
             </a>
         </div>
 
@@ -76,7 +76,7 @@
 
                     <div class="flex-1 pl-0 md:pl-6 space-y-4">
                         <!-- Room Name -->
-                        <h4 class="text-xl font-semibold text-gray-800">{{ $reservasi->room->name }}</h4>
+                        <h4 class="text-xl font-bold text-gray-800">{{ $reservasi->room->name }}</h4>
 
                         <!-- Reservation Date -->
                         <p class="text-gray-600 text-sm">Tanggal Kunjung: <span
@@ -160,8 +160,7 @@
                     </div>
 
                     <div class="flex-1 pl-0 md:pl-6 space-y-4">
-                        <h4 class="text-xl font-semibold text-gray-800 mb-1">{{ $tagihan->reservation->room->name }}
-                        </h4>
+                        <h4 class="text-xl font-bold text-gray-800 mb-1">{{ $tagihan->reservation->room->name }}</h4>
                         <p class="text-gray-600 text-sm">Tagihan: <span class="font-medium">Rp
                                 {{ number_format($tagihan->total_amount, 0, ',', '.') }}</span></p>
 
@@ -181,236 +180,190 @@
                                 {{ \Carbon\Carbon::parse($tagihan->payment_due_date)->format('M d, Y') }}
                             </span>
                         </p>
-                        <button class="pay-button bg-blue-600 text-white px-4 py-2 rounded"
-                            data-id ="{{ $tagihan->id_payment }}" data-id-reservation ="{{ $tagihan->id_reservation }}"
-                            data-total-amount="{{ $tagihan->total_amount }}"
-                            data-name="{{ $tagihan->reservation->user->name }}"
-                            data-email="{{ $tagihan->reservation->user->email }}"
-                            data-phone="{{ $tagihan->reservation->phone_number }}"
-                            data-room="{{ $tagihan->reservation->room->name }}">Bayar</button>
+                        @if ($tagihan->payment_status == 'paid')
+                            @if ($tagihan->payment_type == 'first_payment')
+                                <p class="text-green-600 text-l mb-4 font-semibold">Selamat! Anda sudah resmi menjadi
+                                    penghuni {{ $tagihan->reservation->room->name }}.</p>
+                            @elseif ($tagihan->payment_type == 'monthly_payment')
+                                <p class="text-green-600 text-l mb-4 font-semibold">Terimakasih Anda telah membayar tagihan
+                                    bulan {{ \Carbon\Carbon::parse($tagihan->payment_period)->translatedFormat('F') }}.</p>
+                            @endif
+                        @elseif ($tagihan->reservation->customer->customer_status == 'active')
+                            <button class="pay-button bg-blue-600 text-white px-4 py-2 rounded"
+                                data-id-payment="{{ $tagihan->id_payment }}"
+                                data-id-reservation="{{ $tagihan->id_reservation }}"
+                                data-total-amount="{{ $tagihan->total_amount }}"
+                                data-name="{{ $tagihan->reservation->user->name }}"
+                                data-email="{{ $tagihan->reservation->user->email }}"
+                                data-phone="{{ $tagihan->reservation->phone_number }}"
+                                data-room="{{ $tagihan->reservation->room->name }}">
+                                Bayar
+                            </button>
+                            <button class="cancel-button bg-red-600 text-white px-4 py-2 rounded"
+                                data-id-reservation="{{ $tagihan->id_reservation }}"
+                                data-id_customer="{{ $tagihan->reservation->customer->id_customer }}"
+                                data-customer_status="{{ $tagihan->reservation->customer->customer_status }}">
+                                Berhenti kos
+                            </button>
+                        @else
+                            <p class="text-red-600 text-l mb-4 font-semibold">Anda tidak menjadi penghuni kost ini lagi.</p>
+                        @endif
                     </div>
                 </div>
-            @endforeach
-            <!-- Modal -->
-            {{-- <div id="paymentForm" tabindex="-1" aria-hidden="true"
-                class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center">
-                <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-                    <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <div
-                            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                Detail Tagihan
-                            </h3>
-                            <button type="button"
-                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                id="closeModalButton">
-                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="sr-only">Close modal</span>
-                            </button>
-                        </div>
-                        <form id="kirimBukti" method="POST" enctype="multipart/form-data">
+
+                <div id="berhentiForm" style="display: none;"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-1/3">
+                        <form id="berhentiKos" method="POST">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="id_payment" id="edit_id_payment">
-                            <div class="grid gap-4 mb-4">
-                                <div>
-                                    <label for="total_amount"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                        Tagihan</label>
-                                    <input type="text" name="total_amount" id="total_amount"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                                        readonly>
-                                </div>
-                                <div>
-                                    <label for="payment_method"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                        Via Pembayaran</label>
-                                    <input type="text" name="payment_method" id="payment_method"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                                        readonly>
-                                </div>
-                                <div id="uploadLabel" class="block">
-                                    <label for="proof_of_payment"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                        Bukti Pembayaran</label>
-                                    <input type="file" name="proof_of_payment" id="proof_of_payment"
-                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none">
-                                </div>
-                                <img id="proofImagePreview" class="hidden w-full h-auto rounded-lg" src=""
-                                    alt="Bukti Pembayaran">
+                            <input type="hidden" name="id_customer" id="edit_id_customer">
+                            <input type="hidden" name="customer_status" id="edit_customer_status" value="inactive">
+                            <div class="flex justify-between items-center p-4 border-b">
+                                <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Berhenti kos</h2>
+                                <button id="closeModalButton" type="button"
+                                    class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" aria-label="close">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img"
+                                        aria-hidden="true">
+                                        <path
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" fill-rule="evenodd"></path>
+                                    </svg>
+                                </button>
                             </div>
-                            <div class="text-right mt-4">
-                                <button type="submit"
-                                    class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
-                                    Kirim Bukti
+
+                            <div class="p-4">
+                                <p class="text-sm text-gray-700 dark:text-gray-400">
+                                    Apakah anda yakin untuk tidak memperpanjang kos ini? Dengan menyetujui, status anda
+                                    sebagai penghuni kos sudah tidak aktif
+                                </p>
+                            </div>
+
+                            <div class="flex justify-end p-4 border-t">
+                                <button id="rejectButton" type="button"
+                                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                                    Batal
+                                </button>
+
+                                <button id="acceptButton" type="button"
+                                    class="ml-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-300">
+                                    Setuju
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
-            </div> --}}
+            @endforeach
         @endif
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
+    <script>
+        $(document).ready(function() {
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
+            $('.cancel-button').click(function() {
+                const id = $(this).data('id_customer');
+                const customer_status = $(this).data('customer_status');
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
-        <script>
-            $(document).ready(function() {
-                const csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $('#edit_id_customer').val(id);
+                $('#edit_customer_status').val(customer_status);
 
-                $('.detailPaymentButton, .seeButtonAdmin').click(function() {
-                    const id = $(this).data('id');
-                    const id_reservation = $(this).data('id_reservation');
-                    const name = $(this).data('name');
-                    const payment_method = $(this).data('payment_method');
-                    const total_amount = $(this).data('total_amount');
-                    const proof_of_payment = $(this).data('proof_of_payment');
+                $('#berhentiForm').show(); // Open the modal
+            });
 
-                    // Mengisi nilai ke input form
-                    $('#edit_id_payment').val(id);
-                    $('#id_reservation').val(id_reservation);
-                    $('#name').val(name);
-                    $('#payment_method').val(payment_method);
-                    $('#total_amount').val(total_amount);
+            $('#closeModalButton').click(function() {
+                $('#berhentiForm').hide(); // Hide the modal
+            });
 
-                    // Cek apakah ada bukti pembayaran
-                    if (proof_of_payment) {
-                        const proofUrl = `/storage/payments/${proof_of_payment}`;
-                        $('#proofImagePreview').attr('src', proofUrl).removeClass('hidden'); // Tampilkan gambar
-                        $('#uploadLabel').addClass('hidden'); // Sembunyikan label unggah
-                    } else {
-                        $('#proofImagePreview').addClass('hidden'); // Sembunyikan gambar
-                        $('#uploadLabel').removeClass('hidden'); // Tampilkan label unggah
+            $('#acceptButton').click(function() {
+                $('#edit_customer_status').val('inactive'); // Set reservation_status menjadi 2 (Terima)
+                $('#berhentiKos').submit(); // Kirim form
+            });
+
+            $('#rejectButton').click(function() {
+                $('#edit_customer_status').val('active'); // Set reservation_status menjadi 3 (Tolak)
+                $('#berhentiKos').submit(); // Kirim form
+            });
+
+            $('#berhentiKos').on('submit', function(event) {
+                event.preventDefault(); // Mencegah pengiriman form secara default
+
+                const id = $('#edit_id_customer').val(); // Ambil ID dari input tersembunyi
+                const url = '/customer/' + id; // URL untuk permintaan PUT
+                const formData = $(this).serialize(); // Serialize data form
+
+                console.log("Submitting data:");
+                console.log("ID:", id);
+                console.log("URL:", url);
+                console.log("Form Data:", formData);
+
+                $.ajax({
+                    url: url,
+                    type: 'POST', // Menggunakan metode POST dengan CSRF token
+                    data: formData, // Kirim data form
+                    success: function(response) {
+                        if (response.success) {
+                            alert(
+                                'Pengajuan berhasil, Anda sudah tidak menjadi penghuni kost ini');
+                            location.reload(); // Reload halaman setelah update berhasil
+                        } else {
+                            alert('Update failed: ' + response
+                                .message); // Menampilkan pesan jika gagal
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + xhr
+                            .responseText); // Menampilkan error jika ada masalah
                     }
-
-                    $('#paymentForm').removeClass('hidden');
                 });
-
-                $('#closeModalButton').click(function() {
-                    $('#paymentForm').addClass('hidden');
-                });
-
-                $('.confirmPaymentButton').click(function() {
-                    const id = $(this).data('id');
-                    const payment_status = $(this).data('payment_status');
-
-                    $('#edit_id_reservation').val(id);
-                    $('#edit_payment_status').val(payment_status);
-
-                    $('#terimaPembayaranForm').show(); // Open the modal
-                });
-
-                // Handler untuk Kirim Bukti Pembayaran
-                $('#kirimBukti').on('submit', function(event) {
-                    event.preventDefault(); // Prevent default form submission
-
-                    const id = $('#edit_id_payment').val(); // Ambil ID pembayaran
-                    const url = '/payment/' + id + '/upload-proof'; // Endpoint untuk upload bukti pembayaran
-                    const formData = new FormData(this); // Buat objek FormData dari form
-
-                    console.log("Mengirim bukti pembayaran:");
-                    console.log("ID:", id);
-                    console.log("URL:", url);
-
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        data: formData, // Kirim form data termasuk file
-                        processData: false, // Jangan ubah data menjadi string
-                        contentType: false, // Jangan atur tipe konten
-                        success: function(response) {
-                            if (response.success) {
-                                alert(response.message);
-                                location.reload(); // Reload halaman setelah berhasil
-                            } else {
-                                alert('Gagal: ' + response.message);
-                            }
-                        },
-                        error: function(xhr) {
-                            alert('Error: ' + xhr.responseText);
-                        }
-                    });
-                });
-
-                // Handler untuk Konfirmasi Pembayaran
-                $('#updateStatus').on('submit', function(event) {
-                    event.preventDefault(); // Prevent default form submission
-
-                    const id = $('#edit_id_payment').val(); // Ambil ID pembayaran
-                    const url = '/payment/' + id + '/confirm'; // Endpoint untuk konfirmasi pembayaran
-                    const formData = $(this).serialize(); // Serialize data form
-
-                    console.log("Mengonfirmasi pembayaran:");
-                    console.log("ID:", id);
-                    console.log("URL:", url);
-
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        data: formData + '&_method=PUT', // Tambahkan method PUT ke data form
-                        success: function(response) {
-                            if (response.success) {
-                                alert(response.message);
-                                location.reload(); // Reload halaman setelah berhasil
-                            } else {
-                                alert('Gagal: ' + response.message);
-                            }
-                        },
-                        error: function(xhr) {
-                            alert('Error: ' + xhr.responseText);
-                        }
-                    });
-                });
-
             });
-        </script>
-        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
-            data-client-key="SB-Mid-client-I485cPfrefIvToXk"></script>
-        <script>
-            document.addEventListener('click', function(event) {
-                if (event.target.classList.contains('pay-button')) {
-                    const button = event.target;
-                    const id = button.getAttribute('data-id');
-                    const id_reservation = button.getAttribute('data-id-reservation');
-                    const totalAmount = button.getAttribute('data-total-amount');
-                    const name = button.getAttribute('data-name');
-                    const email = button.getAttribute('data-email');
-                    const phone = button.getAttribute('data-phone');
-                    const room = button.getAttribute('data-room');
+        });
+    </script>
 
-                    fetch('http://127.0.0.1:8000/api/midtrans/transaction', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                id_reservation: id_reservation,
-                                total_amount: totalAmount,
-                                name: name,
-                                email: email,
-                                phone: phone,
-                                room: room
-                            })
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="SB-Mid-client-I485cPfrefIvToXk"></script>
+    <script>
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('pay-button')) {
+                const button = event.target;
+                const id_payment = button.getAttribute('data-id-payment');
+                const id_reservation = button.getAttribute('data-id-reservation');
+                const totalAmount = button.getAttribute('data-total-amount');
+                const name = button.getAttribute('data-name');
+                const email = button.getAttribute('data-email');
+                const phone = button.getAttribute('data-phone');
+                const room = button.getAttribute('data-room');
+
+                fetch('http://127.0.0.1:8000/api/midtrans/transaction', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            id_payment: id_payment,
+                            id_reservation: id_reservation,
+                            total_amount: totalAmount,
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            room: room
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Data received:', data);
-                            if (data.snap_token) {
-                                snap.pay(data.snap_token); // Memulai pembayaran dengan Snap Token
-                            } else {
-                                alert('Gagal membuat transaksi');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Terjadi kesalahan, coba lagi.');
-                        });
-                }
-            });
-        </script>
-    @endsection
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Data received:', data);
+                        if (data.snap_token) {
+                            snap.pay(data.snap_token); // Memulai pembayaran dengan Snap Token
+                        } else {
+                            alert('Gagal membuat transaksi');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan, coba lagi.');
+                    });
+            }
+        });
+    </script>
+@endsection

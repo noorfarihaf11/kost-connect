@@ -29,7 +29,7 @@
                             <th class="px-4 py-3 text-center w-6">ID</th>
                             <th class="px-4 py-3">Nama</th>
                             <th class="px-4 py-3 text-center w-6">Kamar</th>
-                            <th class="px-4 py-3 text-center w-6">Alamat</th>
+                            <th class="px-4 py-3 text-center w-6">Rumah</th>
                             <th class="px-4 py-3 text-center w-6">Harga</th>
                             <th class="px-4 py-3">TGL Kunjung</th>
                             <th class="px-4 py-3">Notes</th>
@@ -57,7 +57,7 @@
                                     {{ $reservasi->room->name }}
                                 </td>
                                 <td class="px-3 py-2 text-sm w-6">
-                                    {{ $reservasi->room->house->address }}
+                                    {{ $reservasi->room->house->name }}
                                 </td>
                                 <td class="px-3 py-2 text-sm w-6">
                                     Rp {{ number_format($reservasi->room->price_per_month, 0, ',', '.') }}

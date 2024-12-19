@@ -11,11 +11,11 @@ use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Midtrans\Snap;
-use Midtrans\Notification;
+use Carbon\Carbon;
 use App\Helpers\MidtransConfig;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 
 class PaymentController extends Controller
@@ -43,56 +43,69 @@ class PaymentController extends Controller
     public function initiatePayment(Request $request)
     {
         $validatedData = $request->validate([
-            'id_reservation' => 'required',
+            'id_payment' => 'required', // Menggunakan id_payment sebagai parameter
             'total_amount' => 'required|numeric',
             'name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|string',
             'room' => 'required|string',
         ]);
-
+    
         try {
-            $id_reservation = $validatedData['id_reservation'];
+            $id_payment = $validatedData['id_payment']; // Mengambil id_payment dari request
             $totalAmount = $validatedData['total_amount'];
             $name = $validatedData['name'];
             $email = $validatedData['email'];
             $phone = $validatedData['phone'];
             $room = $validatedData['room'];
-
+    
             MidtransConfig::set();
-
+    
+            // Mencari data pembayaran berdasarkan id_payment
+            $payment = Payment::where('id_payment', $id_payment)->first();
+    
+            if (!$payment) {
+                return response()->json(['success' => false, 'message' => 'Payment not found.']);
+            }
+    
+            $orderId = $id_payment . '-' . now()->format('Ymd-His') . '-' . Str::random(6);
+    
             $transactionDetails = [
-                'order_id' => $id_reservation,
+                'order_id' => $orderId,
                 'gross_amount' => $totalAmount, // Total jumlah pembayaran
             ];
-
-            // Tentukan item details
+    
             $itemDetails = [
                 [
-                    'id' => $id_reservation,
+                    'id' => $orderId,
                     'price' => $totalAmount,
                     'quantity' => 1,
                     'name' => $room, // Ganti sesuai nama item yang sesuai
                 ],
             ];
-
+    
             $customerDetails = [
                 'first_name' => $name,
                 'email' => $email,
                 'phone' => $phone,
             ];
-
+    
             $transactionData = [
                 'transaction_details' => $transactionDetails,
                 'item_details' => $itemDetails,
                 'customer_details' => $customerDetails,
             ];
             $snapToken = Snap::getSnapToken($transactionData);
-
-            DB::table('payments')
-                ->where('id_reservation', $id_reservation)
-                ->update(['snap_token' => $snapToken]);
-
+    
+            // Update atau insert data pembayaran dengan id_payment
+            DB::table('payments')->updateOrInsert(
+                ['id_payment' => $id_payment],
+                [
+                    'order_id' => $orderId,
+                    'snap_token' => $snapToken,
+                ]
+            );
+    
             return response()->json([
                 'success' => true,
                 'snap_token' => $snapToken,
@@ -101,6 +114,7 @@ class PaymentController extends Controller
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }
     }
+    
 
     public function handleNotification(Request $request)
     {
@@ -110,18 +124,23 @@ class PaymentController extends Controller
 
         try {
             if ($data['transaction_status'] == 'settlement') {
-                $payment = Payment::where('id_reservation', $data['order_id'])->first();
+                $payment = Payment::where('order_id', $data['order_id'])->first();
 
                 if ($payment) {
                     $payment->payment_status = 'paid';
                     $payment->save();
+
+                    $this->createCustomer($payment);
+                    $this->monthlyPayment($payment);
 
                     Log::info('Transaction settled, payment updated', ['id_reservation' => $data['order_id'], 'status_payment' => $payment->status_payment]);
                 } else {
                     Log::warning('Payment not found', ['order_id' => $data['order_id']]);
                 }
             } elseif ($data['transaction_status'] == 'pending') {
+                Log::info('Transaction pending', ['order_id' => $data['order_id']]);
             } else {
+                Log::info('Unhandled transaction status', ['status' => $data['transaction_status']]);
             }
 
             return response()->json(['status' => 'success']);
@@ -131,29 +150,60 @@ class PaymentController extends Controller
         }
     }
 
+    private function createCustomer($payment)
+    {
+        $reservation = Reservation::where('id_reservation', $payment->id_reservation)->first();
 
-    // public function uploadProof(Request $request, $id)
-    // {
-    //     $validatedData = $request->validate([
-    //         'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-    //     ]);
+        if ($reservation) {
+            $existingCustomer = Customer::where('id_reservation', $payment->id_reservation)->first();
 
-    //     try {
-    //         $payment = Payment::findOrFail($id);
+            if (!$existingCustomer) {
+                $customer = new Customer();
+                $customer->id_reservation = $reservation->id_reservation;
+                $customer->name = $reservation->user->name;
+                $customer->email = $reservation->user->email;
+                $customer->phone_number = $reservation->phone_number;
+                $customer->start_date = $payment->updated_at;
+                $customer->end_date = null;
+                $customer->monthly_cost = $payment->total_amount;
+                $customer->customer_status = 'active';
+                $customer->save();
+            }
+        }
+    }
 
-    //         if ($request->hasFile('proof_of_payment')) {
-    //             $file = $request->file('proof_of_payment');
-    //             $filePath = $file->store('payments', 'public');
-    //             $payment->payment_status = 'waiting_for_confirmation';
-    //             $payment->proof_of_payment = basename($filePath);
-    //             $payment->save();
-    //         }
+    private function monthlyPayment($payment)
+    {
+        $reservation = Reservation::where('id_reservation', $payment->id_reservation)->first();
 
-    //         return response()->json(['success' => true, 'message' => 'Bukti pembayaran berhasil diunggah!']);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
-    //     }
-    // }
+        if ($reservation) {
+            $nextInvoiceDate = \Carbon\Carbon::parse($payment->payment_due_date)->addMonth();
+
+            $currentMonth = $nextInvoiceDate->format('Ym');
+            $orderId = $payment->id_reservation . '-' . $currentMonth;
+
+            $monthlypayment = new Payment();
+            $monthlypayment->id_reservation = $payment->id_reservation; // Tetap menyimpan id_reservation
+            $monthlypayment->payment_method = 'midtrans';
+            $monthlypayment->payment_status = 'pending';
+            $monthlypayment->payment_period = $nextInvoiceDate->format('Y-m');
+            $monthlypayment->payment_due_date = $nextInvoiceDate;
+            $monthlypayment->total_amount = $payment->total_amount;
+            $monthlypayment->payment_type = 'monthly_payment';
+            $monthlypayment->created_at = now();
+            $monthlypayment->updated_at = now();
+            $monthlypayment->save();
+
+            Log::info('Next month invoice created', [
+                'id_reservation' => $monthlypayment->id_reservation,
+                'payment_due_date' => $nextInvoiceDate,
+                'total_amount' => $monthlypayment->total_amount,
+                'order_id' => $orderId, // Menambahkan informasi order_id
+            ]);
+        }
+    }
+}    
+
 
     // public function confirmPayment(Request $request, $id)
     // {
@@ -221,4 +271,3 @@ class PaymentController extends Controller
     //         return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
     //     }
     // }
-}

@@ -1,18 +1,79 @@
-<footer class="p-4 bg-white md:p-8 lg:p-10 dark:bg-gray-800">
-    <div class="mx-auto max-w-screen-xl text-center">
-        <a href="#" class="flex justify-center items-center text-2xl font-semibold text-gray-900 dark:text-white">
-            <svg class="mr-2 h-8" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Add your SVG path here -->
-                <path d="M25.2696 13.126C25.1955 13.6364 24.8589 14.3299 24.4728 14.9328C23.9856 15.6936 23.2125 16.2264 22.3276 16.4114L18.43 17.2265C17.8035 17.3575 17.2355 17.6853 16.8089 18.1621L14.2533 21.0188C13.773 21.5556 13.4373 21.4276 13.4373 20.7075C13.4315 20.7342 12.1689 23.9903 15.5149 25.9202C16.8005 26.6618 18.6511 26.3953 19.9367 25.6538L26.7486 21.7247C29.2961 20.2553 31.0948 17.7695 31.6926 14.892C31.7163 14.7781 31.7345 14.6639 31.7542 14.5498L25.2696 13.126Z" fill="url(#paint0_linear)"/>
-                <!-- Add other path elements and gradients here -->
-            </svg>
-            Kost Connect
-        </a>
-        <p class="my-6 text-gray-500 dark:text-gray-400">
-            Your trusted platform to provide seamless services. Reach out to us anytime!
+<footer class="bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white py-12">
+    <div class="max-w-screen-xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- About Us Section -->
+        <div>
+            <h2 class="text-xl font-bold mb-4">About Us</h2>
+            <p class="text-gray-400 text-sm leading-relaxed">
+                Kami menyediakan layanan untuk membantu Anda menemukan kos yang nyaman, aman, dan sesuai kebutuhan dengan mudah.
+            </p>
+        </div>
+
+        <!-- Quick Links Section -->
+        <div>
+            <h2 class="text-xl font-bold mb-4">Quick Links</h2>
+            <ul>
+                <li class="mb-2 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    <a href="#home" class="hover:text-blue-400 transition text-gray-400 text-sm">Beranda</a>
+                </li>
+                <li class="mb-2 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    <a href="#about" class="hover:text-blue-400 transition text-gray-400 text-sm">Tentang Kami</a>
+                </li>
+                <li class="mb-2 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    <a href="#kota" class="hover:text-blue-400 transition text-gray-400 text-sm">Kota</a>
+                </li>
+                <li class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    <a href="#kost" class="hover:text-blue-400 transition text-gray-400 text-sm">Kost</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Contact Section -->
+        <div>
+            <h2 class="text-xl font-bold mb-4">Contact Us</h2>
+            <p class="text-gray-400 text-sm">
+                Email: <a href="mailto:kostconnect@gmail.com" class="hover:text-blue-400 transition">kostconnect@gmail.com</a>
+            </p>
+            <p class="text-gray-400 text-sm mt-2">
+                Phone: <a href="tel:+62812345678" class="hover:text-blue-400 transition">+62 8192783334</a>
+            </p>
+        </div>
+
+        <!-- Social Media Section -->
+        <div>
+            <h2 class="text-xl font-bold mb-4">Follow Us</h2>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:scale-110 transform transition duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/facebook.png" alt="Facebook" class="w-6 h-6">
+                </a>
+                <a href="#" class="hover:scale-110 transform transition duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/twitter.png" alt="Twitter" class="w-6 h-6">
+                </a>
+                <a href="#" class="hover:scale-110 transform transition duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/instagram-new.png" alt="Instagram" class="w-6 h-6">
+                </a>
+                <a href="#" class="hover:scale-110 transform transition duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" alt="LinkedIn" class="w-6 h-6">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="border-t border-gray-700 mt-10 pt-4">
+        <p class="text-center text-gray-400 text-sm">
+            © 2024 KostConnect™. All Rights Reserved.
         </p>
-        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-            © 2024 <a href="#" class="hover:underline">KostConnect</a>. All Rights Reserved.
-        </span>
     </div>
 </footer>

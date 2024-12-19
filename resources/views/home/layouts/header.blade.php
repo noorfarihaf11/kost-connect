@@ -1,7 +1,7 @@
 <nav class="fixed top-0 left-0 w-full bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 z-50">
     <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-        <a href="https://flowbite.com" class="flex items-center">
-            <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
+        <a class="flex items-center">
+            <img src="{{ asset('assets/img/logo.png') }}" class="mr-3 h-9 sm:h-12" alt="Flowbite Logo" />
             <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Kost Connect</span>
         </a>
         <div class="flex items-center lg:order-2">
@@ -48,7 +48,7 @@
                                 </a>
                             </li>
                             <li>
-                                <form action="/logout" method="POST">
+                                <form action="{{ route('logout') }}" method="POST">
                                     @csrf
                                     <button type="submit"
                                         class="block w-full text-left py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">
@@ -72,55 +72,59 @@
                 </a>
             @endguest
         </div>
-        <div class="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1">
-            <ul class="flex flex-col font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                <li>
-                    <a href="#home" id="homeLink"
-                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 active:text-blue-600">
-                        Beranda
-                    </a>
-                </li>
-                <li>
-                    <a href="#about" id="aboutLink"
-                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
-                        Tentang Kami
-                    </a>
-                </li>
-                <li>
-                    <a href="#kota" id="kotaLink"
-                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
-                        Kota
-                    </a>
-                </li>
-                <li>
-                    <a href="#kost" id="kostLink"
-                        class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
-                        Kost
-                    </a>
-                </li>
-            </ul>
-        </div>
+        @if (request()->is('status-reservasi*'))
+        @else
+            <div class="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1">
+                <ul class="flex flex-col font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                    <li>
+                        <a href="#home" id="homeLink"
+                            class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 active:text-blue-600">
+                            Beranda
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#about" id="aboutLink"
+                            class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
+                            Tentang Kami
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#kota" id="kotaLink"
+                            class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
+                            Kota
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#kost" id="kostLink"
+                            class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
+                            Kost
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        @endif
+
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
                 var sections = ['#home', '#about', '#kota', '#kost']; // List of section IDs
                 var links = ['#homeLink', '#aboutLink', '#kotaLink', '#kostLink']; // Corresponding links
-        
+
                 $(window).scroll(function() {
                     var scrollPosition = $(window).scrollTop();
-        
+
                     links.forEach(function(link) {
                         $(link).removeClass('active');
                     });
-        
+
                     sections.forEach(function(section, index) {
-                        if ($(section).offset().top <= scrollPosition && 
+                        if ($(section).offset().top <= scrollPosition &&
                             ($(section).offset().top + $(section).height()) > scrollPosition) {
-                            $(links[index]).addClass('active'); // Add active class to the corresponding link
+                            $(links[index]).addClass(
+                            'active'); // Add active class to the corresponding link
                         }
                     });
                 });
             });
         </script>
-        

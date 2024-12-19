@@ -2,24 +2,46 @@
 
 @section('content')
     <section class="relative bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 text-white">
-        <div id ="home" class="absolute inset-0 bg-cover bg-center opacity-40 parallax"
-            style="background-image: url('https://i.pinimg.com/736x/4a/70/f4/4a70f405a23e39c21903499e2f00a47e.jpg');"></div>
-        <div class="grid max-w-screen-xl px-4 py-16 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 relative z-10">
-            <div class="mr-auto place-self-center lg:col-span-7">
-                <h3 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl">Kost
-                    Connect</h3>
-                <p class="max-w-2xl mb-6 font-light text-gray-200 lg:mb-8 md:text-lg lg:text-xl">Temukan kos yang nyaman,
-                    terjangkau, dan strategis sesuai dengan kebutuhan anda di Kost Connect.</p>
-                <a href="/daftarkost"
-                    class="inline-flex items-center justify-center px-6 py-3 mr-3 text-lg font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 transform transition duration-300 hover:scale-110 shadow-lg">Get
-                    started</a>
+        <!-- Background image with parallax effect -->
+        <div id="home" class="absolute inset-0 bg-cover bg-center opacity-50"
+            style="background-image: url('https://i.pinimg.com/736x/4a/70/f4/4a70f405a23e39c21903499e2f00a47e.jpg'); filter: blur(2px);">
+        </div>
+
+        <!-- Content section -->
+        <div class="relative z-10 grid max-w-screen-xl px-6 py-20 mx-auto lg:grid-cols-12 gap-8 items-center">
+            <!-- Left content -->
+            <div class="lg:col-span-7 space-y-6">
+                <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
+                    Kost Connect
+                </h1>
+                <p class="text-lg md:text-xl font-light text-gray-200">
+                    Temukan kos yang nyaman, terjangkau, dan strategis sesuai dengan kebutuhan Anda di Kost Connect.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#kost"
+                        class="px-8 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                        Mulai
+                    </a>
+                    <a href="#about"
+                        class="px-8 py-3 text-lg font-semibold text-blue-600 bg-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:bg-gray-100 focus:ring-4 focus:ring-blue-300">
+                        Lihat selengkapnya
+                    </a>
+                </div>
             </div>
-            <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
-                <img src="https://i.pinimg.com/736x/4a/70/f4/4a70f405a23e39c21903499e2f00a47e.jpg" alt="mockup"
-                    class="rounded-lg shadow-xl transform transition duration-500 hover:scale-110 hover:rotate-3">
+
+            <!-- Right content -->
+            <div class="hidden lg:col-span-5 lg:flex justify-center">
+                <div class="relative group">
+                    <img src="https://i.pinimg.com/736x/4a/70/f4/4a70f405a23e39c21903499e2f00a47e.jpg" alt="mockup"
+                        class="rounded-lg shadow-2xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-70 transition duration-500">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
+
 
     <section id ="about" class="bg-white dark:bg-gray-900 py-12">
         <div class="max-w-screen-xl px-4 py-8 mx-auto text-center">
@@ -145,7 +167,7 @@
         </div>
     </section>
 
-    <div id="kost" class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+    <div id="kost" class="py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <div class=" px-4 mx-auto max-w-screen-xl lg:px-6">
             <div class="mb-8 flex items-center justify-between">
@@ -269,215 +291,218 @@
                 @endforeach
             </div>
         </div>
+    </div>
 
-        <script>
-            $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
 
-                $('#filterToggle').on('click', function() {
-                    const offset = $(this).offset();
-                    const height = $(this).outerHeight();
-                    $('#filterOptions').css({
-                        top: offset.top + height,
-                        left: offset.left - ($('#filterOptions').outerWidth() - $(this).outerWidth())
-                    }).toggle();
+            $('#filterToggle').on('click', function() {
+                const offset = $(this).offset();
+                const height = $(this).outerHeight();
+                $('#filterOptions').css({
+                    top: offset.top + height,
+                    left: offset.left - ($('#filterOptions').outerWidth() - $(this).outerWidth())
+                }).toggle();
 
-                });
-
-                function updateHeading() {
-                    const selectedCities = $('.city-filter:checked').map(function() {
-                        return $(this).val();
-                    }).get();
-
-                    const selectedGenders = $('.gender-filter:checked').map(function() {
-                        return $(this).val();
-                    }).get();
-
-                    let cityText = selectedCities.length > 0 ? selectedCities.join(' & ') : '';
-                    let genderText = selectedGenders.length > 0 ? selectedGenders.join(' & ') : '';
-
-                    let headingText = 'Semua kost';
-
-                    if (genderText && cityText) {
-                        headingText += '';
-                    }
-
-                    if (genderText) headingText += ` ${genderText} di Kost Connect`;
-
-                    if (cityText) headingText += ` di ${cityText}`;
-
-                    if (!genderText && !cityText) {
-                        headingText += ' di Kost Connect';
-                    }
-
-                    $('#kost-list').text(headingText); // Mengupdate teks heading
-                }
-
-
-                function filterRooms() {
-                    const selectedCities = $('.city-filter:checked').map(function() {
-                        return $(this).val();
-                    }).get();
-
-                    const selectedGenders = $('.gender-filter:checked').map(function() {
-                        return $(this).val();
-                    }).get();
-
-                    $('.room-card').each(function() {
-                        const roomCity = $(this).data('city');
-                        const roomGender = $(this).data('gender');
-
-                        if (
-                            (selectedCities.length === 0 || selectedCities.includes(roomCity)) &&
-                            (selectedGenders.length === 0 || selectedGenders.includes(roomGender))
-                        ) {
-                            $(this).show();
-                        } else {
-                            $(this).hide();
-                        }
-                    });
-                }
-
-                $('#applyFilters').on('click', function() {
-                    filterRooms();
-                    updateHeading();
-
-                    const selectedCount = $('.city-filter:checked').length + $('.gender-filter:checked').length;
-                    const filterText = selectedCount > 0 ? `Filter (${selectedCount})` : 'Filter';
-
-                    $('#filterToggle').html(
-                        `${filterText} <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`
-                    );
-                    $('#filterOptions').hide();
-                });
             });
-        </script>
-        </section>
 
-        <div id="reservationForm" tabindex="-1" aria-hidden="true"
-            class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center">
-            <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-                <!-- Modal content -->
-                <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                    <!-- Modal header -->
-                    <div
-                        class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                            Ajukan Reservasi
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="defaultModal" id="closeModalButton">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="sr-only">Close modal</span>
+            function updateHeading() {
+                const selectedCities = $('.city-filter:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                const selectedGenders = $('.gender-filter:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                let cityText = selectedCities.length > 0 ? selectedCities.join(' & ') : '';
+                let genderText = selectedGenders.length > 0 ? selectedGenders.join(' & ') : '';
+
+                let headingText = 'Semua kost';
+
+                if (genderText && cityText) {
+                    headingText += '';
+                }
+
+                if (genderText) headingText += ` ${genderText} di Kost Connect`;
+
+                if (cityText) headingText += ` di ${cityText}`;
+
+                if (!genderText && !cityText) {
+                    headingText += ' di Kost Connect';
+                }
+
+                $('#kost-list').text(headingText); // Mengupdate teks heading
+            }
+
+
+            function filterRooms() {
+                const selectedCities = $('.city-filter:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                const selectedGenders = $('.gender-filter:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                $('.room-card').each(function() {
+                    const roomCity = $(this).data('city');
+                    const roomGender = $(this).data('gender');
+
+                    if (
+                        (selectedCities.length === 0 || selectedCities.includes(roomCity)) &&
+                        (selectedGenders.length === 0 || selectedGenders.includes(roomGender))
+                    ) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+
+            $('#applyFilters').on('click', function() {
+                filterRooms();
+                updateHeading();
+
+                const selectedCount = $('.city-filter:checked').length + $('.gender-filter:checked').length;
+                const filterText = selectedCount > 0 ? `Filter (${selectedCount})` : 'Filter';
+
+                $('#filterToggle').html(
+                    `${filterText} <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`
+                );
+                $('#filterOptions').hide();
+            });
+        });
+    </script>
+    </section>
+
+    <div id="reservationForm" tabindex="-1" aria-hidden="true"
+        class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center">
+        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+            <!-- Modal content -->
+            <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                <!-- Modal header -->
+                <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Ajukan Reservasi
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-toggle="defaultModal" id="closeModalButton">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+
+                <form action="/submitreservation" method="POST">
+                    @csrf
+                    <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                        <div>
+                            <label for="id_room" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID
+                                Kamar</label>
+                            <input type="number" name="id_room" id="id_room"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                readonly>
+                        </div>
+                        <div>
+                            <label for="name"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kamar</label>
+                            <input type="text" name="name" id="name"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                readonly>
+                        </div>
+                        <div>
+                            <label for="reservation_date"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal
+                                Reservasi</label>
+                            <input type="date" name="reservation_date" id="reservation_date"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required>
+                        </div>
+                        <div>
+                            <label for="phone_number"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No HP</label>
+                            <input type="text" name="phone_number" id="phone_number"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                placeholder="Masukkan no hp aktif" required="">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <div>
+                            <label for="notes"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Catatan</label>
+                            <textarea name="notes" id="notes" rows="4"
+                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                placeholder="Tuliskan catatan reservasi di sini" required></textarea>
+                        </div>
+                    </div>
+                    <div class="text-right mt-4">
+                        <button type="submit"
+                            class="submitButton text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            Kirim
                         </button>
                     </div>
-
-                    <form action="/submitreservation" method="POST">
-                        @csrf
-                        <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                            <div>
-                                <label for="id_room"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID
-                                    Kamar</label>
-                                <input type="number" name="id_room" id="id_room"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    readonly>
-                            </div>
-                            <div>
-                                <label for="name"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kamar</label>
-                                <input type="text" name="name" id="name"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    readonly>
-                            </div>
-                            <div>
-                                <label for="reservation_date"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal
-                                    Reservasi</label>
-                                <input type="date" name="reservation_date" id="reservation_date"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
-                            </div>
-                            <div>
-                                <label for="phone_number"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No HP</label>
-                                <input type="text" name="phone_number" id="phone_number"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Masukkan no hp aktif" required="">
-                            </div>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <div>
-                                <label for="notes"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Catatan</label>
-                                <textarea name="notes" id="notes" rows="4"
-                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Tuliskan catatan reservasi di sini" required></textarea>
-                            </div>
-                        </div>
-                        <div class="text-right mt-4">
-                            <button type="submit"
-                                class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                Kirim
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
-        <script>
-            $(document).ready(function() {
-                const csrfToken = $('meta[name="csrf-token"]').attr('content');
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
+    <script>
+        $(document).ready(function() {
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-                $('.reservButton').click(function() {
-                    const id = $(this).data('id');
-                    const name = $(this).data('name');
+            $('.reservButton').click(function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
 
-                    // Mengisi nilai ID kamar dan nama kamar ke dalam input
-                    $('#id_room').val(id);
-                    $('#name').val(name);
+                // Mengisi nilai ID kamar dan nama kamar ke dalam input
+                $('#id_room').val(id);
+                $('#name').val(name);
 
-                    // Menampilkan modal
-                    $('#reservationForm').removeClass('hidden');
-                });
-
-                $('#closeModalButton').click(function() {
-                    $('#reservationForm').addClass('hidden');
-                });
-
+                // Menampilkan modal
+                $('#reservationForm').removeClass('hidden');
             });
 
-            $('form').submit(function(e) {
-                e.preventDefault(); // Mencegah form disubmit otomatis
+            $('#closeModalButton').click(function() {
+                $('#reservationForm').addClass('hidden');
+            });
 
-                const formData = $(this).serialize(); // Ambil semua data dari form
+        });
 
-                $.ajax({
-                    url: '/submitreservation', // Pastikan action form sesuai dengan URL
-                    method: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        alert(
-                            'Reservasi berhasil!Silakan cek status reservasi kamu di Status Reservasi. Pemilik kos akan mengonfirmasi dalam 1x24 jam.'
-                        );
-                    },
-                    error: function(error) {
-                        if (error.responseJSON && error.responseJSON.message) {
-                            alert('Error: ' + error.responseJSON.message);
-                        } else {
-                            alert('Terjadi kesalahan. Silakan coba lagi nanti.');
-                        }
-                        console.error('Error details:', error);
+        $('#submitButton').submit(function(e) {
+            e.preventDefault(); // Mencegah form disubmit otomatis
+
+            const formData = $(this).serialize(); // Ambil semua data dari form
+
+            $.ajax({
+                url: '/submitreservation', // Pastikan action form sesuai dengan URL
+                method: 'POST',
+                data: formData,
+                success: function(response) {
+                    // Tampilkan pop-up jika reservasi berhasil
+                    alert(
+                        'Reservasi berhasil! Silakan cek status reservasi kamu di Status Reservasi. Pemilik kos akan mengonfirmasi dalam 1x24 jam.'
+                    );
+                    // Refresh halaman setelah sukses
+                    location.reload(); // Akan merefresh halaman
+                },
+                error: function(error) {
+                    // Tampilkan pop-up jika terjadi error
+                    if (error.responseJSON && error.responseJSON.message) {
+                        alert('Error: ' + error.responseJSON.message);
+                    } else {
+                        alert('Terjadi kesalahan. Silakan coba lagi nanti.');
                     }
-                });
+                    console.error('Error details:', error);
+                }
             });
-        </script>
-    @endsection
+        });
+    </script>
+@endsection

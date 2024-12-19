@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id('id_payment');
             $table->unsignedBigInteger('id_reservation');
             $table->foreign('id_reservation')->references('id_reservation')->on('reservations');
-            $table->unsignedBigInteger('id_transaction')->nullable();
+            $table->string('order_id')->nullable();
             $table->string('payment_method');
             $table->enum('payment_status', ['pending', 'waiting_for_confirmation', 'paid', 'failed'])->default('pending');
-            $table->string('proof_of_payment')->nullable(); 
+            $table->date('payment_period')->nullable(); 
             $table->integer('total_amount')->nullable(); 
             $table->date('payment_due_date')->nullable(); // Menambahkan batas pembayaran
             $table->enum('payment_type', ['first_payment', 'monthly_payment']);

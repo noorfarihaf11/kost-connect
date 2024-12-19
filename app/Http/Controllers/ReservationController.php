@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class ReservationController extends Controller
 {
@@ -41,7 +42,7 @@ class ReservationController extends Controller
             $reservations = Reservation::with(['room', 'user'])
                 ->join('rooms', 'reservations.id_room', '=', 'rooms.id_room')
                 ->where('rooms.id_house', $owner->id_owner)
-                ->orderBy('reservations.id_reservation') 
+                ->orderBy('reservations.id_reservation')
                 ->get();
         } else {
 
@@ -114,11 +115,9 @@ class ReservationController extends Controller
                     'payment_method' => 'midtrans',
                     'payment_status' => 'pending',
                     'total_amount' => $reservations->room->price_per_month,
-                    'payment_method' => 'midtrans',
-                    'payment_status' => 'pending',
-                    'total_amount' => $reservations->room->price_per_month,
                     'payment_due_date' => $payment_due_date,
                     'payment_type' => 'first_payment',
+                    'payment_period' => Carbon::parse($reservations->reservation_date)->format('Y-m') . '-01' // Mengonversi string ke Carbon
                 ]);
 
                 $room = $reservations->room;

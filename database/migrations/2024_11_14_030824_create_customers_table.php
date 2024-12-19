@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone_number'); 
             $table->date('start_date'); 
             $table->date('end_date')->nullable(); 
+            $table->integer('monthly_cost')->nullable(); 
             $table->enum('customer_status', ['active', 'inactive'])->default('inactive');
             $table->timestamps();
         });

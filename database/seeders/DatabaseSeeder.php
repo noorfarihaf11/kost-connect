@@ -19,14 +19,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CitySeeder::class,
-            RoomSeeder::class,
+            // RoomSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
         ]);
         
         // Ambil data setelah seeding
         $cities = City::all();
-        $rooms = Room::all();
+        // $rooms = Room::all();
         $roles = Role::all();
         $users = User::all();
     

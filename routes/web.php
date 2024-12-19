@@ -17,15 +17,13 @@ use App\Http\Controllers\MidtransController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Room;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 Route::get('/payment', function () {
     return view('dashboard.payment');
 });
 
+Route::get('/', [HomeController::class, 'index']);
 Route::get('/home', [HomeController::class, 'index']);
 Route::get('/daftarkost', [HomeController::class, 'rooms']);
 Route::get('/daftarkost/{id}', function ($id) {
@@ -51,7 +49,7 @@ Route::get('/register', [AuthController::class, 'index'])->middleware('guest');
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/users', [UserController::class, 'index']);
 
@@ -60,7 +58,7 @@ Route::post('/submitRoomForm', [RoomController::class, 'store']);
 Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
 Route::put('/rooms/{id}', [RoomController::class, 'update']);
 
-Route::post('/submitreservation', [ReservationController::class, 'submitreservation'])->middleware('auth');;
+Route::post('/submitreservation', [ReservationController::class, 'submitreservation'])->middleware('auth');
 Route::get('/reservation', [ReservationController::class, 'index'])->middleware('auth');
 Route::post('/reservation', [ReservationController::class, 'store']);
 Route::put('/reservation/{id}', [ReservationController::class, 'update']);
@@ -70,6 +68,7 @@ Route::put('/payment/{id}/upload-proof', [PaymentController::class, 'uploadProof
 Route::put('/payment/{id}/confirm', [PaymentController::class, 'confirmPayment'])->middleware('auth');
 
 Route::get('/customer', [CustomerController::class, 'index'])->middleware('auth');
+Route::put('/customer/{id}', [CustomerController::class, 'update']);
 
 Route::get('/masuk', [AuthController::class, 'showLoginOptions'])->name('masuk')->middleware('guest');
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');

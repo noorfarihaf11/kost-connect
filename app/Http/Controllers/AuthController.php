@@ -20,7 +20,7 @@ class AuthController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required|min:5|max:60',
+                'name' => 'required|max:60',
                 'email' => 'required|email|unique:users,email|max:200',
                 'password' => 'required|min:5',
                 'no_tlp' => 'nullable|numeric|digits_between:10,13',

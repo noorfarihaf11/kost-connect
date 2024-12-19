@@ -13,7 +13,7 @@
             @endif
             <div class="flex items-center justify-between mb-4">
                 <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    List tagihan
+                    Daftar tagihan
                 </h4>
             </div>
             <meta name="csrf-token" content="{{ csrf_token() }}">

@@ -43,7 +43,7 @@
     </section>
 
 
-    <section id ="about" class="bg-white dark:bg-gray-900 py-12">
+    <section id ="about" class="bg-white dark:bg-gray-900 py-14">
         <div class="max-w-screen-xl px-4 py-8 mx-auto text-center">
             <dl class="grid max-w-screen-md gap-8 mx-auto sm:grid-cols-3 text-gray-900 dark:text-white">
                 <div class="flex flex-col items-center justify-center">

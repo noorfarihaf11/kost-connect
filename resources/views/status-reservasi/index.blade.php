@@ -188,6 +188,17 @@
                                 <p class="text-green-600 text-l mb-4 font-semibold">Terimakasih Anda telah membayar tagihan
                                     bulan {{ \Carbon\Carbon::parse($tagihan->payment_period)->translatedFormat('F') }}.</p>
                             @endif
+                        @elseif ($tagihan->reservation->customer == null)
+                            <button class="pay-button bg-blue-600 text-white px-4 py-2 rounded"
+                                data-id-payment="{{ $tagihan->id_payment }}"
+                                data-id-reservation="{{ $tagihan->id_reservation }}"
+                                data-total-amount="{{ $tagihan->total_amount }}"
+                                data-name="{{ $tagihan->reservation->user->name }}"
+                                data-email="{{ $tagihan->reservation->user->email }}"
+                                data-phone="{{ $tagihan->reservation->phone_number }}"
+                                data-room="{{ $tagihan->reservation->room->name }}">
+                                Bayar
+                            </button>
                         @elseif ($tagihan->reservation->customer->customer_status == 'active')
                             <button class="pay-button bg-blue-600 text-white px-4 py-2 rounded"
                                 data-id-payment="{{ $tagihan->id_payment }}"

@@ -95,7 +95,7 @@ Route::get('/laporanpembayaran', [DashboardController::class, 'laporanPembayaran
 
 
 // Route::post('/rooms/{id}/review', [RoomReviewController::class, 'store'])->middleware('auth');
-Route::get('/rooms', [RoomReviewController::class, 'index']);
+// Route::get('/rooms', [RoomReviewController::class, 'index']);
 Route::put('/stop-kos', [RoomReviewController::class, 'stopKos'])->name('stop.kos');
 // Route::post('/rooms/{id_room}/review', [RoomReviewController::class, 'store'])->name('rooms.review.store');
 Route::post('/rooms/{roomId}/review', [RoomReviewController::class, 'store'])->name('rooms.review.store');

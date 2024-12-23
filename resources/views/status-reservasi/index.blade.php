@@ -84,6 +84,13 @@
                             <span
                                 class="font-bold">{{ number_format($reservasi->room->price_per_month, 0, ',', '.') }}</span>
                         </p>
+                        <p>
+                            @if ($reservasi->reservation_status == 2)
+                                <p class="text-green-600 text-l mb-4 font-semibold">Reservasi anda telah diterima! segera
+                                    lakukan pembayaran dengan batas waktu 1x24 jam</p>
+                            @else
+                            @endif
+                        </p>
                         <div class="flex space-x-4 mt-4">
                             @can('owner')
                                 @if ($reservasi->reservation_status == 2)
@@ -148,20 +155,21 @@
 
                     <div class="flex-1 pl-0 md:pl-6 space-y-4">
                         <h4 class="text-xl font-bold text-gray-800 mb-1">{{ $tagihan->reservation->room->name }}</h4>
-                        <p class="text-gray-600 text-sm">Tagihan: <span class="font-medium">Rp
-                                {{ number_format($tagihan->total_amount, 0, ',', '.') }}</span></p>
-
-                        <p class="text-gray-600 text-sm mb-4">Tipe Pembayaran:
+                        <p class="text-gray-600 text-sm mb-4">Pembayaran:
                             <span class="font-medium">
                                 @if ($tagihan->payment_type == 'first_payment')
-                                    Tagihan Pertama
+                                    Bulan
+                                    {{ \Carbon\Carbon::parse($tagihan->payment_period)->translatedFormat('F Y') }}
                                 @elseif($tagihan->payment_type == 'monthly_payment')
-                                    Tagihan Bulanan
+                                    Bulan
+                                    {{ \Carbon\Carbon::parse($tagihan->payment_period)->translatedFormat('F Y') }}
                                 @else
                                     {{ $tagihan->payment_type }}
                                 @endif
                             </span>
                         </p>
+                        <p class="text-gray-600 text-sm">Tagihan: <span class="font-medium">Rp
+                                {{ number_format($tagihan->total_amount, 0, ',', '.') }}</span></p>
                         <p class="text-gray-600 text-sm">Jatuh Tempo:
                             <span class="font-medium">
                                 {{ \Carbon\Carbon::parse($tagihan->payment_due_date)->format('M d, Y') }}
@@ -206,21 +214,14 @@
                         @else
                             <p class="text-red-600 text-l mb-4 font-semibold">Anda tidak menjadi penghuni kost ini lagi.</p>
                             @if ($tagihan->reservation->customer->customer_status === 'inactive')
-                                <!-- Cek apakah pengguna sudah memberikan review -->
-                                @php
-                                    $existingReview = \App\Models\RoomReview::where('id_room', $room->id_room)
-                                        ->where('id_customer', Auth::id())
-                                        ->first();
-                                @endphp
-
-                                @if (!$existingReview)
-                                    <!-- Tombol Review Muncul -->
+                                @if (!$existingReviews)
                                     <button class="bg-purple-600 text-white px-4 py-2 rounded"
-                                            onclick="showReviewForm({{ $room->id_room }})">
+                                        onclick="showReviewForm({{ $room->id_room }})">
                                         Beri Review
                                     </button>
                                 @else
-                                    <p class="text-green-600 text-sm mt-2">Anda sudah memberikan review untuk kamar ini.</p>
+                                    <p class="text-green-600 text-sm mt-2">Terimakasih anda telah memberikan testimoni untuk
+                                        kamar ini.</p>
                                 @endif
                             @endif
                         @endif
@@ -228,28 +229,49 @@
                 </div>
 
                 @foreach ($rooms as $room)
-                    <div id="reviewForm-{{ $room->id_room }}" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div id="reviewForm-{{ $room->id_room }}" style="display: none;"
+                        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-1/3">
                             <form action="{{ route('rooms.review.store', $room->id_room) }}" method="POST">
                                 @csrf
+                                <div class="flex justify-between items-center p-4 border-b">
+                                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Beri review</h2>
+                                    <button id="closeModalButton" type="button"
+                                        class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                                        aria-label="close">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" fill-rule="evenodd"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                                 <div class="p-4">
-                                    <label for="rating-{{ $room->id_room }}" class="block text-sm font-medium text-gray-700">Rating (1-5):</label>
+                                    <label for="rating-{{ $room->id_room }}"
+                                        class="block text-sm font-medium text-gray-700">Rating (1-5):</label>
                                     <div class="flex items-center space-x-1">
                                         @for ($i = 1; $i <= 5; $i++)
-                                            <input type="radio" id="star-{{ $room->id_room }}-{{ $i }}" name="rating" value="{{ $i }}" class="hidden" />
-                                            <label for="star-{{ $room->id_room }}-{{ $i }}" class="star cursor-pointer text-gray-400 hover:text-yellow-500 text-2xl">&#9733;</label>
+                                            <input type="radio" id="star-{{ $room->id_room }}-{{ $i }}"
+                                                name="rating" value="{{ $i }}" class="hidden" />
+                                            <label for="star-{{ $room->id_room }}-{{ $i }}"
+                                                class="star cursor-pointer text-gray-400 hover:text-yellow-500 text-2xl">&#9733;</label>
                                         @endfor
                                     </div>
 
-                                    <label for="review-{{ $room->id_room }}" class="block mt-4 text-sm font-medium text-gray-700">Review:</label>
-                                    <textarea name="review" id="review-{{ $room->id_room }}" rows="4" class="w-full mt-1 border-gray-300 rounded-md shadow-sm"></textarea>
+                                    <label for="review-{{ $room->id_room }}"
+                                        class="block mt-4 text-sm font-medium text-gray-700">Review:</label>
+                                    <textarea name="review" id="review-{{ $room->id_room }}" rows="4"
+                                        class="w-full mt-1 border-gray-300 rounded-md shadow-sm"></textarea>
                                 </div>
 
                                 <div class="flex justify-end p-4 border-t">
-                                    <button type="button" onclick="hideReviewForm({{ $room->id_room }})" class="px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 rounded-lg">
+                                    <button type="button" onclick="hideReviewForm({{ $room->id_room }})"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 rounded-lg">
                                         Batal
                                     </button>
-                                    <button type="submit" class="ml-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">
+                                    <button type="submit"
+                                        class="ml-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">
                                         Submit
                                     </button>
                                 </div>
@@ -306,21 +328,27 @@
 
     <style>
         .star {
-            font-size: 2rem; /* Ukuran bintang */
-            color: gray; /* Warna bintang default */
-            cursor: pointer; /* Menambahkan cursor pointer untuk menunjukkan elemen yang dapat diklik */
+            font-size: 2rem;
+            /* Ukuran bintang */
+            color: gray;
+            /* Warna bintang default */
+            cursor: pointer;
+            /* Menambahkan cursor pointer untuk menunjukkan elemen yang dapat diklik */
         }
 
         .star:hover {
-            color: #f59e0b; /* Warna kuning ketika dihover */
+            color: #f59e0b;
+            /* Warna kuning ketika dihover */
         }
 
-        input[type="radio"]:checked ~ label.star {
-            color: #f59e0b; /* Warna bintang yang dipilih */
+        input[type="radio"]:checked~label.star {
+            color: #f59e0b;
+            /* Warna bintang yang dipilih */
         }
 
-        input[type="radio"]:checked ~ label.star:hover {
-            color: #f59e0b; /* Warna kuning saat bintang dihover, meskipun sudah dipilih */
+        input[type="radio"]:checked~label.star:hover {
+            color: #f59e0b;
+            /* Warna kuning saat bintang dihover, meskipun sudah dipilih */
         }
     </style>
 
@@ -391,19 +419,44 @@
 
     <script>
         function showReviewForm(roomId) {
-        document.getElementById('reviewForm-' + roomId).style.display = 'block';
-    }
+            document.getElementById('reviewForm-' + roomId).style.display = 'flex';
+        }
 
-    function hideReviewForm(roomId) {
-        document.getElementById('reviewForm-' + roomId).style.display = 'none';
-    }
-    
-    document.querySelectorAll('.star').forEach(star => {
-        star.addEventListener('click', function () {
-            const rating = this.getAttribute('for').split('-')[2]; 
-            console.log(`Rating selected: ${rating}`); 
+        function hideReviewForm(roomId) {
+            document.getElementById('reviewForm-' + roomId).style.display = 'none';
+        }
+
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                // Ambil nilai rating dari atribut 'for' yang diklik
+                const rating = parseInt(this.getAttribute('for').split('-')[2]);
+
+                // Menandai semua input radio yang lebih kecil atau sama dengan nilai rating
+                const radios = document.querySelectorAll(
+                    `#star-${this.getAttribute('for').split('-')[1]}-1, #star-${this.getAttribute('for').split('-')[1]}-2, #star-${this.getAttribute('for').split('-')[1]}-3, #star-${this.getAttribute('for').split('-')[1]}-4, #star-${this.getAttribute('for').split('-')[1]}-5`
+                );
+
+                radios.forEach(radio => {
+                    const radioValue = parseInt(radio.value);
+                    if (radioValue <= rating) {
+                        radio.checked = true;
+                    } else {
+                        radio.checked = false;
+                    }
+                });
+
+                // Mengubah warna semua bintang sesuai rating yang dipilih
+                const stars = document.querySelectorAll('.star');
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.style.color = '#f59e0b'; // Set warna kuning untuk bintang yang dipilih
+                    } else {
+                        s.style.color =
+                            'gray'; // Set warna default untuk bintang yang belum dipilih
+                    }
+                });
+            });
         });
-    });
     </script>
 
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"

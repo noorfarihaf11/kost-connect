@@ -512,22 +512,20 @@
                 method: 'POST',
                 data: formData,
                 success: function(response) {
-                    // Tampilkan pop-up jika reservasi berhasil
-                    alert(
-                        'Reservasi berhasil! Silakan cek status reservasi kamu di Status Reservasi. Pemilik kos akan mengonfirmasi dalam 1x24 jam.'
-                    );
-                    // Refresh halaman setelah sukses
-                    location.reload(); // Akan merefresh halaman
-                },
-                error: function(error) {
-                    // Tampilkan pop-up jika terjadi error
-                    if (error.responseJSON && error.responseJSON.message) {
-                        alert('Error: ' + error.responseJSON.message);
-                    } else {
-                        alert('Terjadi kesalahan. Silakan coba lagi nanti.');
+                        if (response.success) {
+                            alert(
+                                'Reservasi berhasil, cek status reservasi kamu di Status Reservasi'
+                            );
+                            location.reload(); // Reload halaman setelah update berhasil
+                        } else {
+                            alert('Update failed: ' + response
+                                .message); // Menampilkan pesan jika gagal
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + xhr
+                            .responseText); // Menampilkan error jika ada masalah
                     }
-                    console.error('Error details:', error);
-                }
             });
         });
     </script>

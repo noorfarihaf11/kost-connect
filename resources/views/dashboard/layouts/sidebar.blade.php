@@ -63,7 +63,7 @@
                                 <i class="fa-solid fa-file-pdf {{ request()->is('laporanpembayaran') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
                                 <span class="ml-4 {{ request()->is('laporanpembayaran') ? 'font-bold text-gray-800' : '' }}">Laporan Pembayaran</span>
                             </a>
-                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('customer') ? 'block' : 'hidden' }}"></span>
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('laporanpembayaran') ? 'block' : 'hidden' }}"></span>
                         </li>                        
                     @else
                         <li class="relative px-6 py-3">

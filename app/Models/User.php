@@ -18,7 +18,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $primaryKey = 'id_user'; 
+    protected $primaryKey = 'id_user';
     protected $fillable = [
         'name',
         'email',
@@ -50,7 +50,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function role ()
+    public function role()
     {
         return $this->belongsTo(Role::class, 'id_role');
     }
@@ -65,4 +65,8 @@ class User extends Authenticatable
         return $this->id_role === 3;
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'id_user', 'id_user');
+    }
 }

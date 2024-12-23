@@ -13,14 +13,14 @@ class RoomReview extends Model
 
     public function room()
     {
-        return $this->belongsTo(Room::class, 'id_room');
+        return $this->belongsTo(Room::class, 'id_room', 'id_room');
     }
-
+    
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'id_customer');
+        return $this->belongsTo(Customer::class, 'id_customer', 'id_customer');
     }
-
+    
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');

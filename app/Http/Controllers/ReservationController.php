@@ -115,11 +115,12 @@ class ReservationController extends Controller
                     'payment_method' => 'midtrans',
                     'payment_status' => 'pending',
                     'total_amount' => $reservations->room->price_per_month,
-                    'payment_due_date' => $payment_due_date,
+                    'payment_due_date' => $payment_due_date, // Pastikan $payment_due_date sudah dalam format DATE
                     'payment_type' => 'first_payment',
-                    'payment_period' => Carbon::parse($reservations->reservation_date)->format('Y-m') . '-01' // Mengonversi string ke Carbon
+                    'payment_period' => Carbon::parse($reservations->reservation_date)->startOfMonth()->format('Y-m-d') 
                 ]);
-
+                
+                // Update jumlah kamar yang tersedia
                 $room = $reservations->room;
                 if ($room->available_rooms > 0) {
                     $room->available_rooms -= 1;

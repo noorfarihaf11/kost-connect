@@ -35,7 +35,7 @@ class RoomController extends Controller
 
         $cities = City::all();
 
-        return view('dashboard.rooms', compact('owners', 'houses', 'rooms', 'cities', 'totalReservasi', 'status-reservasi'));
+        return view('dashboard.rooms', compact('owners', 'houses', 'rooms', 'cities', 'totalReservasi'));
     }
 
 

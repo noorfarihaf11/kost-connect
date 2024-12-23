@@ -23,15 +23,21 @@ class Customer extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 
-    public function reservation ()
+    public function reservation()
     {
         return $this->hasOne(Reservation::class, 'id_reservation', 'id_reservation');
     }
-    public function payment ()
+
+    public function payment()
     {
         return $this->belongsTo(Payment::class, 'id_payment');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(RoomReview::class, 'id_customer', 'id_customer');
     }
 }

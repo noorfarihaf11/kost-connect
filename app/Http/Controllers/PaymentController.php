@@ -174,34 +174,56 @@ class PaymentController extends Controller
 
     private function monthlyPayment($payment)
     {
+        // Ambil data reservasi berdasarkan id_reservation
         $reservation = Reservation::where('id_reservation', $payment->id_reservation)->first();
-
-        if ($reservation) {
-            $nextInvoiceDate = \Carbon\Carbon::parse($payment->payment_due_date)->addMonth();
-
-            $currentMonth = $nextInvoiceDate->format('Ym');
-            $orderId = $payment->id_reservation . '-' . $currentMonth;
-
-            $monthlypayment = new Payment();
-            $monthlypayment->id_reservation = $payment->id_reservation; // Tetap menyimpan id_reservation
-            $monthlypayment->payment_method = 'midtrans';
-            $monthlypayment->payment_status = 'pending';
-            $monthlypayment->payment_period = $nextInvoiceDate->format('Y-m');
-            $monthlypayment->payment_due_date = $nextInvoiceDate;
-            $monthlypayment->total_amount = $payment->total_amount;
-            $monthlypayment->payment_type = 'monthly_payment';
-            $monthlypayment->created_at = now();
-            $monthlypayment->updated_at = now();
-            $monthlypayment->save();
-
-            Log::info('Next month invoice created', [
-                'id_reservation' => $monthlypayment->id_reservation,
-                'payment_due_date' => $nextInvoiceDate,
-                'total_amount' => $monthlypayment->total_amount,
-                'order_id' => $orderId, // Menambahkan informasi order_id
+    
+        if (!$reservation) {
+            Log::warning('Reservation not found for monthly payment', [
+                'id_reservation' => $payment->id_reservation,
             ]);
+            return; // Keluar jika reservasi tidak ditemukan
         }
-    }
+    
+        // Hitung tanggal invoice berikutnya berdasarkan payment_due_date
+        $nextInvoiceDate = \Carbon\Carbon::parse($payment->payment_due_date)->addMonth();
+        $currentMonth = $nextInvoiceDate->format('Ym');
+        $orderId = $payment->id_reservation . '-' . $currentMonth;
+    
+        // Cek apakah invoice untuk periode tersebut sudah ada
+        $existingInvoice = Payment::where('id_reservation', $payment->id_reservation)
+            ->where('payment_period', $nextInvoiceDate->format('Y-m-d'))
+            ->first();
+    
+        if ($existingInvoice) {
+            Log::warning('Invoice already exists for the given period', [
+                'id_reservation' => $payment->id_reservation,
+                'payment_period' => $nextInvoiceDate->format('Y-m-d'),
+            ]);
+            return; // Keluar jika invoice sudah ada
+        }
+    
+        // Buat invoice baru
+        $monthlypayment = new Payment();
+        $monthlypayment->id_reservation = $payment->id_reservation;
+        $monthlypayment->payment_method = 'midtrans';
+        $monthlypayment->payment_status = 'pending';
+        $monthlypayment->payment_period = $nextInvoiceDate->format('Y-m-d'); // Gunakan tanggal berdasarkan payment_due_date
+        $monthlypayment->payment_due_date = $nextInvoiceDate->format('Y-m-d');
+        $monthlypayment->total_amount = $payment->total_amount;
+        $monthlypayment->payment_type = 'monthly_payment';
+        $monthlypayment->created_at = now();
+        $monthlypayment->updated_at = now();
+        $monthlypayment->save();
+    
+        // Log keberhasilan pembuatan invoice
+        Log::info('Next month invoice created successfully', [
+            'id_reservation' => $monthlypayment->id_reservation,
+            'payment_due_date' => $monthlypayment->payment_due_date,
+            'payment_period' => $monthlypayment->payment_period,
+            'total_amount' => $monthlypayment->total_amount,
+            'order_id' => $orderId,
+        ]);
+    }    
 }    
 
 

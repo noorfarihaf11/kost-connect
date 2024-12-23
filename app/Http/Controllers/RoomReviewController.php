@@ -30,28 +30,84 @@ class RoomReviewController extends Controller
         return redirect()->route('rooms.index')->with('success', 'Anda berhasil berhenti kos!');
     }
 
+    // public function show($roomId)
+    // {
+    //     $room = Room::with('reviews.customer')->findOrFail($roomId);
+    //     return view('room.show', compact('room'));
+    // }
+
+    // public function store(Request $request, $roomId)
+    // {
+    //     $customer = Customer::find($request->id_customer); 
+
+    //     if (!$customer) {
+    //         return redirect()->back()->withErrors(['error' => 'Customer tidak ditemukan.']);
+    //     }
+
+    //     $validated = $request->validate([
+    //         'id_customer' => 'required|exists:customers,id_customer', // Pastikan id_customer ada
+    //         'rating' => 'required|integer|min:1|max:5',
+    //         'review' => 'nullable|string|max:255',
+    //     ]);
+
+    //     // Temukan room berdasarkan roomId
+    //     $room = Room::findOrFail($roomId);
+
+    //     // Cek apakah customer sudah memberikan review untuk kamar ini
+    //     $existingReview = RoomReview::where('id_room', $roomId)
+    //         ->where('id_customer', $customer->id_customer)
+    //         ->first();
+
+    //     if ($existingReview) {
+    //         return redirect()->back()->withErrors(['error' => 'Anda sudah memberikan review untuk kamar ini.']);
+    //     }
+
+    //     // Simpan review baru
+    //     RoomReview::create([
+    //         'id_room' => $room->id_room,
+    //         'id_customer' => $customer->id_customer,
+    //         'rating' => $request->rating,
+    //         'review' => $request->review,
+    //     ]);
+
+    //     return redirect()->back()->with('success', 'Review berhasil ditambahkan!');
+    // }
+
+    // public function show($roomId)
+    // {
+    //     $room = Room::with('reviews.customer')->findOrFail($roomId);
+    //     return view('room.show', compact('room'));
+    // }
+
+    public function show($roomId)
+    {
+        $room = Room::with('reviews.customer')->findOrFail($roomId);
+        return view('room.show', compact('room'));
+    }
 
     public function store(Request $request, $roomId)
     {
-        // Pastikan pengguna sudah login
         if (!Auth::check()) {
             return redirect()->route('login')->withErrors('Anda perlu login untuk memberikan review.');
         }
 
-        // Ambil pengguna yang sedang login
         $user = Auth::user();
 
-        // Validasi kamar
-        $room = Room::findOrFail($roomId); // Menggunakan findOrFail untuk menghindari if ($room) check
+        $room = Room::findOrFail($roomId); 
 
-        // Validasi review ganda
-        $existingReview = RoomReview::where('id_room', $roomId)
+        $existingReview = RoomReview::where('id_room', $roomId) // Gunakan 'room_id' jika ini nama kolomnya
             ->where('id_customer', $user->id)
             ->first();
+
 
         if ($existingReview) {
             return redirect()->back()->withErrors(['error' => 'Anda sudah memberikan review untuk kamar ini.']);
         }
+
+        // $bestReviews = $room->reviews()
+        //     ->selectRaw('*, max(rating) as max_rating')
+        //     ->groupBy('id_customer')
+        //     ->get();
 
         // Validasi input
         $validated = $request->validate([
@@ -59,10 +115,9 @@ class RoomReviewController extends Controller
             'review' => 'nullable|string|max:255',
         ]);
 
-        // Simpan review
         RoomReview::create([
-            'id_room' => $room->id,
-            'id_customer' => $user->id, // Menggunakan id dari Auth::user()
+            'id_room' => $room->id_room, // Sesuaikan dengan migrasi
+            'id_customer' => $user->id_user,
             'rating' => $request->rating,
             'review' => $request->review,
         ]);

@@ -291,7 +291,7 @@
                                 <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Review</h2>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Average Rating: 
                                     <span class="text-primary-600 dark:text-primary-300 font-medium">
-                                        {{ $room->averageRating() ?? 'Belum ada rating' }}
+                                        {{ round($room->averageRating(), 1) ?? 'Belum ada rating' }}
                                     </span>
                                 </p>
                                 @if ($room->reviews->isEmpty())
@@ -299,13 +299,19 @@
                                 @else
                                     @foreach ($room->reviews as $review)
                                         <div class="mt-4 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                                            <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $review->customer->name }}</p>
+                                            @if ($review->customer && $review->customer->user)
+                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                                    {{ $review->customer->user->name }}
+                                                </p>
+                                            @else
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">Customer tidak ditemukan</p>
+                                            @endif
                                             <p class="text-sm text-gray-500 dark:text-gray-400">Rating: {{ $review->rating }} <span class="text-yellow-500">&#9733;</span></p>
                                             <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">{{ $review->review }}</p>
                                         </div>
-                                    @endforeach
+                                    @endforeach                            
                                 @endif
-                            </div>
+                            </div>                                                       
                         </div>
                     </div>
                 @endforeach

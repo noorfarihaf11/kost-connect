@@ -19,9 +19,8 @@ return new class extends Migration
             $table->text('review')->nullable(); // Review pengguna
             $table->timestamps();
 
-            // Foreign keys
             $table->foreign('id_room')->references('id_room')->on('rooms')->onDelete('cascade');
-            $table->foreign('id_customer')->references('id_user')->on('users')->onDelete('cascade'); // Sesuaikan jika id_user di tabel users
+            $table->foreign('id_customer')->references('id_user')->on('customers')->onDelete('cascade');
         });
     }
 

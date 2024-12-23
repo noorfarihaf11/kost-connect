@@ -23,6 +23,11 @@ class Room extends Model
         'timestamps'
     ];
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'id_customer');
+    }
+
     public function house ()
     {
         return $this->belongsTo(BoardingHouse::class, 'id_house');
@@ -47,5 +52,15 @@ class Room extends Model
     public function testimonials ()
     {
         return $this->hasMany(Testimonial::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(RoomReview::class, 'id_room');
+    }
+
+    public function averageRating()
+    {
+        return $this->reviews()->avg('rating');
     }
 }

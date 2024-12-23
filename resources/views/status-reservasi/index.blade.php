@@ -219,11 +219,22 @@
                         @else
                             <p class="text-red-600 text-l mb-4 font-semibold">Anda tidak menjadi penghuni kost ini lagi.</p>
                             @if ($tagihan->reservation->customer->customer_status === 'inactive')
-                            <!-- Tombol Review Muncul -->
-                                <button class="bg-purple-600 text-white px-4 py-2 rounded"
-                                        onclick="showReviewForm({{ $room->id_room }})">
-                                    Beri Review
-                                </button>
+                                <!-- Cek apakah pengguna sudah memberikan review -->
+                                @php
+                                    $existingReview = \App\Models\RoomReview::where('id_room', $room->id_room)
+                                        ->where('id_customer', Auth::id())
+                                        ->first();
+                                @endphp
+
+                                @if (!$existingReview)
+                                    <!-- Tombol Review Muncul -->
+                                    <button class="bg-purple-600 text-white px-4 py-2 rounded"
+                                            onclick="showReviewForm({{ $room->id_room }})">
+                                        Beri Review
+                                    </button>
+                                @else
+                                    <p class="text-green-600 text-sm mt-2">Anda sudah memberikan review untuk kamar ini.</p>
+                                @endif
                             @endif
                         @endif
                     </div>
@@ -401,8 +412,8 @@
     
     document.querySelectorAll('.star').forEach(star => {
         star.addEventListener('click', function () {
-            const rating = this.getAttribute('for').split('-')[2]; // Mengambil nilai rating
-            console.log(`Rating selected: ${rating}`); // Memastikan nilai rating dikirim dengan benar
+            const rating = this.getAttribute('for').split('-')[2]; 
+            console.log(`Rating selected: ${rating}`); 
         });
     });
     </script>

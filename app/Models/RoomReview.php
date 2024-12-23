@@ -9,16 +9,21 @@ class RoomReview extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['room_id', 'customer_id', 'rating', 'review'];
+    protected $fillable = ['id_room', 'id_customer', 'rating', 'review'];
 
     public function room()
     {
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Room::class, 'id_room');
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'id_customer');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
     }
 
     public function reviews()

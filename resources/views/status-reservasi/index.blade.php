@@ -205,9 +205,58 @@
                             </button>
                         @else
                             <p class="text-red-600 text-l mb-4 font-semibold">Anda tidak menjadi penghuni kost ini lagi.</p>
+                            @if ($tagihan->reservation->customer->customer_status === 'inactive')
+                                <!-- Cek apakah pengguna sudah memberikan review -->
+                                @php
+                                    $existingReview = \App\Models\RoomReview::where('id_room', $room->id_room)
+                                        ->where('id_customer', Auth::id())
+                                        ->first();
+                                @endphp
+
+                                @if (!$existingReview)
+                                    <!-- Tombol Review Muncul -->
+                                    <button class="bg-purple-600 text-white px-4 py-2 rounded"
+                                            onclick="showReviewForm({{ $room->id_room }})">
+                                        Beri Review
+                                    </button>
+                                @else
+                                    <p class="text-green-600 text-sm mt-2">Anda sudah memberikan review untuk kamar ini.</p>
+                                @endif
+                            @endif
                         @endif
                     </div>
                 </div>
+
+                @foreach ($rooms as $room)
+                    <div id="reviewForm-{{ $room->id_room }}" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-1/3">
+                            <form action="{{ route('rooms.review.store', $room->id_room) }}" method="POST">
+                                @csrf
+                                <div class="p-4">
+                                    <label for="rating-{{ $room->id_room }}" class="block text-sm font-medium text-gray-700">Rating (1-5):</label>
+                                    <div class="flex items-center space-x-1">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <input type="radio" id="star-{{ $room->id_room }}-{{ $i }}" name="rating" value="{{ $i }}" class="hidden" />
+                                            <label for="star-{{ $room->id_room }}-{{ $i }}" class="star cursor-pointer text-gray-400 hover:text-yellow-500 text-2xl">&#9733;</label>
+                                        @endfor
+                                    </div>
+
+                                    <label for="review-{{ $room->id_room }}" class="block mt-4 text-sm font-medium text-gray-700">Review:</label>
+                                    <textarea name="review" id="review-{{ $room->id_room }}" rows="4" class="w-full mt-1 border-gray-300 rounded-md shadow-sm"></textarea>
+                                </div>
+
+                                <div class="flex justify-end p-4 border-t">
+                                    <button type="button" onclick="hideReviewForm({{ $room->id_room }})" class="px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 rounded-lg">
+                                        Batal
+                                    </button>
+                                    <button type="submit" class="ml-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">
+                                        Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
 
                 <div id="berhentiForm" style="display: none;"
                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -254,6 +303,27 @@
             @endforeach
         @endif
     </div>
+
+    <style>
+        .star {
+            font-size: 2rem; /* Ukuran bintang */
+            color: gray; /* Warna bintang default */
+            cursor: pointer; /* Menambahkan cursor pointer untuk menunjukkan elemen yang dapat diklik */
+        }
+
+        .star:hover {
+            color: #f59e0b; /* Warna kuning ketika dihover */
+        }
+
+        input[type="radio"]:checked ~ label.star {
+            color: #f59e0b; /* Warna bintang yang dipilih */
+        }
+
+        input[type="radio"]:checked ~ label.star:hover {
+            color: #f59e0b; /* Warna kuning saat bintang dihover, meskipun sudah dipilih */
+        }
+    </style>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tambahkan jQuery -->
     <script>
         $(document).ready(function() {
@@ -317,6 +387,23 @@
                 });
             });
         });
+    </script>
+
+    <script>
+        function showReviewForm(roomId) {
+        document.getElementById('reviewForm-' + roomId).style.display = 'block';
+    }
+
+    function hideReviewForm(roomId) {
+        document.getElementById('reviewForm-' + roomId).style.display = 'none';
+    }
+    
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', function () {
+            const rating = this.getAttribute('for').split('-')[2]; 
+            console.log(`Rating selected: ${rating}`); 
+        });
+    });
     </script>
 
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"

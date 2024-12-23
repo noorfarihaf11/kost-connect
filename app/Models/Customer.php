@@ -21,6 +21,11 @@ class Customer extends Model
         'timestamps'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
     public function reservation ()
     {
         return $this->hasOne(Reservation::class, 'id_reservation', 'id_reservation');

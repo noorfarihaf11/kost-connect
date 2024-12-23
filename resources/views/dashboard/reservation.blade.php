@@ -48,7 +48,7 @@
                                 <td class="px-4 py-3">
                                     <div class="text-center">
                                         <p class="font-semibold">{{ $reservasi->user->name }}</p>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
                                             {{ $reservasi->phone_number }}
                                         </p>
                                     </div>

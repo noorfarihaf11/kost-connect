@@ -127,6 +127,7 @@
             </div>
         </div>
 
+
         <!-- Main modal -->
         <div id="paymentForm" tabindex="-1" aria-hidden="true"
             class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center">

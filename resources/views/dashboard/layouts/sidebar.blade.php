@@ -8,130 +8,107 @@
                 <ul class="mt-6">
                     <li class="relative px-6 py-3">
                         <a href="/dashboard"
-                            class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span class="ml-4">Dashboard</span>
+                           class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('dashboard') ? 'text-gray-800' : 'text-gray-600' }}">
+                            <i class="fas fa-tachometer-alt {{ request()->is('dashboard') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                            <span class="ml-4 {{ request()->is('dashboard') ? 'font-bold text-gray-800' : '' }}">Dashboard</span>
                         </a>
+                        <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('dashboard') ? 'block' : 'hidden' }}"></span>
                     </li>
                 </ul>
                 <ul>
                     @if (Gate::allows('owner'))
                         <li class="relative px-6 py-3">
                             <a href="/rumahkost"
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fa-solid fa-house"></i>
-                                <span class="ml-4">Rumah Kost</span>
+                               class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('rumahkost') ? 'text-gray-800' : 'text-gray-600' }}">
+                                <i class="fa-solid fa-house {{ request()->is('rumahkost') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                                <span class="ml-4 {{ request()->is('rumahkost') ? 'font-bold text-gray-800' : '' }}">Rumah Kost</span>
                             </a>
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('rumahkost') ? 'block' : 'hidden' }}"></span>
                         </li>
                         <li class="relative px-6 py-3">
-                            <a href=/rooms
-                                class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fas fa-bed"></i>
-                                <span class="ml-4">Kamar Kost</span>
+                            <a href="/rooms"
+                               class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('rooms') ? 'text-gray-800' : 'text-gray-600' }}">
+                                <i class="fas fa-bed {{ request()->is('rooms') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                                <span class="ml-4 {{ request()->is('rooms') ? 'font-bold text-gray-800' : '' }}">Kamar Kost</span>
                             </a>
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('rooms') ? 'block' : 'hidden' }}"></span>
                         </li>
                         <li class="relative px-6 py-3">
                             <a href="/reservation"
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span class="ml-4">Reservasi</span>
-                                {{-- <span
-                                    class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-600">
-                                    {{ $totalReservasi }}
-                                </span> --}}
+                               class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('reservation') ? 'text-gray-800' : 'text-gray-600' }}">
+                                <i class="fas fa-calendar-alt {{ request()->is('reservation') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                                <span class="ml-4 {{ request()->is('reservation') ? 'font-bold text-gray-800' : '' }}">Reservasi</span>
                             </a>
-                        </li>                               
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('reservation') ? 'block' : 'hidden' }}"></span>
+                        </li>
                         <li class="relative px-6 py-3">
                             <a href="/payment"
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fas fa-wallet"></i>
-                                <span class="ml-4">Pembayaran</span>
+                               class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('payment') ? 'text-gray-800' : 'text-gray-600' }}">
+                                <i class="fas fa-wallet {{ request()->is('payment') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                                <span class="ml-4 {{ request()->is('payment') ? 'font-bold text-gray-800' : '' }}">Pembayaran</span>
                             </a>
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('payment') ? 'block' : 'hidden' }}"></span>
                         </li>
                         <li class="relative px-6 py-3">
                             <a href="/customer"
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fas fa-house-user"></i>
-                                <span class="ml-4">Penghuni Kos</span>
+                               class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('customer') ? 'text-gray-800' : 'text-gray-600' }}">
+                                <i class="fas fa-house-user {{ request()->is('customer') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                                <span class="ml-4 {{ request()->is('customer') ? 'font-bold text-gray-800' : '' }}">Penghuni Kos</span>
                             </a>
-                        </li>
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('customer') ? 'block' : 'hidden' }}"></span>
+                        </li>                        
+                        <li class="relative px-6 py-3">
+                            <a href="/laporanpembayaran"
+                               class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('customer') ? 'text-gray-800' : 'text-gray-600' }}">
+                                <i class="fa-solid fa-file-pdf {{ request()->is('laporanpembayaran') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                                <span class="ml-4 {{ request()->is('laporanpembayaran') ? 'font-bold text-gray-800' : '' }}">Laporan Pembayaran</span>
+                            </a>
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('customer') ? 'block' : 'hidden' }}"></span>
+                        </li>                        
                     @else
                         <li class="relative px-6 py-3">
-                            <a href=/reservation
-                                class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span class="ml-4">Reservation</span>
+                            <a href="/reservation"
+                               class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('reservation') ? 'text-gray-800' : 'text-gray-600' }}">
+                                <i class="fas fa-calendar-alt {{ request()->is('reservation') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                                <span class="ml-4 {{ request()->is('reservation') ? 'font-bold text-gray-800' : '' }}">Reservation</span>
                             </a>
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('reservation') ? 'block' : 'hidden' }}"></span>
                         </li>
                         <li class="relative px-6 py-3">
                             <a href="/payment"
-                                class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                <i class="fas fa-wallet"></i>
-                                <span class="ml-4">Payment</span>
+                               class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('payment') ? 'text-gray-800' : 'text-gray-600' }}">
+                                <i class="fas fa-wallet {{ request()->is('payment') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                                <span class="ml-4 {{ request()->is('payment') ? 'font-bold text-gray-800' : '' }}">Payment</span>
                             </a>
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('payment') ? 'block' : 'hidden' }}"></span>
                         </li>
                     @endauth
                 @endif
                 @if (Gate::allows('admin'))
                 <li class="relative px-6 py-3">
                     <a href="/cities"
-                        class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                        <i class="fas fa-city"></i>
-                        <span class="ml-4">Kota</span>
+                       class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('cities') ? 'text-gray-800' : 'text-gray-600' }}">
+                        <i class="fas fa-city {{ request()->is('cities') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                        <span class="ml-4 {{ request()->is('cities') ? 'font-bold text-gray-800' : '' }}">Kota</span>
                     </a>
+                    <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('cities') ? 'block' : 'hidden' }}"></span>
                 </li>
                 <li class="relative px-6 py-3">
-                    <a href=/owners
-                        class=" menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                        <i class="fas fa-user-tie"></i>
-                        <span class="ml-4">Pemilik Rumah Kost</span>
+                    <a href="/owners"
+                       class="menu-item inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('owners') ? 'text-gray-800' : 'text-gray-600' }}">
+                        <i class="fas fa-user-tie {{ request()->is('owners') ? 'dark:text-gray-200' : 'text-gray-500' }}"></i>
+                        <span class="ml-4 {{ request()->is('owners') ? 'font-bold text-gray-800' : '' }}">Pemilik Rumah Kost</span>
                     </a>
+                    <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg {{ request()->is('owners') ? 'block' : 'hidden' }}"></span>
                 </li>
                 @endif
             </ul>
             <div class="px-6 my-6">
                 <a href="/home"
-                    class="flex items-center justify-start w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                   class="flex items-center justify-start w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Home
                 </a>
             </div>
         </div>
     </aside>
-    <script>
-        // Menentukan fungsi untuk menambahkan kelas aktif pada menu
-        function setActiveMenu() {
-            const currentPath = window.location.pathname;
-            const menuItems = document.querySelectorAll('.menu-item');
-
-            menuItems.forEach(item => {
-                const parentLi = item.closest('li');
-                const isActive = item.getAttribute('href') === currentPath;
-
-                // Menambahkan atau menghapus kelas aktif
-                if (isActive) {
-                    // Menambahkan indikator aktif
-                    if (!parentLi.querySelector('.active-indicator')) {
-                        const activeIndicator = document.createElement('span');
-                        activeIndicator.className =
-                            'absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg active-indicator';
-                        parentLi.insertBefore(activeIndicator, item);
-                    }
-
-                    // Menambahkan kelas aktif pada ikon dan teks
-                    item.querySelector('i').classList.add('text-gray-800', 'dark:text-gray-200');
-                    item.querySelector('span').classList.add('font-semibold');
-                } else {
-                    // Menghapus indikator dan kelas aktif dari item yang lain
-                    const activeIndicator = parentLi.querySelector('.active-indicator');
-                    if (activeIndicator) activeIndicator.remove();
-
-                    item.querySelector('i').classList.remove('text-gray-800', 'dark:text-gray-200');
-                    item.querySelector('span').classList.remove('font-semibold');
-                }
-            });
-        }
-
-        // Menjalankan fungsi setActiveMenu saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', setActiveMenu);
-    </script>

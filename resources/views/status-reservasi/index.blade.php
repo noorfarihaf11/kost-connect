@@ -50,13 +50,11 @@
                             <div class="flex items-center mb-8 relative">
                                 @if ($step < 3)
                                     <div class="absolute left-4 top-8 h-full w-1 bg-gray-300 z-0"></div>
-                                    <!-- Menambahkan z-index untuk memastikan garis berada di bawah -->
                                 @endif
                                 <div class="w-8 h-8 rounded-full flex items-center justify-center {{ $statusClass }} z-10">
                                     <span class="font-bold text-white">{{ $step }}</span>
                                 </div>
                                 <div class="ml-6">
-                                    <!-- Menambahkan margin kiri yang lebih besar untuk spasi lebih luas -->
                                     <p class="font-semibold">{{ $status }}</p>
                                     <p class="text-xs text-gray-500 mt-1">
                                         @if ($step == 1)
@@ -75,28 +73,17 @@
                     </div>
 
                     <div class="flex-1 pl-0 md:pl-6 space-y-4">
-                        <!-- Room Name -->
                         <h4 class="text-xl font-bold text-gray-800">{{ $reservasi->room->name }}</h4>
-
-                        <!-- Reservation Date -->
                         <p class="text-gray-600 text-sm">Tanggal Kunjung: <span
                                 class="font-medium">{{ $reservasi->reservation_date }}</span></p>
-
-                        <!-- Address -->
                         <p class="text-gray-600 text-sm">Alamat: <span
                                 class="font-medium">{{ $reservasi->room->house->address }}</span></p>
-
-                        <!-- Notes -->
                         <p class="text-gray-600 text-sm">Notes: <span class="font-medium">{{ $reservasi->notes }}</span>
                         </p>
-
-                        <!-- Price -->
                         <p class="text-gray-600 font-medium text-sm mb-4">Harga: Rp
                             <span
                                 class="font-bold">{{ number_format($reservasi->room->price_per_month, 0, ',', '.') }}</span>
                         </p>
-
-                        <!-- Action Button -->
                         <div class="flex space-x-4 mt-4">
                             @can('owner')
                                 @if ($reservasi->reservation_status == 2)
@@ -315,7 +302,8 @@
                     success: function(response) {
                         if (response.success) {
                             alert(
-                                'Pengajuan berhasil, Anda sudah tidak menjadi penghuni kost ini');
+                                'Pengajuan berhasil, Anda sudah tidak menjadi penghuni kost ini'
+                            );
                             location.reload(); // Reload halaman setelah update berhasil
                         } else {
                             alert('Update failed: ' + response

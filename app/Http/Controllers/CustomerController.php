@@ -26,17 +26,18 @@ class CustomerController extends Controller
         try {
             $customer = Customer::findOrFail($id);
 
-            $previousStatus = $customer->status;
+            $customer->customer_status = $request->customer_status;
+            $customer->save();
 
-            $customer->update($request->all());
-
-            if ($customer->status == 'inactive') {
-                $customer->end_date = now(); // set end_date dengan updated_at
+            if ($customer->customer_status == 'inactive') {
+                $customer->end_date = now();
                 $customer->save();
 
-                $room = $customer->reservation->room; // Mengakses room melalui reservation
-                $room->available_rooms += 1; // Tambahkan 1 pada available_rooms
-                $room->save();
+                if ($customer->reservation) {
+                    $room = $customer->reservation->room;
+                    $room->available_rooms += 1;
+                    $room->save();
+                }
             }
 
             if ($request->ajax()) {

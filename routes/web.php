@@ -90,6 +90,10 @@ Route::post('/submitHouseForm', [BoardingHouseController::class, 'store']);
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
+Route::get('/laporanpembayaran', [DashboardController::class, 'laporanPembayaran']);
+
+
+
 
 
 

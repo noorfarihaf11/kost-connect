@@ -32,9 +32,6 @@
                             <th class="px-4 py-3">Tanggal Masuk</th>
                             <th class="px-4 py-3">Tanggal Keluar</th>
                             <th class="px-4 py-3">Status</th>
-                            {{-- @if (auth()->check() && auth()->user()->id_role == 1)
-                                <th class="px-4 py-3">Actions</th>
-                            @endif --}}
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">

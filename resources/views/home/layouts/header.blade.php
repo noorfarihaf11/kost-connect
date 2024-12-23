@@ -107,24 +107,29 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 var sections = ['#home', '#about', '#kota', '#kost']; // List of section IDs
                 var links = ['#homeLink', '#aboutLink', '#kotaLink', '#kostLink']; // Corresponding links
-
-                $(window).scroll(function() {
+        
+                $(window).scroll(function () {
                     var scrollPosition = $(window).scrollTop();
-
-                    links.forEach(function(link) {
+        
+                    links.forEach(function (link) {
                         $(link).removeClass('active');
                     });
-
-                    sections.forEach(function(section, index) {
-                        if ($(section).offset().top <= scrollPosition &&
-                            ($(section).offset().top + $(section).height()) > scrollPosition) {
-                            $(links[index]).addClass(
-                            'active'); // Add active class to the corresponding link
+        
+                    sections.forEach(function (section, index) {
+                        var $section = $(section);
+                        if ($section.length) {
+                            var topOffset = $section.offset().top;
+                            var sectionHeight = $section.height();
+        
+                            if (topOffset <= scrollPosition && (topOffset + sectionHeight) > scrollPosition) {
+                                $(links[index]).addClass('active'); // Tambahkan kelas aktif ke tautan terkait
+                            }
                         }
                     });
                 });
             });
         </script>
+        

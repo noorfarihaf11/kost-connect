@@ -18,39 +18,43 @@ class ReservationController extends Controller
     public function index()
     {
         $user = Auth::user();
-
+    
         if (Gate::allows('admin') || Gate::allows('owner')) {
             $reservations = Reservation::with(['room', 'user'])->get();
         } else {
             $reservations = Reservation::with(['room', 'user'])->where('id_user', $user->id_user)->get();
         }
-
+    
         $rooms = Room::all();
         $users = User::all();
-
+    
         $owner = DB::table('owners')->where('id_user', $user->id_user)->first();
-
+    
         if ($owner) {
             $id_owner = $owner->id_owner;
-
+    
+            // Ambil semua rumah yang dimiliki oleh owner
+            $houses = DB::table('boarding_houses')->where('id_owner', $id_owner)->pluck('id_house');
+    
+            // Hitung total reservasi dari semua rumah
             $totalReservasi = Reservation::join('rooms', 'reservations.id_room', '=', 'rooms.id_room')
-                ->join('boarding_houses', 'rooms.id_house', '=', 'boarding_houses.id_house')
-                ->where('boarding_houses.id_owner', $id_owner)
+                ->whereIn('rooms.id_house', $houses)
                 ->where('reservations.reservation_status', 1)
                 ->count();
-
+    
+            // Ambil semua reservasi dari rumah yang dimiliki
             $reservations = Reservation::with(['room', 'user'])
                 ->join('rooms', 'reservations.id_room', '=', 'rooms.id_room')
-                ->where('rooms.id_house', $owner->id_owner)
+                ->whereIn('rooms.id_house', $houses)
                 ->orderBy('reservations.id_reservation')
                 ->get();
         } else {
-
             $totalReservasi = 0;
         }
-
+    
         return view('dashboard.reservation', compact('rooms', 'users', 'reservations', 'totalReservasi'));
     }
+        
 
     public function submitReservation(Request $request)
     {

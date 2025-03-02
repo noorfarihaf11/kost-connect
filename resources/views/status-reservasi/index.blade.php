@@ -252,12 +252,12 @@
                                         class="block text-sm font-medium text-gray-700">Rating (1-5):</label>
                                     <div class="flex items-center space-x-1">
                                         @for ($i = 1; $i <= 5; $i++)
-                                            <input type="radio" id="star-{{ $room->id_room }}-{{ $i }}"
-                                                name="rating" value="{{ $i }}" class="hidden" />
+                                        <input type="radio" id="star-{{ $room->id_room }}-{{ $i }}" name="rating" value="{{ $i }}" class="hidden" />
                                             <label for="star-{{ $room->id_room }}-{{ $i }}"
                                                 class="star cursor-pointer text-gray-400 hover:text-yellow-500 text-2xl">&#9733;</label>
                                         @endfor
                                     </div>
+
 
                                     <label for="review-{{ $room->id_room }}"
                                         class="block mt-4 text-sm font-medium text-gray-700">Review:</label>
@@ -428,31 +428,22 @@
 
         document.querySelectorAll('.star').forEach(star => {
             star.addEventListener('click', function() {
-                // Ambil nilai rating dari atribut 'for' yang diklik
-                const rating = parseInt(this.getAttribute('for').split('-')[2]);
+                // Ambil nilai rating dan id_room
+                const [_, roomId, rating] = this.getAttribute('for').split('-');
 
-                // Menandai semua input radio yang lebih kecil atau sama dengan nilai rating
-                const radios = document.querySelectorAll(
-                    `#star-${this.getAttribute('for').split('-')[1]}-1, #star-${this.getAttribute('for').split('-')[1]}-2, #star-${this.getAttribute('for').split('-')[1]}-3, #star-${this.getAttribute('for').split('-')[1]}-4, #star-${this.getAttribute('for').split('-')[1]}-5`
-                );
-
+                // Tandai input radio yang sesuai
+                const radios = document.querySelectorAll(`input[name="rating-${roomId}"]`);
                 radios.forEach(radio => {
-                    const radioValue = parseInt(radio.value);
-                    if (radioValue <= rating) {
-                        radio.checked = true;
-                    } else {
-                        radio.checked = false;
-                    }
+                    radio.checked = parseInt(radio.value) <= parseInt(rating);
                 });
 
-                // Mengubah warna semua bintang sesuai rating yang dipilih
-                const stars = document.querySelectorAll('.star');
+                // Ubah warna bintang yang sesuai
+                const stars = document.querySelectorAll(`label[for^="star-${roomId}-"]`);
                 stars.forEach((s, index) => {
                     if (index < rating) {
-                        s.style.color = '#f59e0b'; // Set warna kuning untuk bintang yang dipilih
+                        s.style.color = '#f59e0b'; // Warna kuning
                     } else {
-                        s.style.color =
-                            'gray'; // Set warna default untuk bintang yang belum dipilih
+                        s.style.color = 'gray'; // Warna default
                     }
                 });
             });

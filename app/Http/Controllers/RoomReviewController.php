@@ -36,12 +36,16 @@ class RoomReviewController extends Controller
             'review' => 'nullable|string|max:255',
         ]);
 
-        RoomReview::create([
-            'id_room' => $room->id_room, // Sesuaikan dengan nama kolom
-            'id_customer' => $idCustomer,
-            'rating' => $request->rating,
-            'review' => $request->review,
-        ]);
+        try {
+            RoomReview::create([
+                'id_room' => $room->id_room,
+                'id_customer' => $idCustomer,
+                'rating' => $request->rating,
+                'review' => $request->review,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }        
 
         return redirect()->back()->with('success', 'Review berhasil ditambahkan!');
     }

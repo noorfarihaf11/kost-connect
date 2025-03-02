@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Room;
 use App\Models\Reservation;
 use App\Models\Payment;
+use App\Models\Owner;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -21,13 +22,14 @@ class DashboardController extends Controller
         $owner = DB::table('owners')->where('id_user', $user->id_user)->first();
 
         if (!$owner) {
-            $totalReservasi = 0;
-            $totalAmount = 0;
+            $totalReservasi = Reservation::count();
+            $totalAmount = Payment::where('payment_status', 'paid')->sum('total_amount');
             $ownerName = null;
-            $totalCustomer = 0;
-            $totalKamar = 0;
-            $totalRumah = 0;
-            $customers = [];
+            $totalCustomer = Customer::where('customer_status', 'active')->count();
+            $totalOwner = Owner::where('owner_status', 'active')->count();
+            $totalKamar = Room::count();
+            $totalRumah = BoardingHouse::count();
+            $customers = Customer::where('customer_status', 'active')->get();
         } else {
             $id_owner = $owner->id_owner;
 
@@ -68,8 +70,9 @@ class DashboardController extends Controller
                 ->get();
 
             $ownerName = $owner->name;
+            $totalOwner = Owner::where('owner_status', 'active')->count();
         }
-        return view('dashboard.dashboard', compact('ownerName', 'totalReservasi', 'totalAmount', 'totalCustomer', 'totalKamar', 'totalRumah', 'customers'));
+        return view('dashboard.dashboard', compact('ownerName', 'totalReservasi', 'totalAmount', 'totalCustomer', 'totalKamar', 'totalRumah', 'customers','totalOwner'));
     }
 
 

@@ -13,7 +13,8 @@
     #homeLink.active,
     #kostLink.active,
     #aboutLink.active,
-    #kotaLink.active {
+    #kotaLink.active,
+    #testimoniLink.active{
         color: #1d4ed8;
         font-weight: bold;  
     }

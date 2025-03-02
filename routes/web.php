@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/status-reservasi', [StatusReservasiController::class, 'index'])->name('status-reservasi.index');
 });
 
-Route::get('/cities', [CityController::class, 'index'])->middleware('owner');
+Route::get('/cities', [CityController::class, 'index'])->middleware('admin');
 Route::post('/cities', [CityController::class, 'store']);
 Route::put('/cities/{id}', [CityController::class, 'update']);
 Route::delete('/cities/{id}', [CityController::class, 'destroy']);

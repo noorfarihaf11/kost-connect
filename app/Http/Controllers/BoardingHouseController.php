@@ -26,6 +26,7 @@ class BoardingHouseController extends Controller
         } else {
             $owners = Owner::all(); //
             $houses = BoardingHouse::all(); // 
+            $totalReservasi = [];
         }
 
         $cities = City::all();

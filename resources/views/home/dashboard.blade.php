@@ -263,6 +263,16 @@
                             <a href="#"
                                 class="block mb-2 text-lg font-semibold text-gray-900 hover:text-primary-600 dark:text-white dark:hover:text-primary-300">
                                 {{ $room->name }}
+                                <span class="text-sm text-gray-500 dark:text-gray-400"></span>
+                                @if ($room->averageRating())
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 text-sm font-medium text-white bg-primary-600 rounded-full dark:bg-primary-500">
+                                        {{ round($room->averageRating(), 1) }} <span
+                                            class="text-yellow-500">&#9733;</span>
+                                    </span>
+                                @else
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Belum ada rating</span>
+                                @endif
                             </a>
                             <p class="text-sm text-gray-500 dark:text-gray-400">{{ $room->description }}</p>
                             <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -287,7 +297,7 @@
                                 </button>
                             </div>
                             <!-- Bagian review di sini -->
-                            <div>
+                            {{-- <div>
                                 <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Review</h2>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Average Rating:
                                     <span class="text-primary-600 dark:text-primary-300 font-medium">
@@ -311,11 +321,63 @@
                                         </div>
                                     @endforeach
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 @endforeach
             </div>
+        </div>
+    </div>
+    <div id="testimoni" class="py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <div class=" px-4 mx-auto max-w-screen-xl lg:px-6">
+            <div class="mb-8 flex items-center justify-between">
+                <h2 id="kost-list" class="mt-3 text-2xl font-bold text-gray-900 dark:text-white">Testimoni Pengguna</h2>
+            </div>
+            <!-- Bagian review di sini -->
+            <div>
+                <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Semua Review</h2>
+            
+                @if ($rooms->isEmpty())
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Belum ada review untuk semua kamar.</p>
+                @else
+                    @foreach ($rooms as $room)
+                        @if ($room->reviews->isNotEmpty())
+                            <div class="mt-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    {{ $room->name }}
+                                </h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Average Rating:
+                                    <span class="text-primary-600 dark:text-primary-300 font-medium">
+                                        {{ round($room->averageRating(), 1) ?? 'Belum ada rating' }}
+                                    </span>
+                                </p>
+            
+                                @foreach ($room->reviews as $review)
+                                    <div class="mt-4 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                            {{ $review->customer->name }}
+                                        </p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Rating:
+                                            {{ $review->rating }} <span class="text-yellow-500">&#9733;</span>
+                                        </p>
+                                        <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">
+                                            {{ $review->review }}
+                                        </p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="mt-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    {{ $room->name }}
+                                </h3>
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Belum ada review untuk kamar ini.</p>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+            </div>            
         </div>
     </div>
 
@@ -512,20 +574,20 @@
                 method: 'POST',
                 data: formData,
                 success: function(response) {
-                        if (response.success) {
-                            alert(
-                                'Reservasi berhasil, cek status reservasi kamu di Status Reservasi'
-                            );
-                            location.reload(); // Reload halaman setelah update berhasil
-                        } else {
-                            alert('Update failed: ' + response
-                                .message); // Menampilkan pesan jika gagal
-                        }
-                    },
-                    error: function(xhr) {
-                        alert('Error: ' + xhr
-                            .responseText); // Menampilkan error jika ada masalah
+                    if (response.success) {
+                        alert(
+                            'Reservasi berhasil, cek status reservasi kamu di Status Reservasi'
+                        );
+                        location.reload(); // Reload halaman setelah update berhasil
+                    } else {
+                        alert('Update failed: ' + response
+                            .message); // Menampilkan pesan jika gagal
                     }
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr
+                        .responseText); // Menampilkan error jika ada masalah
+                }
             });
         });
     </script>

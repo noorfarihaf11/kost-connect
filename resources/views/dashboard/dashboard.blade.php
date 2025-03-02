@@ -61,16 +61,29 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                        Penghuni Kamar
-                    </p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                        @if ($totalCustomer > 0)
-                            {{ $totalCustomer }}
-                        @else
-                            Belum ada penghuni kost
-                        @endif
-                    </p>
+                    @if (Gate::allows('admin'))
+                        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                            Pemilik Rumah Kost
+                        </p>
+                        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                            @if ($totalOwner > 0)
+                                {{ $totalOwner }}
+                            @else
+                                Belum ada penghuni kost
+                            @endif
+                        </p>
+                    @elseif (Gate::allows('owner'))
+                        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                            Penghuni Kamar
+                        </p>
+                        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                            @if ($totalCustomer > 0)
+                                {{ $totalCustomer }}
+                            @else
+                                Belum ada penghuni kost
+                            @endif
+                        </p>
+                    @endif
                 </div>
             </div>
             <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
@@ -130,7 +143,7 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="text-center">
-                                        <p class="font-semibold">  {{ $customer->reservation->user->name }}</p>
+                                        <p class="font-semibold"> {{ $customer->reservation->user->name }}</p>
                                         <p class="text-xs text-gray-600 dark:text-gray-400">
                                             {{ $customer->phone_number }}
                                         </p>
@@ -164,4 +177,3 @@
     </div>
     </div>
 @endsection
-

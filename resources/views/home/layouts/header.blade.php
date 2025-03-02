@@ -5,6 +5,7 @@
             <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Kost Connect</span>
         </a>
         <div class="flex items-center lg:order-2">
+
             @auth
                 @if (Gate::allows('admin') || Gate::allows('owner'))
                     <a href="/dashboard"
@@ -100,6 +101,12 @@
                             Kost
                         </a>
                     </li>
+                    <li>
+                        <a href="#testimoni" id="testimoniLink"
+                            class="block py-2 px-4 rounded lg:p-0 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900">
+                            Testimoni
+                        </a>
+                    </li>
                 </ul>
             </div>
         @endif
@@ -107,29 +114,31 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function () {
-                var sections = ['#home', '#about', '#kota', '#kost']; // List of section IDs
-                var links = ['#homeLink', '#aboutLink', '#kotaLink', '#kostLink']; // Corresponding links
-        
-                $(window).scroll(function () {
+            $(document).ready(function() {
+                var sections = ['#home', '#about', '#kota', '#kost', '#testimoni']; // List of section IDs
+                var links = ['#homeLink', '#aboutLink', '#kotaLink', '#kostLink',
+                '#testimoniLink']; // Corresponding links
+
+                $(window).scroll(function() {
                     var scrollPosition = $(window).scrollTop();
-        
-                    links.forEach(function (link) {
+
+                    links.forEach(function(link) {
                         $(link).removeClass('active');
                     });
-        
-                    sections.forEach(function (section, index) {
+
+                    sections.forEach(function(section, index) {
                         var $section = $(section);
                         if ($section.length) {
                             var topOffset = $section.offset().top;
                             var sectionHeight = $section.height();
-        
-                            if (topOffset <= scrollPosition && (topOffset + sectionHeight) > scrollPosition) {
-                                $(links[index]).addClass('active'); // Tambahkan kelas aktif ke tautan terkait
+
+                            if (topOffset <= scrollPosition && (topOffset + sectionHeight) >
+                                scrollPosition) {
+                                $(links[index]).addClass(
+                                'active'); // Tambahkan kelas aktif ke tautan terkait
                             }
                         }
                     });
                 });
             });
         </script>
-        
